@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/13 22:58:15 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/14 04:34:17 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,57 +180,15 @@ int handle_redirections_and_pipes(char **argv,t_data *data, char **env)
 	}
 	return(0);
 }
-void  pipe_own(char **tree)
+void	execute(char **args, char **env)
 {
-	int i = 0;
-	int fd[3];
-	pid_t pid;
-	while (tree[i])
-	{
-		pipe(fd);
-		dup2(fd[0], STDOUT_FILENO);
-		dup2(fd[1], STDIN_FILENO);
-		execute(tree[i]);
-		i++;
-		continue;
-	}
-	dup2(STDOUT_FILENO, fd[0]);
-	
-}
-int main(int ac, char **av, char **env)
-{
-	if (ac != 1)
-		return 1;
-	(void)av;
-	char *input = NULL;
-	char *pathname = NULL;
-	char **argv = NULL;
-	t_data	data;
-	while(1)
-	{
-		if(data.token != NULL)
-			free_linked_list(&data.token);
-		data.lexer = (t_lexer ){0};
-		data.token = (t_token *){0};
-		input = readline(COLOR_BOLD_RED "➜  minishell " COLOR_RESET);
-		if(comands_formater(input, argv, &data) == 0)
-		{
-			argv = get_copy_of_token(argv, &(data.token));
-			if(data.lexer.dollar)
-				expand(argv,env, &data);
-			// red = handle_redirections_and_pipes(argv,&data, env);
-			// if(red)
-			// 	continue;
-		}
-		else
-			continue;
-		add_history(input);
 		pid_t pid = fork();
+		char *pathname = NULL;
 		if (pid == 0)
 		{
 
-			pathname = ft_strjoin("/bin/", argv[0]);
-			execve(pathname, argv, env);
+			pathname = ft_strjoin("/bin/", args[0]);
+			execve(pathname, args, env);
 			perror("Error");
 		}
 		else
@@ -239,6 +197,40 @@ int main(int ac, char **av, char **env)
 			
 			waitpid(pid,&status, 0);
 		}
+}
+int main(int ac, char **av, char **env)
+{
+	if (ac != 1)
+		return 1;
+	(void)av;
+	char *input = NULL;
+
+	char **argv = NULL;
+	t_data	data;
+	memset(&data, 0, sizeof(t_data));
+	while(1)
+	{
+		if(data.token != NULL)
+			free_linked_list(&data.token);
+		data.lexer = (t_lexer ){0};
+		data.token = (t_token *){0};
+		input = readline(COLOR_BOLD_RED "➜  minishell " COLOR_RESET);
+		add_history(input);
+		if(comands_formater(input, argv, &data) == 0)
+		{
+			argv = get_copy_of_token(argv, &(data.token));
+			if(data.lexer.dollar)
+				expand(argv,env, &data);
+		}
+		else
+			continue;
+
+		////////////////////////////////////////////////////////////////
+		// hna 9bl matsift lcommand lexecve checki wach kaynin lbultins|
+		////////////////////////////////////////////////////////////////
+
+		
+		execute(argv, env);
 	}
 	
 }
