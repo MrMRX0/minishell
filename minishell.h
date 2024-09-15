@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/13 21:33:37 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/15 02:36:22 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@
 #define D_QUOTE             2
 #define APPEND_REDIRECTION  3
 #define SINGLE_REDIRECTION  4
+#define PIPE                5
 
 typedef struct  t_lst_2
 {
@@ -89,11 +90,13 @@ typedef struct      t_lst_0
     t_lexer     lexer;
     t_token     *token;
     char        **args;
+    char **env;
     int         type;
 }                   t_data;
 
 
 void ft_exit(t_data *data);
+void lexer(char *command, t_data *data);
 void ft_lst_add(t_token **lst);
 char *remove_white_spaces(char *str);
 void free_linked_list(t_token **lst);
@@ -105,6 +108,6 @@ char *handle_quote(char *command , t_data *data, char c);
 char *handle_redirections(char *command, t_data *data);
 char *handle_dollar_sign(char *str, char **env, int *b);
 char **expand(char** argv, char**env, t_data *data);
-int comands_formater(char *command, char**args, t_data *data);
+int comands_formater(char *command,  t_data *data);
 
 #endif

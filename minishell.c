@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/14 04:34:17 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/15 02:54:43 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,8 +173,8 @@ int handle_redirections_and_pipes(char **argv,t_data *data, char **env)
 			perror("Error");
 			return(1);
 		}
-		printf("arg  %s\n",tmp->arg);
-		printf("type %d\n",tmp->type);
+		// printf("arg  %s\n",tmp->arg);
+		// printf("type %d\n",tmp->type);
 		tmp = tmp->next;
 		i++;
 	}
@@ -198,6 +198,72 @@ void	execute(char **args, char **env)
 			waitpid(pid,&status, 0);
 		}
 }
+
+int get_size_of_creepy(t_token **token)
+{
+	int ret = 0;
+	t_token *tmp = *token;
+	while(tmp->next)
+	{
+		if(tmp->type == PIPE)
+			ret++;
+		tmp = tmp->next;
+	}
+	return(ret);
+}
+void piss_off(t_token **lst, int len)
+{
+	int i = 0;
+	t_token *tmp = NULL;
+	while(*lst && i <= len)
+	{
+		tmp = *lst;
+		*lst = (*lst)->next;
+		free(tmp);
+		i++;
+	}
+}
+char **get_copy_of_token_version_tow(char **argv, t_token **lst)
+{
+	int len = 0;
+	t_token *tmp = *lst;
+	while(tmp && tmp->type != PIPE)
+	{
+		tmp = tmp->next;
+		len++;
+	}
+	tmp= *lst;
+	argv = malloc(len * sizeof(char *) + 1);
+	int i = 0;
+	while(i < len)
+	{
+		// printf("len of arg[%d] is %d\n",i,get_len(tmp->arg));
+		argv[i] = malloc(get_len(tmp) + 1);
+		get_copy(argv[i], tmp);
+		// printf("%s\n",argv[i]);
+		tmp = tmp->next;
+		i++;
+		
+	}
+	argv[i] = NULL;
+	piss_off(lst, len);
+	return(argv);
+
+}
+void plorial(t_data *data)
+{
+	int i = 0;
+	int j = 0;
+	char ***creepy = NULL;
+	i = get_size_of_creepy(&data->token);
+	creepy = malloc((i + 1) * sizeof(char **));
+	while(j <= i)
+	{
+		creepy[j] = get_copy_of_token_version_tow(creepy[j],&data->token);
+		execute(creepy[j], data->env);
+		j++;
+	}
+}
 int main(int ac, char **av, char **env)
 {
 	if (ac != 1)
@@ -216,11 +282,23 @@ int main(int ac, char **av, char **env)
 		data.token = (t_token *){0};
 		input = readline(COLOR_BOLD_RED "➜  minishell " COLOR_RESET);
 		add_history(input);
-		if(comands_formater(input, argv, &data) == 0)
+		lexer(input, &data);
+		data.env = env;
+		if(comands_formater(input, &data) == 0)
 		{
-			argv = get_copy_of_token(argv, &(data.token));
+			// while(data.token)
+			// {
+			// 	printf("%d\n",data.token->type);
+			// 	data.token  =  data.token->next;
+			// }
 			if(data.lexer.dollar)
 				expand(argv,env, &data);
+			if(data.lexer.pipe)
+			{
+				plorial(&data);
+				continue;
+			}
+			argv = get_copy_of_token(argv, &(data.token));
 		}
 		else
 			continue;

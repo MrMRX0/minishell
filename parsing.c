@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 14:48:47 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/01 17:10:10 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/15 02:17:58 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char *add_command_to_node(char *command, int i, t_data *data)
 		j++;
 	}
 	tmp->arg[j] = '\0';
-    // printf("%s\n", tmp->arg);
+	// printf("%s\n", tmp->arg);
 	if(!command[i])
 		return(NULL);
 	return(command + i);
@@ -57,7 +57,7 @@ char *handle_quote(char *command , t_data *data, char c)
 			quote++;
 			i++;
 		}
-		if((quote % 2 == 0) && (command[i] == ' '  || command[i] == '\0' || command[i] == s || command[i] == c || command[i] == '>'))
+		if((quote % 2 == 0) && (command[i] == ' '  || command[i] == '\0' || command[i] == s || command[i] == c || command[i] == '>' || command[i] == '|'))
 		{
 			if(i == 2)
 				return (command + 2);
@@ -66,11 +66,11 @@ char *handle_quote(char *command , t_data *data, char c)
 				t_token *tmp = data->token;
 				while(tmp  && tmp->next)
 					tmp = tmp->next;
-				tmp->next_command = 1; //set the flag to 1 to join the token later 
+				tmp->next_command = 1; //set the flag to 1 to join the node later 
 			}
-            data->type = S_QUOTE;
-            if (c == '\"')
-                data->type = D_QUOTE;
+			data->type = S_QUOTE;
+			if (c == '\"')
+				data->type = D_QUOTE;
 			command = add_command_to_node(command, i, data);
 			if(!command)
 				return(NULL);
@@ -83,14 +83,14 @@ char *handle_quote(char *command , t_data *data, char c)
 char *handle_redirections(char *command, t_data *data)
 {
 	int i = 0;
-    while(command[i] != '>')
-        i++;
-    if(i)
-       command = add_command_to_node(command, i, data);
-    // printf("comand after cut it==%s\n",command);
-    i = 0;
-    if(command[i + 2] == '>')
-        ft_exit(data);
+	while(command[i] != '>')
+		i++;
+	if(i)
+	   command = add_command_to_node(command, i, data);
+	// printf("comand after cut it==%s\n",command);
+	i = 0;
+	if(command[i + 2] == '>')
+		ft_exit(data);
 	else if(command[i + 1] != '>')
 	{
 		data->type = SINGLE_REDIRECTION;
@@ -101,7 +101,7 @@ char *handle_redirections(char *command, t_data *data)
 		data->type = APPEND_REDIRECTION;
 		command = add_command_to_node(command, i + 2, data);
 	}
-    return(command);
+	return(command);
 		
 }
 
@@ -196,15 +196,11 @@ char **expand(char** argv, char**env, t_data *data)
 	}
 	return(argv);
 }
-
-int comands_formater(char *command, char**args, t_data *data)
+void lexer(char *command, t_data *data)
 {
 	int i;
 	
 	i = 0;
-	(void)args;
-	if(command[i] == '\0')
-		return(1);
 	while(command[i])
 	{
 		data->lexer.dollar += (command[i] == '$');
@@ -215,15 +211,54 @@ int comands_formater(char *command, char**args, t_data *data)
 		data->lexer.double_quote += (command[i] == '\"');
 		i++;
 	}
+	
+}
+
+char * handle_pipe(char *command, t_data *data)
+{
+	int i = 0;
+	int b = 0;
+	
+	while(command[i] != '|')
+		i++;
+	if(i)
+	{
+		data->type = 0;
+		command = add_command_to_node(command, i, data);
+		return(command);
+	}
+	i = 1;
+	while(command[i] != '|' && command[i] != '\0')
+	{
+		if (command[i] == ' ')
+			i++;
+		else
+		{
+			b++;
+			i++;
+		}
+	}
+	if(b == 0)
+		ft_exit(data);
+	data->type = PIPE;
+	command = add_command_to_node(command, 1, data);
+
+
+	return(command);
+}
+int comands_formater(char *command, t_data *data)
+{
+	int i;
+	
 	i = 0;
 	while(command[i] != '\0')
 	{
 		command = remove_white_spaces(command);
-		while(command[i] != '\"' && command[i] != ' '  && command[i] != '\0' && command[i] != '\'' && command[i] != '>')
+		while(command[i] != '\"' && command[i] != ' '  && command[i] != '\0' && command[i] != '\'' && command[i] != '>' && command[i] != '|')
 			i++;
 		if (command[i] == ' ' || command[i] == '\0')
 		{
-			
+			data->type = 0;
 			command = add_command_to_node(command, i,data);
 			if(!command)
 				return(0);
@@ -246,6 +281,13 @@ int comands_formater(char *command, char**args, t_data *data)
 		else if (command[i] == '>')
 		{
 			command = handle_redirections(command, data);
+			if(!command)
+				return(0);
+			i = 0;
+		}
+		else if (command[i] == '|')
+		{
+			command = handle_pipe(command, data);
 			if(!command)
 				return(0);
 			i = 0;
