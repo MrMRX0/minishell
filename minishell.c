@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/15 02:54:43 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/21 23:58:50 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,6 +284,7 @@ int main(int ac, char **av, char **env)
 		add_history(input);
 		lexer(input, &data);
 		data.env = env;
+		billed_env_list(env, &data);
 		if(comands_formater(input, &data) == 0)
 		{
 			// while(data.token)

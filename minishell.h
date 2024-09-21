@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/15 02:36:22 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/22 00:13:44 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include "libft/libft.h"
-#include <linux/limits.h>
+#include <limits.h>
 #include <fcntl.h>
 
 // Regular Colors
@@ -85,15 +85,37 @@ typedef struct      t_lst_1
     struct      t_lst_1 *next;
 }                   t_token;
 
+/*env*/
+//--------------------env--------------------
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
+//--------------------env--------------------
+
 typedef struct      t_lst_0
 {
     t_lexer     lexer;
     t_token     *token;
     char        **args;
-    char **env;
+    char         **env;
+    t_env       *env_list;
     int         type;
 }                   t_data;
 
+
+/*env*/
+//--------------------env--------------------
+t_env	*init_env(char **env);
+char	**ft_null_env(void);
+void	ft_null_helper(char **default_env);
+t_env	*create_env_node(const char *env_var);
+char	*ft_strndup(const char *s1, size_t n);
+void	shlvl_init(t_data *data);
+void billed_env_list(char **env, t_data *data);
+//--------------------env--------------------
 
 void ft_exit(t_data *data);
 void lexer(char *command, t_data *data);
@@ -109,5 +131,10 @@ char *handle_redirections(char *command, t_data *data);
 char *handle_dollar_sign(char *str, char **env, int *b);
 char **expand(char** argv, char**env, t_data *data);
 int comands_formater(char *command,  t_data *data);
+char	*ft_strcpy(char *dest, const char *src);
+char	*ft_strcat(char *dest, const char *src);
+int	ft_strcmp(const char *s1, const char *s2);
+
+
 
 #endif
