@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/21 23:58:50 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/22 00:47:22 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,42 @@ void plorial(t_data *data)
 		j++;
 	}
 }
+int	ft_env(t_data *data)
+{
+	t_env	*tmp;
+
+	tmp = data->env_list;
+	while (tmp)
+	{
+		ft_putstr_fd(tmp->key, 1);
+		write(1, "=", 1);
+		ft_putstr_fd(tmp->value, 1);
+		write(1, "\n", 1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+int 	ft_buitin_check(char **av, t_data *data)
+{
+	// if (ft_strncmp(av[0], "echo", 4) == 0)
+	// {
+	// 	return (ft_echo(av));
+	// }
+	// else if (ft_strncmp(av[0], "pwd", 3) == 0)
+	// {
+	// 	return (ft_pwd(av));
+	// }
+	if (ft_strncmp(av[0], "env", 3) == 0)
+	{
+		return (0);
+	}
+	// else if (ft_strncmp(av[0], "export", 6) == 0)
+	// {
+	// 	return (ft_export(av));
+	// }
+	return (0);
+
+}
 int main(int ac, char **av, char **env)
 {
 	if (ac != 1)
@@ -308,8 +344,12 @@ int main(int ac, char **av, char **env)
 		// hna 9bl matsift lcommand lexecve checki wach kaynin lbultins|
 		////////////////////////////////////////////////////////////////
 
-		
-		execute(argv, env);
+		if (ft_buitin_check(argv,&data) == 0)
+		{
+			ft_env(&data);
+			continue;
+		}
+		// execute(argv, env);
 	}
 	
 }

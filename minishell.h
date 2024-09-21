@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/22 00:13:44 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/22 00:30:24 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include "libft/libft.h"
-#include <limits.h>
+#include <linux/limits.h>
 #include <fcntl.h>
 
 // Regular Colors

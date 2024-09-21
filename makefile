@@ -4,8 +4,8 @@
 
 NAME = minishell
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
+CC = cc -lreadline
+CFLAGS = -Wall -Wextra -g
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
