@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/22 18:51:41 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/22 19:20:43 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,7 +320,7 @@ int main(int ac, char **av, char **env)
 		add_history(input);
 		lexer(input, &data);
 		billed_env_list(env, &data);
-		data.env = ft_update_env(data.env_list);
+		data.env = transform_env(data.env_list);
 		if(comands_formater(input, &data) == 0)
 		{
 			// while(data.token)

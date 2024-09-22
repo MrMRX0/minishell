@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/22 18:44:40 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/22 19:26:02 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ char	*ft_strndup(const char *s1, size_t n);
 void	shlvl_init(t_data *data);
 void billed_env_list(char **env, t_data *data);
 t_env **get_env(void);
+char	**transform_env(t_env *env);
+void	join_key_value(char *str, char **envp, int i, t_env *tmp);
 //--------------------env--------------------
 
 
