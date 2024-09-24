@@ -4,29 +4,30 @@
 
 NAME = minishell
 
-CC = cc -lreadline
-CFLAGS = -Wall -Wextra -g
+CC = cc
+CFLAGS = -Wall -Wextra -g -lreadline
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRCS_DIR = ./src
-BUILTINS_DIR = ./builtins
-ENV_DIR = ./env
-PARSING_DIR = ./parsing
-
-SRCS = $(addprefix $(ENV_DIR)/, \
-		env.c \
-		env_tools.c \
-	) \
-	parsing.c \
-	util.c \
-	bultins.c \
-	minishell.c
+SRCS =  pipe.c \
+		execution.c \
+		minishell.c \
+		bultins/buil_tools.c \
+		bultins/export_helper.c \
+		bultins/ft_export.c \
+		bultins/ft_env.c \
+		bultins/sib_lib.c \
+		bultins/ft_unset.c \
+		bultins/ft_pwd.c \
+		bultins/ft_echo.c \
+		parsing.c \
+		bultins.c \
+		env/env.c	\
+		env/env_tools.c
 
 OBJS = $(SRCS:.c=.o)
 
-INCLUDES = -I. -I$(LIBFT_DIR) -I$(ENV_DIR) -I$(PARSING_DIR)
 
 # **************************************************************************** #
 #                                 MAKE RULES                                   #
@@ -40,8 +41,9 @@ $(LIBFT):
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
+# Rule to create object files from .c files
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@make clean -C $(LIBFT_DIR)

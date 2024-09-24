@@ -1,16 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.c                                             :+:      :+:    :+:   */
+/*   sib_lib.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/22 00:12:57 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/22 00:13:05 by nait-bou         ###   ########.fr       */
+/*   Created: 2024/09/22 18:36:43 by nait-bou          #+#    #+#             */
+/*   Updated: 2024/09/23 11:18:19 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
+
+char	*ft_strstr(const char *haystack, const char *needle)
+{
+	int	i;
+	int	j;
+
+	if (!*needle)
+		return ((char *)haystack);
+	i = 0;
+	while (haystack[i])
+	{
+		j = 0;
+		while (haystack[i + j] && needle[j] && haystack[i + j] == needle[j])
+			j++;
+		if (!needle[j])
+			return ((char *)&haystack[i]);
+		i++;
+	}
+	return (NULL);
+}
 
 char	*ft_strcpy(char *dest, const char *src)
 {
