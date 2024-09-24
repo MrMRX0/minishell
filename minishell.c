@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/24 18:07:00 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/24 18:22:55 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,32 +190,22 @@ char **get_copy_of_token(char **argv, t_token **lst)
 	return(argv);
 
 }
-char	*check_env(t_data *data)
-{
-		return (NULL);
-}
+// char	*check_env(t_data *data)
+// {
+// 		return (NULL);
+// }
 void	bultins_runner(char **av, t_data *data)
 {
 	if (ft_strncmp(av[0], "env", 3) == 0)
-	{
 		ft_env(av, data);
-	}
 	else if (ft_strncmp(av[0], "export", 6) == 0)
-	{
 		ft_export(av, data);
-	}
 	else if (ft_strncmp(av[0], "unset", 5) == 0)
-	{
 		ft_unset(av, data);
-	}
 	else if (ft_strncmp(av[0], "pwd", 3) == 0)
-	{
 		ft_pwd(av);
-	}
 	else if (ft_strncmp(av[0], "echo", 4) == 0)
-	{
 		ft_echo(av);
-	}
 }
 
 int 	ft_buitin_check(char **av)
@@ -224,7 +214,7 @@ int 	ft_buitin_check(char **av)
 	{
 		return (0);
 	}
-	if (ft_strncmp(av[0], "pwd", 3) == 0)
+	else if (ft_strncmp(av[0], "pwd", 3) == 0)
 	{
 		return (0);
 	}
