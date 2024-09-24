@@ -6,22 +6,17 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:20:45 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/22 19:25:15 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/24 09:37:18 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_env **get_env(void)
-{
-	static t_env *env_list = NULL;
-	return (&env_list);
-}
+
 
 void billed_env_list(char **env, t_data *data)
 {
 
-	data->env_list = get_env();
 	data->env_list = init_env(env);
 	shlvl_init(data);
 }

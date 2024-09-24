@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/22 19:26:02 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:47:16 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "libft/libft.h"
 #include <fcntl.h>
 #include <errno.h>
+#include <limits.h>
 
 
 
@@ -117,6 +118,9 @@ typedef struct      t_lst_0
 }                   t_data;
 
 
+
+
+
 /*env*/
 //--------------------env--------------------
 t_env	*init_env(char **env);
@@ -126,7 +130,6 @@ t_env	*create_env_node(const char *env_var);
 char	*ft_strndup(const char *s1, size_t n);
 void	shlvl_init(t_data *data);
 void billed_env_list(char **env, t_data *data);
-t_env **get_env(void);
 char	**transform_env(t_env *env);
 void	join_key_value(char *str, char **envp, int i, t_env *tmp);
 //--------------------env--------------------
@@ -134,20 +137,44 @@ void	join_key_value(char *str, char **envp, int i, t_env *tmp);
 
 /*export*/
 //--------------------export--------------------
-t_bool	ft_export(char **av);
+t_bool	ft_export(char **av, t_data *data);
 t_env	*ft_copy_env(t_env *env);
 void	ft_sort_env(t_env *env);
 void	print_env(t_env *env);
 t_bool	ft_export_check(char **av, int i);
 t_bool	is_valid_identifier(char c, int i);
-t_bool	is_exported(char *variable);
+t_bool	is_exported(char *variable, t_data *data);
 char	*ft_key(char *variable);
-void	update_exported_variable(char *variable);
+void	update_exported_variable(char *variable, t_data *data);
 void	update_value(t_env *tmp, char *variable);
-void	add_exported_variable(char *variable);
+void	add_exported_variable(char *variable, t_data *data);
 t_env	*init_new_variable(char *variable, char *key);
 void	free_global_tmp(t_env *tmp);
 //--------------------export--------------------
+
+/*ft_env*/
+//--------------------ft_env--------------------
+t_bool	ft_env(char **av, t_data *data);
+int     nb_args(char **args);
+//--------------------ft_env--------------------
+
+/*ft_unset*/
+//--------------------ft_unset--------------------
+t_bool	ft_unset(char **av, t_data *data);
+void	remove_variable(char *key, t_data *data);
+//--------------------ft_unset--------------------
+
+
+/*ft_pwd*/
+//--------------------ft_pwd--------------------
+t_bool	ft_pwd(char **av);
+//--------------------ft_pwd--------------------
+
+/*ft_echo*/
+//--------------------ft_echo--------------------
+t_bool	ft_echo(char **av);
+int	ft_strncmp_echo(char *str);
+//--------------------ft_echo-------------------
 
 /*sub_lib*/
 //--------------------sub_lib--------------------
@@ -172,6 +199,7 @@ char *handle_dollar_sign(char *str, char **env, int *b);
 char **expand(char** argv, char**env, t_data *data);
 int comands_formater(char *command,  t_data *data);
 
+int 	ft_buitin_check(char **av);
 
 
 

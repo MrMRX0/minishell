@@ -6,11 +6,13 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/22 19:20:43 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:48:52 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+
 
 void ft_exit(t_data *data)
 {
@@ -180,16 +182,47 @@ int handle_redirections_and_pipes(char **argv,t_data *data, char **env)
 	}
 	return(0);
 }
-void	execute(char **args, char **env)
+void	bultins_runner(char **av, t_data *data)
+{
+	if (ft_strncmp(av[0], "env", 3) == 0)
+	{
+		ft_env(av, data);
+	}
+	else if (ft_strncmp(av[0], "export", 6) == 0)
+	{
+		ft_export(av, data);
+	}
+	else if (ft_strncmp(av[0], "unset", 5) == 0)
+	{
+		ft_unset(av, data);
+	}
+	else if (ft_strncmp(av[0], "pwd", 3) == 0)
+	{
+		ft_pwd(av);
+	}
+	else if (ft_strncmp(av[0], "echo", 4) == 0)
+	{
+		ft_echo(av);
+	}
+}
+
+void	execute(char **args, char **env, t_data *data)
 {
 		pid_t pid = fork();
 		char *pathname = NULL;
 		if (pid == 0)
 		{
-
-			pathname = ft_strjoin("/bin/", args[0]);
-			execve(pathname, args, env);
-			perror("Error");
+			if (ft_buitin_check(args) == 0)
+			{
+				bultins_runner(args,data);
+			}
+			// else
+			// {
+				
+			// pathname = ft_strjoin("/bin/", args[0]);
+			// execve(pathname, args, env);
+			// perror("Error");
+			// }
 		}
 		else
 		{
@@ -260,44 +293,34 @@ void plorial(t_data *data)
 	while(j <= i)
 	{
 		creepy[j] = get_copy_of_token_version_tow(creepy[j],&data->token);
-		execute(creepy[j], data->env);
+		execute(creepy[j], data->env,NULL);
 		j++;
 	}
 }
-int	ft_env(t_data *data)
-{
-	t_env	*tmp;
 
-	tmp = data->env_list;
-	while (tmp)
-	{
-		ft_putstr_fd(tmp->key, 1);
-		write(1, "=", 1);
-		ft_putstr_fd(tmp->value, 1);
-		write(1, "\n", 1);
-		tmp = tmp->next;
-	}
-	return (0);
-}
-int 	ft_buitin_check(char **av, t_data *data)
+int 	ft_buitin_check(char **av)
 {
-	// if (ft_strncmp(av[0], "echo", 4) == 0)
-	// {
-	// 	return (ft_echo(av));
-	// }
-	// else if (ft_strncmp(av[0], "pwd", 3) == 0)
-	// {
-	// 	return (ft_pwd(av));
-	// }
-	if (ft_strncmp(av[0], "env", 3) == 0)
+	if (ft_strncmp(av[0], "echo", 4) == 0)
 	{
 		return (0);
 	}
-	// else if (ft_strncmp(av[0], "export", 6) == 0)
-	// {
-	// 	return (ft_export(av));
-	// }
-	return (0);
+	if (ft_strncmp(av[0], "pwd", 3) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(av[0], "env", 3) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(av[0], "export", 6) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(av[0], "unset", 6) == 0)
+	{
+		return (0);
+	}
+	return (1);
 
 }
 int main(int ac, char **av, char **env)
@@ -310,6 +333,7 @@ int main(int ac, char **av, char **env)
 	char **argv = NULL;
 	t_data	data;
 	memset(&data, 0, sizeof(t_data));
+	billed_env_list(env, &data);
 	while(1)
 	{
 		if(data.token != NULL)
@@ -319,7 +343,6 @@ int main(int ac, char **av, char **env)
 		input = readline(COLOR_BOLD_RED "➜  minishell " COLOR_RESET);
 		add_history(input);
 		lexer(input, &data);
-		billed_env_list(env, &data);
 		data.env = transform_env(data.env_list);
 		if(comands_formater(input, &data) == 0)
 		{
@@ -344,12 +367,8 @@ int main(int ac, char **av, char **env)
 		// hna 9bl matsift lcommand lexecve checki wach kaynin lbultins|
 		////////////////////////////////////////////////////////////////
 
-		if (ft_buitin_check(argv,&data) == 0)
-		{
-			ft_env(&data);
-			continue;
-		}
-		// execute(argv, env);
+
+		execute(argv, env,&data);
 	}
 	
 }

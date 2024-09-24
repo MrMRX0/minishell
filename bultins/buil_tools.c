@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 18:06:27 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/22 18:32:35 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/24 10:26:36 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,14 @@ t_env	*init_new_variable(char *variable, char *key)
 	}
 	new->next = NULL;
 	return (new);
+}
+
+int	nb_args(char **args)
+{
+	int	len;
+
+	len = 0;
+	while (args[len])
+		len++;
+	return (len);
 }
