@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   tmp.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/23 13:33:47 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:32:36 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -453,7 +453,7 @@ void redirect_input(t_data *data)
 	dup2(fd, STDIN_FILENO);
 }
 
-int minishell(t_data	*data, char **env)
+int minishell(t_data	*data)
 {
 	char *input;
 	int std_in;
@@ -472,7 +472,6 @@ int minishell(t_data	*data, char **env)
 			return(printf("exit"), 0);
 		add_history(input);
 		lexer(input, data);
-		data->env = env;
 		if(parsing(input, data) == 0)
 		{
 			save_stdin_stdout(&std_in, &std_out);

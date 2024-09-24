@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 14:48:47 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/15 02:17:58 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:25:30 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char *handle_quote(char *command , t_data *data, char c)
 			quote++;
 			i++;
 		}
-		if((quote % 2 == 0) && (command[i] == ' '  || command[i] == '\0' || command[i] == s || command[i] == c || command[i] == '>' || command[i] == '|'))
+		if((quote % 2 == 0) && (command[i] == ' '  || command[i] == '\0' || command[i] == s || command[i] == c || command[i] == '>' || command[i] == '|' || command[i] == '<'))
 		{
 			if(i == 2)
 				return (command + 2);
@@ -80,25 +80,32 @@ char *handle_quote(char *command , t_data *data, char c)
 	return(ft_exit(data), NULL);
 }
 
-char *handle_redirections(char *command, t_data *data)
+char *handle_redirections(char *command, t_data *data, char c)
 {
 	int i = 0;
-	while(command[i] != '>')
+	while(command[i] != c)
 		i++;
 	if(i)
-	   command = add_command_to_node(command, i, data);
+	{
+		data->type = 0;
+		command = add_command_to_node(command, i, data);
+	}
 	// printf("comand after cut it==%s\n",command);
 	i = 0;
-	if(command[i + 2] == '>')
-		ft_exit(data);
-	else if(command[i + 1] != '>')
+	// if(command[i + 2] == c)
+	// 	ft_exit(data);
+	if(command[i + 1] != c)
 	{
-		data->type = SINGLE_REDIRECTION;
+		data->type = INPUT_REDIRECTION;
+		if (c == '>')
+			data->type = SINGLE_REDIRECTION;
 		command = add_command_to_node(command, i + 1, data);
 	}
-	else if(command[i + 1] == '>')
+	else if(command[i + 1] == c)
 	{
 		data->type = APPEND_REDIRECTION;
+		if(c == '<')
+			data->type = HERDOK;
 		command = add_command_to_node(command, i + 2, data);
 	}
 	return(command);
@@ -150,6 +157,7 @@ char **expand(char** argv, char**env, t_data *data)
 	char *returned_str = NULL;
 	char *str = NULL;
 	char tmp[2];
+	t_token *tmpp = data->token;
 	while(argv[i])
 	{
 		str = argv[i];
@@ -191,9 +199,11 @@ char **expand(char** argv, char**env, t_data *data)
 			}	
 		}
 		argv[i] = final_str;
+		data->token->arg = final_str;
 		final_str = NULL;
 		i++;
 	}
+	data->token = tmpp;
 	return(argv);
 }
 void lexer(char *command, t_data *data)
@@ -204,14 +214,15 @@ void lexer(char *command, t_data *data)
 	while(command[i])
 	{
 		data->lexer.dollar += (command[i] == '$');
-		data->lexer.redirect_input += (command[i] == '>');
-		data->lexer.redirect_output += (command[i] == '<');
+		data->lexer.redirect_output += (command[i] == '>');
+		data->lexer.redirect_input += (command[i] == '<');
 		data->lexer.pipe += (command[i] == '|');
 		data->lexer.single_quote += (command[i] == '\'');
 		data->lexer.double_quote += (command[i] == '\"');
 		i++;
 	}
-	
+	// return ;
+	// printf ("ll\n");
 }
 
 char * handle_pipe(char *command, t_data *data)
@@ -236,7 +247,7 @@ char * handle_pipe(char *command, t_data *data)
 		{
 			b++;
 			i++;
-		}
+		}			// exit(0);
 	}
 	if(b == 0)
 		ft_exit(data);
@@ -246,7 +257,7 @@ char * handle_pipe(char *command, t_data *data)
 
 	return(command);
 }
-int comands_formater(char *command, t_data *data)
+int parsing(char *command, t_data *data)
 {
 	int i;
 	
@@ -254,44 +265,28 @@ int comands_formater(char *command, t_data *data)
 	while(command[i] != '\0')
 	{
 		command = remove_white_spaces(command);
-		while(command[i] != '\"' && command[i] != ' '  && command[i] != '\0' && command[i] != '\'' && command[i] != '>' && command[i] != '|')
+		if(!command)
+			return(0);
+		while(command[i] != '\"' && command[i] != ' '  && command[i] != '\0' && command[i] != '\'' && command[i] != '>' && command[i] != '|' && command[i] != '<')
 			i++;
 		if (command[i] == ' ' || command[i] == '\0')
 		{
 			data->type = 0;
 			command = add_command_to_node(command, i,data);
-			if(!command)
-				return(0);
-			i = 0;
 		}
 		else if (command[i] == '\"')
-		{
 			command = handle_quote(command, data, '\"');
-			if(!command)
-				return(0);
-			i = 0;
-		}
 		else if (command[i] == '\'')
-		{
 			command = handle_quote(command, data, '\'');
-			if(!command)
-				return(0);
-			i = 0;
-		}
 		else if (command[i] == '>')
-		{
-			command = handle_redirections(command, data);
-			if(!command)
-				return(0);
-			i = 0;
-		}
+			command = handle_redirections(command, data, '>');
 		else if (command[i] == '|')
-		{
 			command = handle_pipe(command, data);
-			if(!command)
-				return(0);
-			i = 0;
-		}
+		else if (command[i] == '<')
+			command = handle_redirections(command, data, '<');
+		if(!command)
+			return(0);
+		i = 0;
 	}
 	return(0);
 }
