@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/24 18:22:55 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:15:40 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,21 @@ void get_copy(char *s1, t_token *lst)
 	//free lst after
 	lst->arg = s1;
 }
+void get_copy_v3(char *s1, t_token *lst)
+{
+	int i;
+
+	i = 0;
+	// printf("..%d %s\n", lst->type, lst->arg);
+	while(lst->arg[i])
+	{
+			s1[i] = lst->arg[i];
+			i++;
+	}
+	s1[i] = '\0';
+	//free lst after
+	lst->arg = s1;
+}
 char **get_copy_of_token_v3(char **argv, t_token **lst)
 {
 	int len = 0;
@@ -145,16 +160,23 @@ char **get_copy_of_token_v3(char **argv, t_token **lst)
 	int i = 0;
 	while(tmp)
 	{
-		// printf("len of arg[%d] is %d\n",i,get_len(tmp->arg));
 		if(tmp->type == HERDOK || tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION || tmp->type == INPUT_REDIRECTION)
 			tmp = tmp->next->next;
 		else
 		{
-			argv[i] = malloc(get_len(tmp) + 1);
-			get_copy(argv[i], tmp);
-			// printf("%s\n",argv[i]);
-			tmp = tmp->next;
-			i++;
+			if(!tmp->arg)
+			{
+				argv[i] = NULL;
+				tmp = tmp->next;
+				i++;
+			}
+			else
+			{
+				argv[i] = malloc(ft_strlen(tmp->arg) + 1);
+				get_copy_v3(argv[i], tmp);
+				tmp = tmp->next;
+				i++;
+			}
 		}
 		
 	}
@@ -398,35 +420,7 @@ int herdok(t_token **node)
         return -1;
     }
 	return(fd);
-	// dup2(fd, STDIN_FILENO);
-	// close(fd);
 }
-// void free_node_2(t_token **token, int a, int b)
-// {
-	// t_token *new = NULL;
-	// t_token *tmp = NULL;
-	// int i = 0;
-	// while((*token))
-	// {
-		// if ((*token)->type == a || (*token)->type == b)
-			// *token = (*token)->next->next;
-		// else
-		// {
-			// ft_lst_add(&new);
-			// while(new->next)
-			// 	new = new->next;
-			// new = *token;
-			// *token = (*token)->next;
-			// new->next = NULL;
-			// if(i == 0)
-			// 	new->previous = NULL;
-			// i++;
-// 		}
-// 	}
-// 	while(new->previous)
-// 		new = new->previous;
-// 	*token = new;
-// }
 
 void free_node(t_token ** token, int a, int b)
 {
@@ -476,6 +470,7 @@ void free_node(t_token ** token, int a, int b)
 	}
 	(*token) = hold_pointer;
 }
+
 void redirect_input(t_token **token)
 {
 	t_token *tmp = *token;

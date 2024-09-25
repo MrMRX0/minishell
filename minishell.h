@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/24 17:40:11 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:15:37 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ typedef struct      t_lst_1
     int         next_command;
     int         type;
     struct      t_lst_1 *next;
-     struct      t_lst_1 *previous;
+    struct      t_lst_1 *previous;
 }                   t_token;
 
 typedef struct      t_lst_0

@@ -6,12 +6,36 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/24 16:18:26 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:41:14 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+void join_nodes(t_token **token)
+{
+	t_token *tmp = *token;
+	t_token *to_free;
+	while(tmp)
+	{
+		if(tmp->next_command == 1 && tmp->next)
+		{
+			tmp->arg = ft_strjoin(tmp->arg, tmp->next->arg);
+			to_free = tmp->next;
+			if(to_free->next)
+				tmp->next = to_free->next;
+			else
+				tmp->next = NULL;
+			if(to_free->next_command == 0)
+				tmp->next_command = 0;
+			free(to_free);
+		}
+		// printf("%s\n", tmp->arg);
+		// printf("%d\n", tmp->next_command);
+		if (tmp->next_command == 0)
+			tmp = tmp->next;
+		// printf("arg=%s\n", tmp->arg);
+	}
+}
 void	normal_execution(t_data *data)
 {
 	char **command;
@@ -21,6 +45,7 @@ void	normal_execution(t_data *data)
 	
 	if(data->lexer.dollar)
 		expand(command,data->env, &data->token);
+	join_nodes(&data->token);
 	if (data->lexer.redirect_output)
 		redirections(&data->token);
 	if (data->lexer.redirect_input)
