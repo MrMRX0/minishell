@@ -5,12 +5,14 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -g -lreadline
+CFLAGS = -Wall -Wextra -Werror -g 
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRCS =  minishell.c \
+SRCS =  pipe.c \
+		execution.c \
+		minishell.c \
 		bultins/buil_tools.c \
 		bultins/export_helper.c \
 		bultins/ft_export.c \
@@ -20,10 +22,11 @@ SRCS =  minishell.c \
 		bultins/ft_pwd.c \
 		bultins/ft_echo.c \
 		parsing.c \
-		util.c \
 		bultins.c \
 		env/env.c	\
-		env/env_tools.c
+		env/env_tools.c \
+		bultins/ft_cd.c \
+		bultins/buil_tools1.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -38,7 +41,7 @@ $(LIBFT):
 	@make -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
 
 # Rule to create object files from .c files
 %.o: %.c

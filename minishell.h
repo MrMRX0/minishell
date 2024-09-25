@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/24 11:47:16 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/25 12:00:05 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,8 @@
 #include <sys/wait.h>
 #include <string.h>
 #include "libft/libft.h"
+#include <linux/limits.h>
 #include <fcntl.h>
-#include <errno.h>
-#include <limits.h>
-
-
 
 // Regular Colors
 #define COLOR_BLACK     "\033[0;30m"
@@ -68,6 +65,18 @@
 #define APPEND_REDIRECTION  3
 #define SINGLE_REDIRECTION  4
 #define PIPE                5
+#define INPUT_REDIRECTION   6
+#define HERDOK              7
+
+/*env*/
+//--------------------env--------------------
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
+//--------------------env--------------------
 
 typedef struct  t_lst_2
 {
@@ -86,17 +95,23 @@ typedef struct      t_lst_1
     int         next_command;
     int         type;
     struct      t_lst_1 *next;
+     struct      t_lst_1 *previous;
 }                   t_token;
 
-/*env*/
-//--------------------env--------------------
-typedef struct s_env
+typedef struct      t_lst_0
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
-//--------------------env--------------------
+    t_lexer     lexer;
+    t_token     *token;
+    char        **args;
+    char **env;
+    t_env       *env_list;
+    int         type;
+    int     std_in  ;
+	int     std_out ;
+}                   t_data;
+
+
+
 
 /*boul*/
 //--------------------boul--------------------
@@ -106,19 +121,6 @@ typedef enum e_bool
 	true = 1
 }						t_bool;
 //--------------------boul--------------------
-
-typedef struct      t_lst_0
-{
-    t_lexer     lexer;
-    t_token     *token;
-    char        **args;
-    char         **env;
-    t_env       *env_list;
-    int         type;
-}                   t_data;
-
-
-
 
 
 /*env*/
@@ -176,6 +178,17 @@ t_bool	ft_echo(char **av);
 int	ft_strncmp_echo(char *str);
 //--------------------ft_echo-------------------
 
+/*ft_cd*/
+//--------------------ft_cd--------------------
+t_bool	ft_cd(char **av, t_data *data);
+t_bool	check_cd(char **av, char *old_pwd);
+t_bool	check_directory(char *dir);
+void	set_env(t_env *env, const char *key, const char *value, t_data *data);
+char	*get_env_value(t_env *env, const char *key);
+void	error(const char *cmd, const char *msg);
+void	change_pwd(t_env *envs, const char *old_pwd, const char *pwd, t_data *data);
+//--------------------ft_cd--------------------
+
 /*sub_lib*/
 //--------------------sub_lib--------------------
 char	*ft_strstr(const char *haystack, const char *needle);
@@ -184,23 +197,48 @@ char	*ft_strcat(char *dest, const char *src);
 int	    ft_strcmp(const char *s1, const char *s2);
 //--------------------sub_lib--------------------
 
+
 void ft_exit(t_data *data);
+
+
+void	save_stdin_stdout(int *std_in, int *std_out);
+
+
+int 	ft_buitin_check(char **av);
+void	bultins_runner(char **av, t_data *data);
+
+
+void	pipe_execution(int i, t_data *data);
+void	normal_execution(t_data *data);
+void    execution(t_data *data);
+
+int redirections(t_token **token);
+void redirect_input(t_token **token);
+
+
+void	restore_stdin_stdout(int std_in, int std_out);
+void	save_stdin_stdout(int *std_in, int *std_out);
+
+char **get_copy_of_token_version_tow(char **argv, t_token **lst);
+char **get_copy_of_token_v3(char **argv, t_token **lst);
+
+int get_size_of_tree(t_token **token);
+void piss_off(t_token **lst, int len);
+void free_node(t_token ** token, int a, int b);
+void pipe_pipe(char ***commands, int n, t_data *data);
+void	execute(char **args, t_data *data);
 void lexer(char *command, t_data *data);
 void ft_lst_add(t_token **lst);
 char *remove_white_spaces(char *str);
 void free_linked_list(t_token **lst);
+char *handle_redirections(char *command, t_data *data, char c);
 void get_copy(char *s1, t_token *lst);
 char **get_copy_of_token(char **argv, t_token **lst);
 char **env_initializer(char **env, char *new_arg);
 char *add_command_to_node(char *command, int i, t_data *data);
 char *handle_quote(char *command , t_data *data, char c);
-char *handle_redirections(char *command, t_data *data);
 char *handle_dollar_sign(char *str, char **env, int *b);
-char **expand(char** argv, char**env, t_data *data);
-int comands_formater(char *command,  t_data *data);
-
-int 	ft_buitin_check(char **av);
-
-
+char **expand(char** argv, char**env, t_token **token);
+int parsing(char *command, t_data *data);
 
 #endif
