@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/26 12:03:36 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/26 12:14:48 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ int	nb_count(char **av);
 
 /*free*/
 //--------------------free--------------------
-void    free_close_all(t_data **data, char **av);
+void    free_close_all(t_data *data, char **av);
 void    free_env(t_env **env);
 void    free_av(char **av);
 //--------------------free--------------------

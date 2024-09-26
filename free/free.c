@@ -6,11 +6,11 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:43:47 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/26 11:56:55 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/26 12:25:56 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void   free_av(char **av)
 {
@@ -25,7 +25,7 @@ void   free_av(char **av)
     free(av);
 }
 
-voi free_env(t_env **env)
+void free_env(t_env **env)
 {
     t_env *tmp;
     t_env *tmp2;
@@ -41,9 +41,9 @@ voi free_env(t_env **env)
     *env = NULL;
 }
 
-void    free_close_all(t_data **data, char **av)
+void    free_close_all(t_data *data, char **av)
 {
     free_av(av);
     free_av(data->env);
-    free_env(&(*data)->env_list);
+    free_env(&(data)->env_list);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 14:48:47 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/24 15:16:11 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/26 12:12:05 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char *handle_quote(char *command , t_data *data, char c)
 			return(command);
 		}
 	}
-	return(ft_exit(data), NULL);
+	return(fft_exit(data), NULL);
 }
 
 char *handle_redirections(char *command, t_data *data, char c)
@@ -250,7 +250,7 @@ char * handle_pipe(char *command, t_data *data)
 		}			// exit(0);
 	}
 	if(b == 0)
-		ft_exit(data);
+		fft_exit(data);
 	data->type = PIPE;
 	command = add_command_to_node(command, 1, data);
 

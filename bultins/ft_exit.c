@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*   .c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -41,8 +41,8 @@ void	ft_exit_helper(char **av, t_data *data)
 	write(2, "exit\n", 5);
 	write(2, "exit: numeric argument required\n", 33);
 	data->status = 2;
-	free_close_all(&data, av);
-	exit(data->status);
+	free_close_all(data, av);
+	exit(0);
 }
 
 void	ft_exit_helper2(t_data *data, char **av)
@@ -57,7 +57,7 @@ void	ft_exit_helper2(t_data *data, char **av)
 		i = 2;
 	}
 	free_close_all(data, av);
-	exit((unsigned char)i);
+	exit(0);
 }
 
 t_bool	ft_exit(char **av, t_data *data)
@@ -65,8 +65,8 @@ t_bool	ft_exit(char **av, t_data *data)
 	if (nb_count(av) == 1)
 	{
 		write(2, "exit\n", 5);
-		free_close_all(&data, av);
-		exit(data->status);
+		free_close_all(data, av);
+		exit(0);
 	}
 	if (nb_count(av) > 2)
 	{
@@ -78,6 +78,6 @@ t_bool	ft_exit(char **av, t_data *data)
 	else if (ft_isnumber(av[1]) == false)
 		ft_exit_helper(av, data);
 	else
-		ft_exit_helper2(&data, av);
+		ft_exit_helper2(data, av);
 	return (true);
 }
