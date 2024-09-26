@@ -26,7 +26,9 @@ SRCS =  pipe.c \
 		env/env.c	\
 		env/env_tools.c \
 		bultins/ft_cd.c \
-		bultins/buil_tools1.c
+		bultins/buil_tools1.c \
+		bultins/ft_exit.c \
+		free/free.c \
 
 OBJS = $(SRCS:.c=.o)
 

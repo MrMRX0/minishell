@@ -6,13 +6,13 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/25 13:05:39 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/26 11:40:17 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_exit(t_data *data)
+void fft_exit(t_data *data)
 {
 	(void)data;
 	printf("syntax Error\n");

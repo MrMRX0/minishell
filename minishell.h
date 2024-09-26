@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/25 13:09:19 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/26 12:03:36 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,12 @@ typedef struct      t_lst_0
     t_lexer     lexer;
     t_token     *token;
     char        **args;
-    char **env;
-    t_env       *env_list;
+    char        **env; //myne free
+    t_env       *env_list;  // myne free
     int         type;
     int     std_in  ;
 	int     std_out ;
+    int         status; //myne 
 }                   t_data;
 
 
@@ -199,8 +200,23 @@ char	*ft_strcat(char *dest, const char *src);
 int	    ft_strcmp(const char *s1, const char *s2);
 //--------------------sub_lib--------------------
 
+/*ft_exit*/
+//--------------------ft_exit--------------------
+t_bool	ft_exit(char **av, t_data *data);
+void	ft_exit_helper2(t_data *data, char **av);
+void	ft_exit_helper(char **av, t_data *data);
+int	ft_isnumber(char *str);
+int	nb_count(char **av);
+//--------------------ft_exit--------------------
 
-void ft_exit(t_data *data);
+/*free*/
+//--------------------free--------------------
+void    free_close_all(t_data **data, char **av);
+void    free_env(t_env **env);
+void    free_av(char **av);
+//--------------------free--------------------
+
+void fft_exit(t_data *data);
 
 
 void	save_stdin_stdout(int *std_in, int *std_out);

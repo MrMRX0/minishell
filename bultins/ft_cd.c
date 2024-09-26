@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:44:35 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/25 11:56:21 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/26 10:24:40 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_bool	check_directory(char *dir)
 	if (access(dir, F_OK) == -1)
 		return (error("cd", "No such file or directory"), false);
 	if (stat(dir, &info) == -1)
-		return (error("cd", NULL), false);
+		return (error("cd", "Error!"), false);
 	if (!S_ISDIR(info.st_mode))
 		return (error("cd", "Not a directory"), false);
 	if (access(dir, R_OK | X_OK) == -1)
