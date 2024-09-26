@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/25 12:00:05 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/25 13:09:19 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 #include "libft/libft.h"
 #include <linux/limits.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 // Regular Colors
 #define COLOR_BLACK     "\033[0;30m"

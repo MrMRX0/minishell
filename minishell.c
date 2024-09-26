@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/25 12:03:38 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/25 13:05:39 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ void	bultins_runner(char **av, t_data *data)
 	else if (ft_strncmp(av[0], "echo", 4) == 0)
 		ft_echo(av);
 	else if (ft_strncmp(av[0], "cd", 2) == 0)
-		ft_cd(av);
+		ft_cd(av, data);
 }
 
 int 	ft_buitin_check(char **av)
