@@ -1,11 +1,14 @@
 #include "minishell.h"
 
-void pipe_pipe(char ***commands, int n, t_data *data)
+void pipe_pipe(int n, t_data *data)
 {
     int i = 0;
     pid_t pid;
     int *fd = malloc(((2 * n)  * sizeof(int)));
     int cmd_idx = 0;
+    t_token *pipe_token;
+	char **command = NULL;
+    int red_fd;
 
 
     while(i < n)
@@ -20,15 +23,28 @@ void pipe_pipe(char ***commands, int n, t_data *data)
     // Fork and execute commands
     while(cmd_idx <= n)
     {
+        pipe_token  = extract_token(&data->token);
+        command = get_copy_of_token(command, &pipe_token);
+        expand(command,data->env, &pipe_token);
+        red_fd = redirections(&pipe_token);
+        redirect_input(&pipe_token);
+        join_nodes(&pipe_token);
+        command = get_copy_of_token_v3(command, &pipe_token);
         pid = fork();
         if (pid == 0)
         {
             // If not the first command, redirect stdin to the previous pipe
-            if (cmd_idx > 0)
-                dup2(fd[(cmd_idx - 1) * 2], STDIN_FILENO);
-            // If not the last command, redirect stdout to the next pipe
-            if (cmd_idx < n)
-                dup2(fd[cmd_idx * 2 + 1], STDOUT_FILENO);
+            if(!red_fd)
+            {
+                if (cmd_idx > 0)
+                    dup2(fd[(cmd_idx - 1) * 2], STDIN_FILENO);
+                // If not the last command, redirect stdout to the next pipe
+                if (cmd_idx < n)
+                    dup2(fd[cmd_idx * 2 + 1], STDOUT_FILENO);
+
+            }
+            else 
+                dup2(red_fd, STDOUT_FILENO);
             // Close all pipe file descriptors
             i = 0;
             while(i < 2 * n)
@@ -36,14 +52,7 @@ void pipe_pipe(char ***commands, int n, t_data *data)
                 close(fd[i]);
                 i++;
             }
-            execute(commands[cmd_idx], data);
-            i = 0;
-            while(commands[cmd_idx][i])
-            {
-                free(commands[cmd_idx][i]);
-                i++;
-            }
-            free(commands[cmd_idx]);
+            execute(command, data);
             exit(0);
         }
         else if (pid < 0) 

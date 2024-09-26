@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/25 12:15:40 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/26 17:29:30 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,21 @@ void ft_lst_add(t_token **lst)
 		(*lst)->arg = NULL;
 		(*lst)->next = NULL;
 		(*lst)->previous = NULL;
+		(*lst)->next_command = 0;
 		return;
 	}
 	t_token *current = *lst;
 	while (current->next)
 		current = current->next;
 	t_token *new_node = malloc(sizeof(t_token));
-	if (!new_node) {
+	if (!new_node)
+	{
 		perror("malloc failed");
 		exit(EXIT_FAILURE);
 	}
 	new_node->arg = NULL;
 	new_node->next = NULL;
+	new_node->next_command = 0;
 	current->next = new_node;
 	new_node->previous = current;
 }
@@ -286,17 +289,7 @@ int redirections(t_token **token)
 {
 	int i = 0;
 	t_token *tmp = *token;
-	while(tmp)
-	{
-		if (tmp->type == SINGLE_REDIRECTION)
-		{
-			i++;
-		}
-		tmp = tmp->next;
-	}
-	if(!i)
-		return 0;
-	int *fd = malloc(i * sizeof(int));
+	int fd = 0;
 	tmp = *token;
 	i = 0;
 	while(tmp)
@@ -304,18 +297,15 @@ int redirections(t_token **token)
 		if (tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION)
 		{
 			if (tmp->type == APPEND_REDIRECTION)
-				fd[i] = open(tmp->next->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				fd  = open(tmp->next->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			else
-				fd[i] = open(tmp->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			i++;
+				fd  = open(tmp->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		}
 		tmp = tmp->next;
 	}
-	while(fd[i])
-		i++;
-	dup2(fd[i - 1], STDOUT_FILENO);
-	close(fd[i - 1]);
-	return(0);
+	// dup2(fd , STDOUT_FILENO);
+	// close(fd);
+	return(fd);
 }
 
 int get_size_of_tree(t_token **token)

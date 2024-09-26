@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/24 19:15:37 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:58:38 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,11 @@ typedef struct      t_lst_0
 	int     std_out ;
 }                   t_data;
 
+typedef struct      t_lst_3
+{
+    t_token *token;
+    struct t_lst_3 *next;
+}                   t_hold_token;
 
 
 
@@ -214,7 +219,7 @@ char **get_copy_of_token_v3(char **argv, t_token **lst);
 int get_size_of_tree(t_token **token);
 void piss_off(t_token **lst, int len);
 void free_node(t_token ** token, int a, int b);
-void pipe_pipe(char ***commands, int n, t_data *data);
+void pipe_pipe(int n, t_data *data);
 void	execute(char **args, t_data *data);
 void lexer(char *command, t_data *data);
 void ft_lst_add(t_token **lst);
@@ -229,5 +234,7 @@ char *handle_quote(char *command , t_data *data, char c);
 char *handle_dollar_sign(char *str, char **env, int *b);
 char **expand(char** argv, char**env, t_token **token);
 int parsing(char *command, t_data *data);
+t_token *extract_token(t_token **token);
+void join_nodes(t_token **token);
 
 #endif

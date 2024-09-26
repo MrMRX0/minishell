@@ -1,6 +1,1 @@
-"echo \'\"$USER\"\'\"alo\""
-""
-"       "
-echo $USER $a
-echo $a$USERaaa
-p"w"'mclear
+hello

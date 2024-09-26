@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 14:48:47 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/25 13:47:53 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:02:15 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,12 @@ char *handle_quote(char *command , t_data *data, char c)
 			command = add_command_to_node(command, i, data);
 			if(!command)
 				return(NULL);
-			if(letter != ' ' || letter == '\0')
-			{
-				t_token *tmp = data->token;
-				while(tmp  && tmp->next)
-					tmp = tmp->next;
+			t_token *tmp = data->token;
+			while(tmp  && tmp->next)
+				tmp = tmp->next;
+			tmp->next_command = 0;
+			if(letter != ' ' && letter != '\0' && letter != '>' && letter != '<' && letter != '|')
 				tmp->next_command = 1; //set the flag to 1 to join the node later 
-			}
 			return(command);
 		}
 	}
@@ -127,7 +126,20 @@ char *handle_redirections(char *command, t_data *data, char c)
 	return(command);
 		
 }
-
+//USER
+//USER
+int str_cmp_n(char *str1, char *str2, int n)
+{
+	while((*str1 != '\0') && (*str1 == *str2))
+	{
+		n--;
+		(str1)++;
+		(str2)++;
+	}
+	if (n == 0 && *str1 == '\0')
+		return 0;
+	return 1;
+}
 char *handle_dollar_sign(char *str, char **env, int *b)
 {
 	int i = 0;
@@ -145,8 +157,10 @@ char *handle_dollar_sign(char *str, char **env, int *b)
 	while(env[j])
 	{
 		splited_env = ft_split(env[j], '=');
-		if(strncmp(str, splited_env[0], ft_strlen(splited_env[0])) == 0)
+		if(str_cmp_n(splited_env[0], str, i) == 0)
+		{
 			return(*b += (i), splited_env[1]);
+		}
 		j++;
 	}
 	return(*b += i,NULL);
@@ -176,6 +190,7 @@ char **expand(char** argv, char**env, t_token **token)
 		{
 			while(str[b])
 			{
+				//$USERasdf
 				if(str[b] == '$')
 				{
 					b++;
