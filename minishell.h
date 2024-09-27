@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/26 12:14:48 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/26 20:54:25 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ typedef struct      t_lst_0
     int     std_in  ;
 	int     std_out ;
     int         status; //myne 
+    int     flag;
 }                   t_data;
 
 
@@ -258,5 +259,5 @@ char *handle_quote(char *command , t_data *data, char c);
 char *handle_dollar_sign(char *str, char **env, int *b);
 char **expand(char** argv, char**env, t_token **token);
 int parsing(char *command, t_data *data);
-
+void	ft_execute(char **args, t_data *data);
 #endif

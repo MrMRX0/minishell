@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/26 12:19:23 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/26 20:57:37 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,10 @@ int 	ft_buitin_check(char **av)
 
 void	execute(char **args, t_data *data)
 {
+		if(ft_strcmp(args[0],"exit") == 0)
+		{
+			ft_exit(args,data);
+		}
 		pid_t pid = fork();
 		char *path = NULL;
 		if (pid == 0)
@@ -540,6 +544,7 @@ int minishell(t_data	*data, char **env)
 			return(printf("exit"), 0);
 		add_history(input);
 		lexer(input, data);
+		data->flag = 0;
 		data->env = transform_env(data->env_list);
 		if(parsing(input, data) == 0)
 		{

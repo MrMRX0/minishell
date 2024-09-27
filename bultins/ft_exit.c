@@ -62,6 +62,13 @@ void	ft_exit_helper2(t_data *data, char **av)
 
 t_bool	ft_exit(char **av, t_data *data)
 {
+
+	if (nb_count(av) == 1 && data->flag == 1)
+	{
+
+		free_close_all(data, av);
+		exit(0);
+	}
 	if (nb_count(av) == 1)
 	{
 		write(2, "exit\n", 5);

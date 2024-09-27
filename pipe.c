@@ -20,6 +20,7 @@ void pipe_pipe(char ***commands, int n, t_data *data)
     // Fork and execute commands
     while(cmd_idx <= n)
     {
+        
         pid = fork();
         if (pid == 0)
         {
@@ -36,6 +37,12 @@ void pipe_pipe(char ***commands, int n, t_data *data)
                 close(fd[i]);
                 i++;
             }
+            if(ft_strcmp(commands[cmd_idx][0],"exit") == 0)
+		    {
+                data->flag = 1;
+			    ft_exit(commands[cmd_idx],data);
+            }
+		
             execute(commands[cmd_idx], data);
             i = 0;
             while(commands[cmd_idx][i])
