@@ -48,36 +48,38 @@ char *handle_quote(char *command , t_data *data, char c)
 		quote = 1;
 		i++;
 	
-	while(command[i])
-	{
-		if(command[i] != c)
-			i++;
-		
-		if(command[i] == c)
+		while(command[i])
 		{
-			quote++;
-			i++;
+			if(command[i] != c)
+				i++;
+			
+			if(command[i] == c)
+			{
+				quote++;
+				i++;
+			}
+			if((quote % 2 == 0))
+			{
+				char letter = command[i];
+				if(i == 2)
+					return (command + 2);
+				data->type = S_QUOTE;
+				if (c == '\"')
+					data->type = D_QUOTE;
+				command = add_command_to_node(command, i, data);
+				if(!command)
+					return(NULL);
+				t_token *tmp = data->token;
+				while(tmp  && tmp->next)
+					tmp = tmp->next;
+				tmp->next_command = 0;
+				if(letter != ' ' && letter != '\0' && letter != '>' && letter != '<' && letter != '|')
+					tmp->next_command = 1; //set the flag to 1 to join the node later 
+				return(command);
+			}
 		}
-		if((quote % 2 == 0))
-		{
-			char letter = command[i];
-			if(i == 2)
-				return (command + 2);
-			data->type = S_QUOTE;
-			if (c == '\"')
-				data->type = D_QUOTE;
-			command = add_command_to_node(command, i, data);
-			if(!command)
-				return(NULL);
-			t_token *tmp = data->token;
-			while(tmp  && tmp->next)
-				tmp = tmp->next;
-			tmp->next_command = 0;
-			if(letter != ' ' && letter != '\0' && letter != '>' && letter != '<' && letter != '|')
-				tmp->next_command = 1; //set the flag to 1 to join the node later 
-			return(command);
-		}
-	}
+		ft_syntax_error(data);
+		return(NULL);
 	}
 	else
 	{
@@ -92,36 +94,40 @@ char *handle_quote(char *command , t_data *data, char c)
 		return(command);
 	}
 		
-	return(ft_exit(data), NULL);
+	return(NULL);
 }
 
 char *handle_redirections(char *command, t_data *data, char c)
 {
 	int i = 0;
-	while(command[i] != c)
-		i++;
-	if(i)
+	if(command[i] != c)
 	{
+		while(command[i] != c)
+			i++;
 		data->type = 0;
 		command = add_command_to_node(command, i, data);
+		return(command);
 	}
-	// printf("comand after cut it==%s\n",command);
-	i = 0;
-	// if(command[i + 2] == c)
-	// 	ft_exit(data);
-	if(command[i + 1] != c)
+	while(command[i] == c)
+		i++;
+	if(i == 1)
 	{
 		data->type = INPUT_REDIRECTION;
 		if (c == '>')
 			data->type = SINGLE_REDIRECTION;
-		command = add_command_to_node(command, i + 1, data);
+		command = add_command_to_node(command, i, data);
 	}
-	else if(command[i + 1] == c)
+	else if(i == 2)
 	{
 		data->type = APPEND_REDIRECTION;
 		if(c == '<')
 			data->type = HERDOK;
-		command = add_command_to_node(command, i + 2, data);
+		command = add_command_to_node(command, i, data);
+	}
+	else
+	{
+		ft_syntax_error(data);
+		return (NULL);
 	}
 	return(command);
 		
@@ -233,7 +239,12 @@ void lexer(char *command, t_data *data)
 		i++;
 	}
 }
-
+void ft_syntax_error(t_data *data)
+{
+	printf("syntax Error\n");
+	data->syntax_error = 1;
+	// exit(1);
+}
 char * handle_pipe(char *command, t_data *data)
 {
 	int i = 0;
@@ -259,18 +270,45 @@ char * handle_pipe(char *command, t_data *data)
 		}			// exit(0);
 	}
 	if(b == 0)
-		ft_exit(data);
+	{
+		ft_syntax_error(data);
+		return(NULL);
+	}
 	data->type = PIPE;
 	command = add_command_to_node(command, 1, data);
 
 
 	return(command);
 }
+int parser(t_data *data)
+{
+	t_token *tmp;
+	
+	tmp = data->token;
+	while(tmp->next)
+	{
+		if(tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION || tmp->type == HERDOK || tmp->type == INPUT_REDIRECTION || tmp->type == PIPE)
+		{
+			if(tmp->next->type == SINGLE_REDIRECTION || tmp->next->type == APPEND_REDIRECTION)
+				ft_syntax_error(data);
+			else if(tmp->next->type == HERDOK || tmp->next->type == INPUT_REDIRECTION)
+				ft_syntax_error(data);
+			else if(tmp->next->type == PIPE)
+				ft_syntax_error(data);
+			if(data->syntax_error)
+				return(1);
+			
+		}
+		tmp = tmp->next;
+	}
+	return(0);
+}
 int parsing(char *command, t_data *data)
 {
 	int i;
 	
 	i = 0;
+	data->syntax_error = 0;
 	while(command[i] != '\0')
 	{
 		command = remove_white_spaces(command);
@@ -293,6 +331,8 @@ int parsing(char *command, t_data *data)
 			command = handle_pipe(command, data);
 		else if (command[i] == '<')
 			command = handle_redirections(command, data, '<');
+		if(data->syntax_error)
+			return(1);
 		if(!command)
 			return(0);
 		i = 0;

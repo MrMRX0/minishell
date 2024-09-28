@@ -17,6 +17,8 @@ void join_nodes(t_token **token)
 	t_token *to_free;
 	while(tmp)
 	{
+		if (tmp->next_command == 1 && !tmp->next)
+			return;
 		if(tmp->next_command == 1 && tmp->next)
 		{
 			tmp->arg = ft_strjoin(tmp->arg, tmp->next->arg);
@@ -89,31 +91,31 @@ t_token *extract_token(t_token **token)
 		*token=(*token)->next;
 	return(new);
 }
-void ft_lst_add_2(t_hold_token **lst, t_token ** token) 
-{
-	if (!*lst) {
-		*lst = malloc(sizeof(t_hold_token));
-		if (!*lst) {
-			perror("malloc failed");
-			exit(EXIT_FAILURE);
-		}
-		(*lst)->next = NULL;
-		(*lst)->token = *token;
-		return;
-	}
-	t_hold_token *current = *lst;
-	while (current->next)
-		current = current->next;
-	t_hold_token *new_node = malloc(sizeof(t_hold_token));
-	if (!new_node)
-	{
-		perror("malloc failed");
-		exit(EXIT_FAILURE);
-	}
-	new_node->next = NULL;
-	new_node->token = *token;
-	current->next = new_node;
-}
+// void ft_lst_add_2(t_hold_token **lst, t_token ** token) 
+// {
+// 	if (!*lst) {
+// 		*lst = malloc(sizeof(t_hold_token));
+// 		if (!*lst) {
+// 			perror("malloc failed");
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		(*lst)->next = NULL;
+// 		(*lst)->token = *token;
+// 		return;
+// 	}
+// 	t_hold_token *current = *lst;
+// 	while (current->next)
+// 		current = current->next;
+// 	t_hold_token *new_node = malloc(sizeof(t_hold_token));
+// 	if (!new_node)
+// 	{
+// 		perror("malloc failed");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	new_node->next = NULL;
+// 	new_node->token = *token;
+// 	current->next = new_node;
+// }
 void	pipe_execution(int i, t_data *data)
 {
 	pipe_pipe(i, data);

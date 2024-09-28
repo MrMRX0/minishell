@@ -52,6 +52,11 @@ void pipe_pipe(int n, t_data *data)
                 close(fd[i]);
                 i++;
             }
+            if(ft_strcmp(command[0],"exit") == 0)
+		    {
+                data->flag = 1;
+			    ft_exit(command,data);
+		    }
             execute(command, data);
             exit(0);
         }

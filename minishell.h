@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/26 16:58:38 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/27 13:30:12 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 #include "libft/libft.h"
 #include <linux/limits.h>
 #include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 // Regular Colors
 #define COLOR_BLACK     "\033[0;30m"
@@ -95,7 +97,7 @@ typedef struct      t_lst_1
     int         next_command;
     int         type;
     struct      t_lst_1 *next;
-    struct      t_lst_1 *previous;
+     struct      t_lst_1 *previous;
 }                   t_token;
 
 typedef struct      t_lst_0
@@ -103,18 +105,16 @@ typedef struct      t_lst_0
     t_lexer     lexer;
     t_token     *token;
     char        **args;
-    char **env;
-    t_env       *env_list;
+    char        **env; //myne free
+    t_env       *env_list;  // myne free
     int         type;
     int     std_in  ;
 	int     std_out ;
+    int         status; //myne 
+    int     flag;
+    int syntax_error;
 }                   t_data;
 
-typedef struct      t_lst_3
-{
-    t_token *token;
-    struct t_lst_3 *next;
-}                   t_hold_token;
 
 
 
@@ -183,6 +183,17 @@ t_bool	ft_echo(char **av);
 int	ft_strncmp_echo(char *str);
 //--------------------ft_echo-------------------
 
+/*ft_cd*/
+//--------------------ft_cd--------------------
+t_bool	ft_cd(char **av, t_data *data);
+t_bool	check_cd(char **av, char *old_pwd);
+t_bool	check_directory(char *dir);
+void	set_env(t_env *env, const char *key, const char *value, t_data *data);
+char	*get_env_value(t_env *env, const char *key);
+void	error(const char *cmd, const char *msg);
+void	change_pwd(t_env *envs, const char *old_pwd, const char *pwd, t_data *data);
+//--------------------ft_cd--------------------
+
 /*sub_lib*/
 //--------------------sub_lib--------------------
 char	*ft_strstr(const char *haystack, const char *needle);
@@ -191,8 +202,23 @@ char	*ft_strcat(char *dest, const char *src);
 int	    ft_strcmp(const char *s1, const char *s2);
 //--------------------sub_lib--------------------
 
+/*ft_exit*/
+//--------------------ft_exit--------------------
+t_bool	ft_exit(char **av, t_data *data);
+void	ft_exit_helper2(t_data *data, char **av);
+void	ft_exit_helper(char **av, t_data *data);
+int	ft_isnumber(char *str);
+int	nb_count(char **av);
+//--------------------ft_exit--------------------
 
-void ft_exit(t_data *data);
+/*free*/
+//--------------------free--------------------
+void    free_close_all(t_data *data, char **av);
+void    free_env(t_env **env);
+void    free_av(char **av);
+//--------------------free--------------------
+
+void fft_exit(t_data *data);
 
 
 void	save_stdin_stdout(int *std_in, int *std_out);
@@ -234,7 +260,10 @@ char *handle_quote(char *command , t_data *data, char c);
 char *handle_dollar_sign(char *str, char **env, int *b);
 char **expand(char** argv, char**env, t_token **token);
 int parsing(char *command, t_data *data);
+void	ft_execute(char **args, t_data *data);
 t_token *extract_token(t_token **token);
 void join_nodes(t_token **token);
-
+void ft_syntax_error(t_data *data);
+int parser(t_data *data);
+// t_bool	ft_exit(char **av, t_data *data);
 #endif

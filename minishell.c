@@ -1,26 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/21 06:32:49 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/26 17:29:30 by ibougajd         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
-
-void ft_exit(t_data *data)
-{
-	(void)data;
-	printf("syntax Error\n");
-	exit(1);
-}
-
-
-
 
 void ft_lst_add(t_token **lst) 
 {
@@ -231,6 +210,10 @@ void	bultins_runner(char **av, t_data *data)
 		ft_pwd(av);
 	else if (ft_strncmp(av[0], "echo", 4) == 0)
 		ft_echo(av);
+	else if (ft_strncmp(av[0], "cd", 2) == 0)
+		ft_cd(av, data);
+	else if (ft_strncmp(av[0], "exit", 4) == 0)
+		ft_exit(av, data);
 }
 
 int 	ft_buitin_check(char **av)
@@ -240,6 +223,10 @@ int 	ft_buitin_check(char **av)
 		return (0);
 	}
 	else if (ft_strncmp(av[0], "pwd", 3) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(av[0], "exit", 4) == 0)
 	{
 		return (0);
 	}
@@ -255,12 +242,71 @@ int 	ft_buitin_check(char **av)
 	{
 		return (0);
 	}
+	else if (ft_strncmp(av[0], "cd", 2) == 0)
+	{
+		return (0);
+	}
 	return (1);
 
 }
 
+int check_splited_path(char **splited_path, char *command)
+{
+	int i;
+	char *path;
+	char slash[2];
+
+	i = 0;
+	slash[0] = '/';
+	slash[1] = '\0';
+	while(splited_path[i])
+	{
+		path = ft_strjoin(splited_path[i], slash);
+		path = ft_strjoin(path, command);
+		if((access(path, X_OK) == 0))
+			return(1);
+		i++;
+	}
+	return(0);
+}
+int check_path(char *command, t_data *data)
+{
+	char *path;
+	char **splited_path;
+	int i;
+
+	i = 0;
+	path = NULL;
+	splited_path = NULL;
+	while(data->env[i])
+	{
+		splited_path = ft_split(data->env[i], '=');
+		if(strcmp(splited_path[0], "PATH") == 0)
+			break;
+		i++;
+	}
+	if(!data->env[i])
+		return(0);
+	path = data->env[i];
+	free(splited_path[0]);
+	free(splited_path[1]);
+	free(splited_path);
+	splited_path = ft_split(path, ':');
+	i = 0;
+	i = check_splited_path(splited_path, command);
+	return(i);
+}
+void ft_error(char **cmd)
+{
+	printf("minishell: %s: No such file or directory\n", cmd[0]);
+	exit(0);
+}
 void	execute(char **args, t_data *data)
 {
+		if(ft_strcmp(args[0],"exit") == 0)
+		{
+			ft_exit(args,data);
+		}
 		pid_t pid = fork();
 		char *path = NULL;
 		if (pid == 0)
@@ -271,10 +317,18 @@ void	execute(char **args, t_data *data)
 			}
 			else
 			{
-				// path = check_env(data);
-				path = ft_strjoin("/bin/", args[0]);
-				execve(path, args, data->env);
-				perror("Error");
+				if(check_path(args[0], data))
+				{
+					path = ft_strjoin("/bin/", args[0]);
+					if (execve(path, args, data->env) == -1)
+					{
+						perror("Error");
+						exit(0);
+					}
+				}
+				else
+					ft_error(args);
+
 			}
 		}
 		else
@@ -387,9 +441,9 @@ int herdok(t_token **node)
 	i++;
 	int fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1) {
-        write(2, "Failed to open file\n", 20);  // Write to stderr if open fails
-        return -1;
-    }
+		write(2, "Failed to open file\n", 20);  // Write to stderr if open fails
+		return -1;
+	}
 	char *input = NULL;
 	while(1)
 	{
@@ -405,10 +459,10 @@ int herdok(t_token **node)
 	close(fd);
 	free(input);
 	fd = open(filepath, O_RDONLY);
-    if (fd == -1) {
-        write(2, "Failed to reopen file\n", 22);
-        return -1;
-    }
+	if (fd == -1) {
+		write(2, "Failed to reopen file\n", 22);
+		return -1;
+	}
 	return(fd);
 }
 
@@ -500,7 +554,6 @@ int minishell(t_data	*data, char **env)
 	char *input ;
 				 
 	input = NULL;
-	memset(data, 0, sizeof(t_data));
 	billed_env_list(env, data);
 	while(1)
 	{
@@ -510,17 +563,18 @@ int minishell(t_data	*data, char **env)
 		data->token = (t_token *){0};
 		input = readline(COLOR_BOLD_RED "➜  minishell " COLOR_RESET);
 		if (!input)
-			return(printf("exit"), 0);
+			return(printf("NULL_EXIT\n"), exit(0), 0);
 		add_history(input);
 		lexer(input, data);
+		data->flag = 0;
 		data->env = transform_env(data->env_list);
-		if(parsing(input, data) == 0)
+		if(parsing(input, data) == 0 && parser(data) == 0)
 		{
 			save_stdin_stdout(&data->std_in, &data->std_out);
 			execution(data);
 			restore_stdin_stdout(data->std_in, data->std_out);
-			continue;
 		}
+		continue;
 	}
 	return(0);
 }

@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 18:06:27 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/24 10:26:36 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/26 10:23:50 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,11 @@ int	nb_args(char **args)
 	while (args[len])
 		len++;
 	return (len);
+}
+
+void	error(const char *cmd, const char *msg)
+{
+	if (msg && cmd)
+		printf("%s: %s\n", cmd, msg);
+
 }

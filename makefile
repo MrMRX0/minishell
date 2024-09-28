@@ -5,7 +5,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra  -g 
+CFLAGS = -Wall -Wextra -Werror -g 
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -24,7 +24,11 @@ SRCS =  pipe.c \
 		parsing.c \
 		bultins.c \
 		env/env.c	\
-		env/env_tools.c
+		env/env_tools.c \
+		bultins/ft_cd.c \
+		bultins/buil_tools1.c \
+		bultins/ft_exit.c \
+		free/free.c \
 
 OBJS = $(SRCS:.c=.o)
 
