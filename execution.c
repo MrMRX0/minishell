@@ -65,10 +65,7 @@ void	normal_execution(t_data *data)
 	red_fd = redirections(&data->token);
 	red_in = redirect_input(&data->token, data);
 	if(red_in == -1)
-	{
-		ft_syntax_error(data);
 		return;
-	}
 	if (red_fd)
 		dup2(red_fd, STDOUT_FILENO);
 	join_nodes(&data->token);

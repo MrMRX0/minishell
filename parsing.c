@@ -189,7 +189,7 @@ char **expand(char** argv, t_data *data, t_token **token)
 
 	i = 0;
 	b = 0;
-	while(argv[i])
+	while(argv[i] && *token)
 	{
 		str = argv[i];
 		b = 0;
@@ -293,11 +293,19 @@ int parser(t_data *data)
 	tmp = data->token;
 	if(!tmp)
 		return(0);
+	if(tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION || tmp->type == HERDOK || tmp->type == INPUT_REDIRECTION )
+	{
+		if (tmp->next == NULL)
+			ft_syntax_error(data);
+		return(1);
+	}
 	while(tmp->next)
 	{
 		if(tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION || tmp->type == HERDOK || tmp->type == INPUT_REDIRECTION )
 		{
-			if(tmp->next->type == SINGLE_REDIRECTION || tmp->next->type == APPEND_REDIRECTION)
+			if (tmp->next == NULL)
+				ft_syntax_error(data);
+			else if(tmp->next->type == SINGLE_REDIRECTION || tmp->next->type == APPEND_REDIRECTION)
 				ft_syntax_error(data);
 			else if(tmp->next->type == HERDOK || tmp->next->type == INPUT_REDIRECTION)
 				ft_syntax_error(data);

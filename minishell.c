@@ -298,9 +298,10 @@ int check_path(char *command, t_data *data)
 	i = check_splited_path(splited_path, command);
 	return(i);
 }
-void ft_error(char **cmd)
+void ft_error(char **cmd, t_data *data)
 {
 	printf("minishell: %s: No such file or directory\n", cmd[0]);
+	data->status = 127;
 	exit(0);
 }
 void	execute(char **args, t_data *data)
@@ -328,7 +329,7 @@ void	execute(char **args, t_data *data)
 					}
 				}
 				else
-					ft_error(args);
+					ft_error(args, data);
 
 			}
 		else
@@ -348,7 +349,7 @@ int redirections(t_token **token)
 	i = 0;
 	while(tmp)
 	{
-		if (tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION)
+		if ((tmp->next) && (tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION))
 		{
 			if (tmp->type == APPEND_REDIRECTION)
 				fd  = open(tmp->next->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -566,11 +567,11 @@ int  redirect_input(t_token **token, t_data *data)
 		}
 		else if(tmp->type == INPUT_REDIRECTION)
 		{
-			int fd;
 			fd = open(tmp->next->arg, O_RDONLY);
 			if (fd == -1)
 			{
-				perror("file");
+				perror("minishell");
+				data->status = 1;
 				return -1;
 			}
 			dup2(fd, STDIN_FILENO);
@@ -606,7 +607,9 @@ int minishell(t_data	*data, char **env)
 		lexer(input, data);
 		data->flag = 0;
 		data->env = transform_env(data->env_list);
-		if(parsing(input, data) == 0 && parser(data) == 0)
+		if(parser(data) == 1)
+			continue;
+		if(parsing(input, data) == 0)
 		{
 			save_stdin_stdout(&data->std_in, &data->std_out);
 			execution(data);

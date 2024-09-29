@@ -49,6 +49,7 @@ void pipe_pipe(int n, t_data *data)
 			}
 			else 
 				dup2(red_fd, STDOUT_FILENO);
+			close(red_fd);
 			// Close all pipe file descriptors
 			i = 0;
 			while(i < 2 * n)
@@ -62,6 +63,7 @@ void pipe_pipe(int n, t_data *data)
 				ft_exit(command,data);
 			}
 			execute(command, data);
+			restore_stdin_stdout(data->std_in, data->std_out);
 			exit(0);
 		}
 		else if (pid < 0) 
@@ -71,7 +73,7 @@ void pipe_pipe(int n, t_data *data)
 		}
 		else
 		{
-			restore_stdin_stdout(data->std_in, data->std_out);
+			// restore_stdin_stdout(data->std_in, data->std_out);
 			usleep(1000);
 			cmd_idx++;
 		}
