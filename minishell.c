@@ -309,17 +309,15 @@ void	execute(char **args, t_data *data)
 		{
 			ft_exit(args,data);
 		}
+		if (ft_buitin_check(args) == 0)
+		{
+			bultins_runner(args,data);
+			return ;
+		}
 		pid_t pid = fork();
 		char *path = NULL;
 		if (pid == 0)
 		{
-			if (ft_buitin_check(args) == 0)
-			{
-				bultins_runner(args,data);
-				exit(0);
-			}
-			else
-			{
 				if(check_path(args[0], data))
 				{
 					path = ft_strjoin("/bin/", args[0]);
@@ -333,7 +331,6 @@ void	execute(char **args, t_data *data)
 					ft_error(args);
 
 			}
-		}
 		else
 		{
 			int status;
@@ -594,9 +591,10 @@ int minishell(t_data	*data, char **env)
 	char *input ;
 				 
 	input = NULL;
+	billed_env_list(env, data);
 	while(1)
 	{
-		billed_env_list(env, data);
+	
 		if(data->token != NULL)
 			free_linked_list(&data->token);
 		data->lexer = (t_lexer ){0};

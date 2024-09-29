@@ -61,7 +61,7 @@ void	normal_execution(t_data *data)
 	command = get_copy_of_token(command, &(data->token));
 	if(!command)
 		return ;
-	// expand(command,data, &data->token);
+	expand(command,data, &data->token);
 	red_fd = redirections(&data->token);
 	red_in = redirect_input(&data->token, data);
 	if(red_in == -1)
