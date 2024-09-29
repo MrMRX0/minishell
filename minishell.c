@@ -594,9 +594,9 @@ int minishell(t_data	*data, char **env)
 	char *input ;
 				 
 	input = NULL;
-	billed_env_list(env, data);
 	while(1)
 	{
+		billed_env_list(env, data);
 		if(data->token != NULL)
 			free_linked_list(&data->token);
 		data->lexer = (t_lexer ){0};
