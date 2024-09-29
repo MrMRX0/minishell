@@ -146,11 +146,17 @@ int str_cmp_n(char *str1, char *str2, int n)
 		return 0;
 	return 1;
 }
-char *handle_dollar_sign(char *str, char **env, int *b)
+char *handle_dollar_sign(char *str, t_data *data, int *b)
 {
 	int i = 0;
 	int j = 0;
 	char **splited_env;
+	if(str_cmp_n("?", str, 1) == 0)
+	{
+		char *res = NULL;
+		res = ft_itoa(data->status);
+		return(*b += 1, res);
+	}
 	while(str[i])
 	{
 		if((str[i] != '$' && str[i] >= 65 && str[i] <= 90) || (str[i] >= 97 && str[i] <= 122) || (str[i] >= '0' && str[i] <= '9'))
@@ -160,9 +166,9 @@ char *handle_dollar_sign(char *str, char **env, int *b)
 	}
 	if(!i)
 		return("$");
-	while(env[j])
+	while(data->env[j])
 	{
-		splited_env = ft_split(env[j], '=');
+		splited_env = ft_split(data->env[j], '=');
 		if(str_cmp_n(splited_env[0], str, i) == 0)
 		{
 			return(*b += (i), splited_env[1]);
@@ -171,7 +177,7 @@ char *handle_dollar_sign(char *str, char **env, int *b)
 	}
 	return(*b += i,NULL);
 }
-char **expand(char** argv, char**env, t_token **token)
+char **expand(char** argv, t_data *data, t_token **token)
 {
 	int i;
 	int b;
@@ -187,7 +193,7 @@ char **expand(char** argv, char**env, t_token **token)
 	{
 		str = argv[i];
 		b = 0;
-		if(((strchr(str, '$')) && (*token)->type == S_QUOTE) || (strchr(str, '$') == 0))
+		if(((strchr(str, '$')) && ((*token)->type == S_QUOTE || (*token)->type == HERDOK_INPUT))  || (strchr(str, '$') == 0))
 		{
 			i++;
 			*token = (*token)->next;
@@ -200,7 +206,7 @@ char **expand(char** argv, char**env, t_token **token)
 				if(str[b] == '$')
 				{
 					b++;
-					returned_str = handle_dollar_sign(str + b, env, &b);
+					returned_str = handle_dollar_sign(str + b, data, &b);
 					if(returned_str)
 						final_str = ft_strjoin(final_str, returned_str);
 				}
@@ -283,11 +289,13 @@ char * handle_pipe(char *command, t_data *data)
 int parser(t_data *data)
 {
 	t_token *tmp;
-	
+
 	tmp = data->token;
+	if(!tmp)
+		return(0);
 	while(tmp->next)
 	{
-		if(tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION || tmp->type == HERDOK || tmp->type == INPUT_REDIRECTION || tmp->type == PIPE)
+		if(tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION || tmp->type == HERDOK || tmp->type == INPUT_REDIRECTION )
 		{
 			if(tmp->next->type == SINGLE_REDIRECTION || tmp->next->type == APPEND_REDIRECTION)
 				ft_syntax_error(data);

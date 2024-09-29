@@ -137,6 +137,8 @@ char **get_copy_of_token_v3(char **argv, t_token **lst)
 			len++;
 		}
 	}
+	if(!len)
+		return NULL;
 	tmp= *lst;
 	argv = malloc(len * sizeof(char *) + 1);
 	int i = 0;
@@ -314,6 +316,7 @@ void	execute(char **args, t_data *data)
 			if (ft_buitin_check(args) == 0)
 			{
 				bultins_runner(args,data);
+				exit(0);
 			}
 			else
 			{
@@ -429,8 +432,39 @@ void	restore_stdin_stdout(int std_in, int std_out)
 	close(std_in);
 	close(std_out);
 }
-int herdok(t_token **node)
+char *herdok_expand(char *str, t_data *data)
 {
+	int b;
+	char *returned_str;
+	char *final_str;
+	char tmp[2];
+
+	b = 0;
+	final_str  = NULL;
+	returned_str = NULL;
+	while(str[b])
+	{
+		if(str[b] == '$')
+		{
+			b++;
+			returned_str = handle_dollar_sign(str + b, data, &b);
+			if(returned_str)
+				final_str = ft_strjoin(final_str, returned_str);
+		}
+		else
+		{
+			tmp[0] = str[b];
+			tmp[1] = '\0';
+			final_str = ft_strjoin(final_str, tmp);
+			b++;
+		}
+	}
+	return(final_str);
+}
+int heredoc(t_token **node, t_data *data)
+{
+	if(!(*node)->next)
+		return -1;
 	static int i;
 	char s2[2];
 	s2[0] = (i + 48);
@@ -450,9 +484,12 @@ int herdok(t_token **node)
 		input = readline(">");
 		if (!input)
 			break;
-		if (strcmp(input, (*node)->next->arg) == 0)
+		if (ft_strcmp(input, (*node)->next->arg) == 0)
 			break;
-		write(fd, input, ft_strlen(input));
+		if (ft_strchr(input, '$'))
+			input = herdok_expand(input, data);
+		if(input)
+			write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
 		free(input);
 	}
@@ -515,7 +552,7 @@ void free_node(t_token ** token, int a, int b)
 	(*token) = hold_pointer;
 }
 
-void redirect_input(t_token **token)
+int  redirect_input(t_token **token, t_data *data)
 {
 	t_token *tmp = *token;
 	int fd = 0;
@@ -524,7 +561,9 @@ void redirect_input(t_token **token)
 	{
 		if (tmp->type == HERDOK)
 		{
-			fd = herdok(&tmp);
+			fd = heredoc(&tmp, data);
+			if(fd == -1)
+				return(-1);
 			tmp = tmp->next->next;
 			i++;
 		}
@@ -535,7 +574,7 @@ void redirect_input(t_token **token)
 			if (fd == -1)
 			{
 				perror("file");
-				return ;
+				return -1;
 			}
 			dup2(fd, STDIN_FILENO);
 			tmp = tmp->next->next;
@@ -547,6 +586,7 @@ void redirect_input(t_token **token)
 	}
 	if(i)
 		dup2(fd, STDIN_FILENO);
+	return 0;
 }
 
 int minishell(t_data	*data, char **env)

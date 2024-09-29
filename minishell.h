@@ -69,6 +69,7 @@
 #define PIPE                5
 #define INPUT_REDIRECTION   6
 #define HERDOK              7
+#define HERDOK_INPUT        8
 
 /*env*/
 //--------------------env--------------------
@@ -233,7 +234,7 @@ void	normal_execution(t_data *data);
 void    execution(t_data *data);
 
 int redirections(t_token **token);
-void redirect_input(t_token **token);
+int  redirect_input(t_token **token, t_data *data);
 
 
 void	restore_stdin_stdout(int std_in, int std_out);
@@ -242,6 +243,7 @@ void	save_stdin_stdout(int *std_in, int *std_out);
 char **get_copy_of_token_version_tow(char **argv, t_token **lst);
 char **get_copy_of_token_v3(char **argv, t_token **lst);
 
+int heredoc(t_token **node, t_data *data);
 int get_size_of_tree(t_token **token);
 void piss_off(t_token **lst, int len);
 void free_node(t_token ** token, int a, int b);
@@ -257,8 +259,8 @@ char **get_copy_of_token(char **argv, t_token **lst);
 char **env_initializer(char **env, char *new_arg);
 char *add_command_to_node(char *command, int i, t_data *data);
 char *handle_quote(char *command , t_data *data, char c);
-char *handle_dollar_sign(char *str, char **env, int *b);
-char **expand(char** argv, char**env, t_token **token);
+char *handle_dollar_sign(char *str, t_data *data, int *b);
+char **expand(char** argv, t_data *data, t_token **token);
 int parsing(char *command, t_data *data);
 void	ft_execute(char **args, t_data *data);
 t_token *extract_token(t_token **token);

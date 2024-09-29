@@ -36,31 +36,42 @@ void join_nodes(t_token **token)
 			tmp = tmp->next;
 	}
 }
+void set_heredoc_input_value(t_token **token)
+{
+	t_token *tmp;
 
+	tmp = *token;
+	if(!tmp)
+		return ;
+	while(tmp)
+	{
+		if(tmp->type == HERDOK && tmp->next)
+			tmp->next->type = HERDOK_INPUT;
+		tmp = tmp->next;
+	}
+}
 void	normal_execution(t_data *data)
 {
 	char **command;
 	int red_fd = 0;
+	int red_in = 0;
 
 	command = NULL;
+	set_heredoc_input_value(&data->token);
 	command = get_copy_of_token(command, &(data->token));
-	
-	if(data->lexer.dollar)
-		expand(command,data->env, &data->token);
-	if (data->lexer.redirect_output)
-		red_fd = redirections(&data->token);
-	if (data->lexer.redirect_input)
-		redirect_input(&data->token);
+	if(!command)
+		return ;
+	expand(command,data, &data->token);
+	red_fd = redirections(&data->token);
+	red_in = redirect_input(&data->token, data);
+	if(red_in == -1)
+	{
+		ft_syntax_error(data);
+		return;
+	}
 	if (red_fd)
 		dup2(red_fd, STDOUT_FILENO);
 	join_nodes(&data->token);
-	// while(data->token)
-	// {
-	// 	printf("%s ",data->token->arg);
-	// 	printf("%d ",data->token->type);
-	// 	printf("%d \n",data->token->next_command);
-	// 	data->token = data->token->next;
-	// }
 	command = get_copy_of_token_v3(command, &(data->token));
 	if(!command)
 		return;
