@@ -300,16 +300,13 @@ int check_path(char *command, t_data *data)
 }
 void ft_error(char **cmd, t_data *data)
 {
-	printf("minishell: %s: No such file or directory\n", cmd[0]);
-	data->status = 127;
-	exit(0);
+	write(2, cmd[0], ft_strlen(cmd[0]));
+	write(2, ": command not found\n", 21);
+	data->exit_status = 127;
+	exit(data->exit_status);
 }
 void	execute(char **args, t_data *data)
 {
-		if(ft_strcmp(args[0],"exit") == 0)
-		{
-			ft_exit(args,data);
-		}
 		if (ft_buitin_check(args) == 0)
 		{
 			bultins_runner(args,data);
@@ -319,13 +316,25 @@ void	execute(char **args, t_data *data)
 		char *path = NULL;
 		if (pid == 0)
 		{
-				if(check_path(args[0], data))
+				if (strchr(args[0], '/'))
+				{
+					if (execve(args[0], args, data->env) == -1)
+					{
+						write(2, "minishell: ", 12);
+						write(2, args[0], ft_strlen(args[0]));
+						write(2, ": No such file or directory\n", 29);
+						data->exit_status = 127;
+						exit(data->exit_status);
+					}
+				}
+				else if(check_path(args[0], data))
 				{
 					path = ft_strjoin("/bin/", args[0]);
+					data->exit_status = 0;
 					if (execve(path, args, data->env) == -1)
 					{
 						perror("Error");
-						exit(0);
+						exit(data->exit_status);
 					}
 				}
 				else
@@ -337,6 +346,8 @@ void	execute(char **args, t_data *data)
 			int status;
 			
 			waitpid(pid,&status, 0);
+			if (WIFEXITED(status))
+				data->exit_status = WEXITSTATUS(status); // Get the child's exit status
 		}
 		restore_stdin_stdout(data->std_in, data->std_out);
 }
@@ -459,6 +470,42 @@ char *herdok_expand(char *str, t_data *data)
 	}
 	return(final_str);
 }
+
+char *extraxt_arg(char *arg)
+{
+	int i = 0;
+	int b = 0;
+	while(arg[i])
+	{
+		if (arg[i] == '\'')
+			i++;
+		else if (arg[i] == '\"')
+			i++;
+		else
+		{
+			i++;
+			b++;
+		}
+	}
+	i = 0;
+	b = 0;
+	char *new_arg = malloc((b + 1) * sizeof(char));
+	while(arg[i])
+	{
+		if (arg[i] == '\'')
+			i++;
+		else if (arg[i] == '\"')
+			i++;
+		else
+		{
+			new_arg[b] = arg[i];
+			i++;
+			b++;
+		}
+		new_arg[b] = '\0';
+	}
+	return(new_arg);
+}
 int heredoc(t_token **node, t_data *data)
 {
 	if(!(*node)->next)
@@ -477,14 +524,19 @@ int heredoc(t_token **node, t_data *data)
 		return -1;
 	}
 	char *input = NULL;
+	char *arg = extraxt_arg((*node)->next->arg);
 	while(1)
 	{
 		input = readline(">");
 		if (!input)
+		{
+			printf("minishell: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",\
+			data->prompt_call_times,  (*node)->next->arg);
 			break;
-		if (ft_strcmp(input, (*node)->next->arg) == 0)
+		}
+		if (ft_strcmp(input, arg) == 0)
 			break;
-		if (ft_strchr(input, '$'))
+		if ((ft_strchr(input, '$')) && (ft_strchr((*node)->next->arg, '\'') == 0) && (ft_strchr((*node)->next->arg, '\"') == 0))
 			input = herdok_expand(input, data);
 		if(input)
 			write(fd, input, ft_strlen(input));
@@ -571,7 +623,7 @@ int  redirect_input(t_token **token, t_data *data)
 			if (fd == -1)
 			{
 				perror("minishell");
-				data->status = 1;
+				data->exit_status = 1;
 				return -1;
 			}
 			dup2(fd, STDIN_FILENO);
@@ -593,29 +645,28 @@ int minishell(t_data	*data, char **env)
 				 
 	input = NULL;
 	billed_env_list(env, data);
+	data->prompt_call_times = 0;
 	while(1)
 	{
-	
 		if(data->token != NULL)
 			free_linked_list(&data->token);
 		data->lexer = (t_lexer ){0};
 		data->token = (t_token *){0};
 		input = readline(COLOR_BOLD_RED "➜  minishell " COLOR_RESET);
+		data->prompt_call_times ++;
 		if (!input)
-			return(printf("NULL_EXIT\n"), exit(0), 0);
+			return(printf("exit\n"), exit(0), 0);
 		add_history(input);
-		lexer(input, data);
 		data->flag = 0;
 		data->env = transform_env(data->env_list);
-		if(parser(data) == 1)
-			continue;
 		if(parsing(input, data) == 0)
 		{
+			if(parser(data) == 1)
+				continue;
 			save_stdin_stdout(&data->std_in, &data->std_out);
 			execution(data);
 			restore_stdin_stdout(data->std_in, data->std_out);
 		}
-		continue;
 	}
 	return(0);
 }

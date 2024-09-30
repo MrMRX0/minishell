@@ -111,9 +111,10 @@ typedef struct      t_lst_0
     int         type;
     int     std_in  ;
 	int     std_out ;
-    int         status; //myne 
+    int         exit_status; //myne 
     int     flag;
     int syntax_error;
+    int prompt_call_times;
 }                   t_data;
 
 
@@ -229,7 +230,6 @@ int 	ft_buitin_check(char **av);
 void	bultins_runner(char **av, t_data *data);
 
 
-void	pipe_execution(int i, t_data *data);
 void	normal_execution(t_data *data);
 void    execution(t_data *data);
 

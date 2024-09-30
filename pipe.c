@@ -26,13 +26,13 @@ void pipe_pipe(int n, t_data *data)
 		pipe_token  = extract_token(&data->token);
 		command = get_copy_of_token(command, &pipe_token);
 		expand(command,data, &pipe_token);
+		join_nodes(&pipe_token);
 		red_fd = redirections(&pipe_token);
 		if(redirect_input(&pipe_token, data) == -1)
 		{
 			ft_syntax_error(data);
 			return;
 		}
-		join_nodes(&pipe_token);
 		command = get_copy_of_token_v3(command, &pipe_token);
 		pid = fork();
 		if (pid == 0)
@@ -49,7 +49,7 @@ void pipe_pipe(int n, t_data *data)
 			}
 			else 
 				dup2(red_fd, STDOUT_FILENO);
-			close(red_fd);
+			
 			// Close all pipe file descriptors
 			i = 0;
 			while(i < 2 * n)

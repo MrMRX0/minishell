@@ -78,7 +78,7 @@ char *handle_quote(char *command , t_data *data, char c)
 				return(command);
 			}
 		}
-		ft_syntax_error(data);
+		data->syntax_error = 1;
 		return(NULL);
 	}
 	else
@@ -126,7 +126,7 @@ char *handle_redirections(char *command, t_data *data, char c)
 	}
 	else
 	{
-		ft_syntax_error(data);
+		data->syntax_error = 1;
 		return (NULL);
 	}
 	return(command);
@@ -154,7 +154,7 @@ char *handle_dollar_sign(char *str, t_data *data, int *b)
 	if(str_cmp_n("?", str, 1) == 0)
 	{
 		char *res = NULL;
-		res = ft_itoa(data->status);
+		res = ft_itoa(data->exit_status);
 		return(*b += 1, res);
 	}
 	while(str[i])
@@ -202,7 +202,6 @@ char **expand(char** argv, t_data *data, t_token **token)
 		{
 			while(str[b])
 			{
-				//$USERasdf
 				if(str[b] == '$')
 				{
 					b++;
@@ -229,27 +228,26 @@ char **expand(char** argv, t_data *data, t_token **token)
 	*token = hold;
 	return(argv);
 }
-void lexer(char *command, t_data *data)
-{
-	int i;
+// void lexer(char *command, t_data *data)
+// {
+// 	int i;
 	
-	i = 0;
-	while(command[i])
-	{
-		data->lexer.dollar += (command[i] == '$');
-		data->lexer.redirect_output += (command[i] == '>');
-		data->lexer.redirect_input += (command[i] == '<');
-		data->lexer.pipe += (command[i] == '|');
-		data->lexer.single_quote += (command[i] == '\'');
-		data->lexer.double_quote += (command[i] == '\"');
-		i++;
-	}
-}
+// 	i = 0;
+// 	while(command[i])
+// 	{
+// 		data->lexer.dollar += (command[i] == '$');
+// 		data->lexer.redirect_output += (command[i] == '>');
+// 		data->lexer.redirect_input += (command[i] == '<');
+// 		data->lexer.pipe += (command[i] == '|');
+// 		data->lexer.single_quote += (command[i] == '\'');
+// 		data->lexer.double_quote += (command[i] == '\"');
+// 		i++;
+// 	}
+// }
 void ft_syntax_error(t_data *data)
 {
-	printf("syntax Error\n");
-	data->syntax_error = 1;
-	// exit(1);
+	write(2, "syntax Error\n", 14);
+	data->exit_status = 2;
 }
 char * handle_pipe(char *command, t_data *data)
 {
@@ -277,7 +275,7 @@ char * handle_pipe(char *command, t_data *data)
 	}
 	if(b == 0)
 	{
-		ft_syntax_error(data);
+		data->syntax_error = 1;
 		return(NULL);
 	}
 	data->type = PIPE;
@@ -293,27 +291,18 @@ int parser(t_data *data)
 	tmp = data->token;
 	if(!tmp)
 		return(0);
-	if(tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION || tmp->type == HERDOK || tmp->type == INPUT_REDIRECTION )
-	{
-		if (tmp->next == NULL)
-			ft_syntax_error(data);
-		return(1);
-	}
-	while(tmp->next)
+	while(tmp)
 	{
 		if(tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION || tmp->type == HERDOK || tmp->type == INPUT_REDIRECTION )
 		{
-			if (tmp->next == NULL)
-				ft_syntax_error(data);
-			else if(tmp->next->type == SINGLE_REDIRECTION || tmp->next->type == APPEND_REDIRECTION)
-				ft_syntax_error(data);
-			else if(tmp->next->type == HERDOK || tmp->next->type == INPUT_REDIRECTION)
-				ft_syntax_error(data);
-			else if(tmp->next->type == PIPE)
-				ft_syntax_error(data);
-			if(data->syntax_error)
-				return(1);
-			
+			if (!tmp->next)
+				return(ft_syntax_error(data), 1);
+			if(tmp->next->type == SINGLE_REDIRECTION || tmp->next->type == APPEND_REDIRECTION)
+				return(ft_syntax_error(data), 1);
+			if(tmp->next->type == HERDOK || tmp->next->type == INPUT_REDIRECTION)
+				return(ft_syntax_error(data), 1);
+			if(tmp->next->type == PIPE)
+				return(ft_syntax_error(data), 1);
 		}
 		tmp = tmp->next;
 	}
@@ -324,6 +313,8 @@ int parsing(char *command, t_data *data)
 	int i;
 	
 	i = 0;
+	if(*command == '\n')
+		return(1);
 	data->syntax_error = 0;
 	while(command[i] != '\0')
 	{
@@ -348,10 +339,11 @@ int parsing(char *command, t_data *data)
 		else if (command[i] == '<')
 			command = handle_redirections(command, data, '<');
 		if(data->syntax_error)
-			return(1);
+			return(ft_syntax_error(data), 1);
 		if(!command)
 			return(0);
 		i = 0;
 	}
+
 	return(0);
 }

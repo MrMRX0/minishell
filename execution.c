@@ -62,13 +62,13 @@ void	normal_execution(t_data *data)
 	if(!command)
 		return ;
 	expand(command,data, &data->token);
+	join_nodes(&data->token);
 	red_fd = redirections(&data->token);
 	red_in = redirect_input(&data->token, data);
 	if(red_in == -1)
 		return;
 	if (red_fd)
 		dup2(red_fd, STDOUT_FILENO);
-	join_nodes(&data->token);
 	command = get_copy_of_token_v3(command, &(data->token));
 	if(!command)
 		return;
@@ -81,7 +81,6 @@ t_token *extract_token(t_token **token)
 
 	new = NULL;
 	tmp = NULL;
-	// ls -la | echo hello world | wc -l 
 	while((*token) && (*token)->type != PIPE)
 	{
 		
@@ -94,62 +93,9 @@ t_token *extract_token(t_token **token)
 		tmp->type = (*token)->type;
 		*token = (*token)->next;
 	}
-	//skip pipe
 	if(*token)
 		*token=(*token)->next;
 	return(new);
-}
-// void ft_lst_add_2(t_hold_token **lst, t_token ** token) 
-// {
-// 	if (!*lst) {
-// 		*lst = malloc(sizeof(t_hold_token));
-// 		if (!*lst) {
-// 			perror("malloc failed");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		(*lst)->next = NULL;
-// 		(*lst)->token = *token;
-// 		return;
-// 	}
-// 	t_hold_token *current = *lst;
-// 	while (current->next)
-// 		current = current->next;
-// 	t_hold_token *new_node = malloc(sizeof(t_hold_token));
-// 	if (!new_node)
-// 	{
-// 		perror("malloc failed");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	new_node->next = NULL;
-// 	new_node->token = *token;
-// 	current->next = new_node;
-// }
-void	pipe_execution(int i, t_data *data)
-{
-	pipe_pipe(i, data);
-	// int		j;
-	// char	***tree;
-	// t_token *pipe_token;
-	// t_hold_token *holder = NULL;
-	// char **command = NULL;
-	
-	// tree = NULL;
-	// j = 0;
-	// pipe_token = NULL;
-	// tree = malloc((i + 1) * sizeof(char **));
-	// while(j <= i)
-	// {
-		
-	// 	ft_lst_add_2(&holder, &pipe_token);
-	// 	pipe_token  = extract_token(&data->token);
-	// 	command = get_copy_of_token(command, &pipe_token);
-	// 	expand(command,data->env, &pipe_token);
-	// 	redirections(&pipe_token);
-	// 	redirect_input(&pipe_token);
-	// 	join_nodes(&pipe_token);
-	// 	tree[j] = get_copy_of_token_v3(tree[j], &pipe_token);
-	// 	j++;
-	// }
 }
 
 void execution(t_data *data)
@@ -160,5 +106,5 @@ void execution(t_data *data)
 	if (!i)
 		normal_execution(data);
 	else
-		pipe_execution(i, data);
+		pipe_pipe(i, data);
 }

@@ -40,9 +40,9 @@ void	ft_exit_helper(char **av, t_data *data)
 {
 	write(2, "exit\n", 5);
 	write(2, "exit: numeric argument required\n", 33);
-	data->status = 2;
+	data->exit_status = 2;
 	free_close_all(data, av);
-	exit(data->status);
+	exit(data->exit_status);
 }
 
 void	ft_exit_helper2(t_data *data, char **av)
@@ -65,21 +65,21 @@ t_bool	ft_exit(char **av, t_data *data)
 
 	if (nb_count(av) == 1 && data->flag == 1)
 	{
-		data->status = 0;
+		data->exit_status = 0;
 		free_close_all(data, av);
-		exit(data->status);
+		exit(data->exit_status);
 	}
 	if (nb_count(av) == 1)
 	{
 		write(2, "exit\n", 5);
 		free_close_all(data, av);
-		exit(data->status);
+		exit(data->exit_status);
 	}
 	if (nb_count(av) > 2)
 	{
 		write(2, "exit\n", 5);
 		write(2, "exit: too many arguments\n", 25);
-		data->status = 1;
+		data->exit_status = 1;
 		return (false);
 	}
 	else if (ft_isnumber(av[1]) == false)
