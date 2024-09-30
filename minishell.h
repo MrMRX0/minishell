@@ -226,7 +226,7 @@ void    free_av(char **av);
 void    main_signal_handler(void);
 void    handler(int signum);
 void   middle_exec_signal(t_data *data);
-void    exec_handler(int signum, siginfo_t *info, void *context);
+void    exec_handler(int signum);
 //--------------------signals--------------------
 
 void fft_exit(t_data *data);

@@ -29,27 +29,25 @@ void    handler(int signum)
     }
 }
 
-void   middle_exec_signal(t_data *data)
-{
-    struct sigaction sa;
-    sa.sa_flags = SA_SIGINFO;
-    sa.sa_sigaction = exec_handler;
-    sigaction(SIGINT, &sa, data);
-    sigaction(SIGQUIT, &sa, data);
-}
+// void   middle_exec_signal(t_data *data)
+// {
+//     struct sigaction sa;
+//     sa.sa_flags = SA_SIGINFO;
+//     sa.sa_sigaction = exec_handler;
+//     sigaction(SIGINT, &sa, (void *)data);
+//     sigaction(SIGQUIT, &sa, (void *)data);
+// }
 
-void    exec_handler(int signum, siginfo_t *info, void *context)
+void    exec_handler(int signum)
 {
-    t_data *data;
-    data = (t_data *)context;
     if (signum == SIGINT)
     {
         write(1, "\n", 1);
-        data->shild_signal = 1;
+
     }
     else if (signum == SIGQUIT)
     {
         write(1, "\n", 1);
-        data->shild_signal = 2;
+
     }
 }
