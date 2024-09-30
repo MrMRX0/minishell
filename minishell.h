@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/27 13:30:12 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/30 11:46:41 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
-#include <readline/history.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -24,7 +24,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include "libft/libft.h"
-#include <linux/limits.h>
+#include <limits.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -219,6 +219,12 @@ void    free_close_all(t_data *data, char **av);
 void    free_env(t_env **env);
 void    free_av(char **av);
 //--------------------free--------------------
+
+/*signals*/
+//--------------------signals--------------------
+void    main_signal_handler(void);
+void    handler(int signum);
+//--------------------signals--------------------
 
 void fft_exit(t_data *data);
 

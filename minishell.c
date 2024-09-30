@@ -652,6 +652,7 @@ int minishell(t_data	*data, char **env)
 			free_linked_list(&data->token);
 		data->lexer = (t_lexer ){0};
 		data->token = (t_token *){0};
+		main_signal_handler();
 		input = readline(COLOR_BOLD_RED "➜  minishell " COLOR_RESET);
 		data->prompt_call_times ++;
 		if (!input)

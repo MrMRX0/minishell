@@ -5,7 +5,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g 
+CFLAGS =  -g 
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -29,6 +29,7 @@ SRCS =  pipe.c \
 		bultins/buil_tools1.c \
 		bultins/ft_exit.c \
 		free/free.c \
+		signals/signals.c \
 
 OBJS = $(SRCS:.c=.o)
 
