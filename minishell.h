@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/30 11:46:41 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/09/30 12:42:38 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ typedef struct      t_lst_0
     int     flag;
     int syntax_error;
     int prompt_call_times;
+    int shild_signal;
 }                   t_data;
 
 
@@ -224,6 +225,8 @@ void    free_av(char **av);
 //--------------------signals--------------------
 void    main_signal_handler(void);
 void    handler(int signum);
+void   middle_exec_signal(t_data *data);
+void    exec_handler(int signum, siginfo_t *info, void *context);
 //--------------------signals--------------------
 
 void fft_exit(t_data *data);

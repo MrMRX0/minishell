@@ -307,6 +307,7 @@ void ft_error(char **cmd, t_data *data)
 }
 void	execute(char **args, t_data *data)
 {
+	    middle_exec_signal(data);
 		if (ft_buitin_check(args) == 0)
 		{
 			bultins_runner(args,data);
