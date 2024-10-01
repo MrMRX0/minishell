@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:43:47 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/26 12:25:56 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/01 05:04:49 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void   free_av(char **av)
     int i;
 
     i = 0;
+    if(!av)
+        return ;
     while (av[i])
     {
         free(av[i]);
@@ -46,4 +48,34 @@ void    free_close_all(t_data *data, char **av)
     free_av(av);
     free_av(data->env);
     free_env(&(data)->env_list);
+}
+void	ft_free(t_data *data)
+{
+	free_linked_list(&data->token);
+	return ;
+}
+void free_n_lst(t_token **lst, int len)
+{
+	int i = 0;
+	t_token *tmp = NULL;
+	while(*lst && i <= len)
+	{
+		tmp = *lst;
+		*lst = (*lst)->next;
+		free(tmp);
+		i++;
+	}
+}
+void free_linked_list(t_token **lst)
+{
+	if(!*lst)
+		return ;
+	t_token *tmp = NULL;
+	while(*lst)
+	{
+		tmp = *lst;
+		*lst = (*lst)->next;
+        free(tmp->arg);
+		free(tmp);
+	}
 }

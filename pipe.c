@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/01 04:21:45 by ibougajd          #+#    #+#             */
+/*   Updated: 2024/10/01 04:21:47 by ibougajd         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void pipe_pipe(int n, t_data *data)
@@ -8,7 +20,8 @@ void pipe_pipe(int n, t_data *data)
 	int cmd_idx = 0;
 	t_token *pipe_token;
 	char **command = NULL;
-	int red_fd;
+	int std_out = 0;
+	int std_in = 0;
 
 
 	while(i < n)
@@ -27,30 +40,26 @@ void pipe_pipe(int n, t_data *data)
 		command = get_copy_of_token(command, &pipe_token);
 		expand(command,data, &pipe_token);
 		join_nodes(&pipe_token);
-		red_fd = redirections(&pipe_token);
-		if(redirect_input(&pipe_token, data) == -1)
-		{
-			ft_syntax_error(data);
-			return;
-		}
+		std_out = redirections(&pipe_token);
+		std_in = redirect_input(&pipe_token, data);
+		if(std_in)
+			dup2(std_in, STDIN_FILENO);
+		if (std_out)
+			dup2(std_out, STDOUT_FILENO);
 		command = get_copy_of_token_v3(command, &pipe_token);
 		pid = fork();
 		if (pid == 0)
 		{
-			// If not the first command, redirect stdin to the previous pipe
-			if(!red_fd)
+			if(!std_in)
 			{
 				if (cmd_idx > 0)
 					dup2(fd[(cmd_idx - 1) * 2], STDIN_FILENO);
-				// If not the last command, redirect stdout to the next pipe
+			}
+			if(!std_out)
+			{
 				if (cmd_idx < n)
 					dup2(fd[cmd_idx * 2 + 1], STDOUT_FILENO);
-
 			}
-			else 
-				dup2(red_fd, STDOUT_FILENO);
-			
-			// Close all pipe file descriptors
 			i = 0;
 			while(i < 2 * n)
 			{
@@ -63,7 +72,6 @@ void pipe_pipe(int n, t_data *data)
 				ft_exit(command,data);
 			}
 			execute(command, data);
-			restore_stdin_stdout(data->std_in, data->std_out);
 			exit(0);
 		}
 		else if (pid < 0) 
@@ -73,7 +81,8 @@ void pipe_pipe(int n, t_data *data)
 		}
 		else
 		{
-			// restore_stdin_stdout(data->std_in, data->std_out);
+			restore_stdin_stdout(data->std_in, data->std_out);
+			save_stdin_stdout(&data->std_in, &data->std_out);
 			usleep(1000);
 			cmd_idx++;
 		}

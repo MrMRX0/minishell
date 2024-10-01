@@ -13,28 +13,7 @@
 #include "minishell.h"
 
 
-char *add_command_to_node(char *command, int i, t_data *data)
-{
-	int j;
 
-	j = 0;
-	ft_lst_add(&data->token);
-	t_token *tmp = data->token;
-	while(tmp->next)
-		tmp = tmp->next;
-	tmp->arg = malloc(i * sizeof(char));
-	tmp->type = data->type;
-	while(j < i)
-	{
-		tmp->arg[j] = command[j];
-		j++;
-	}
-	tmp->arg[j] = '\0';
-	// printf("%s\n", tmp->arg);
-	if(!command[i])
-		return(NULL);
-	return(command + i);
-}
 
 char *handle_quote(char *command , t_data *data, char c)
 {
@@ -97,159 +76,18 @@ char *handle_quote(char *command , t_data *data, char c)
 	return(NULL);
 }
 
-char *handle_redirections(char *command, t_data *data, char c)
-{
-	int i = 0;
-	if(command[i] != c)
-	{
-		while(command[i] != c)
-			i++;
-		data->type = 0;
-		command = add_command_to_node(command, i, data);
-		return(command);
-	}
-	while(command[i] == c)
-		i++;
-	if(i == 1)
-	{
-		data->type = INPUT_REDIRECTION;
-		if (c == '>')
-			data->type = SINGLE_REDIRECTION;
-		command = add_command_to_node(command, i, data);
-	}
-	else if(i == 2)
-	{
-		data->type = APPEND_REDIRECTION;
-		if(c == '<')
-			data->type = HERDOK;
-		command = add_command_to_node(command, i, data);
-	}
-	else
-	{
-		data->syntax_error = 1;
-		return (NULL);
-	}
-	return(command);
-		
-}
-//USER
-//USER
-int str_cmp_n(char *str1, char *str2, int n)
-{
-	while((*str1 != '\0') && (*str1 == *str2))
-	{
-		n--;
-		(str1)++;
-		(str2)++;
-	}
-	if (n == 0 && *str1 == '\0')
-		return 0;
-	return 1;
-}
-char *handle_dollar_sign(char *str, t_data *data, int *b)
-{
-	int i = 0;
-	int j = 0;
-	char **splited_env;
-	if(str_cmp_n("?", str, 1) == 0)
-	{
-		char *res = NULL;
-		res = ft_itoa(data->exit_status);
-		return(*b += 1, res);
-	}
-	while(str[i])
-	{
-		if((str[i] != '$' && str[i] >= 65 && str[i] <= 90) || (str[i] >= 97 && str[i] <= 122) || (str[i] >= '0' && str[i] <= '9'))
-			i++;
-		else	
-			break;
-	}
-	if(!i)
-		return("$");
-	while(data->env[j])
-	{
-		splited_env = ft_split(data->env[j], '=');
-		if(str_cmp_n(splited_env[0], str, i) == 0)
-		{
-			return(*b += (i), splited_env[1]);
-		}
-		j++;
-	}
-	return(*b += i,NULL);
-}
-char **expand(char** argv, t_data *data, t_token **token)
-{
-	int i;
-	int b;
-	char *final_str = NULL;
-	char *returned_str = NULL;
-	char *str = NULL;
-	char tmp[2];
-	t_token *hold = *token;
 
-	i = 0;
-	b = 0;
-	while(argv[i] && *token)
-	{
-		str = argv[i];
-		b = 0;
-		if(((strchr(str, '$')) && ((*token)->type == S_QUOTE || (*token)->type == HERDOK_INPUT))  || (strchr(str, '$') == 0))
-		{
-			i++;
-			*token = (*token)->next;
-		}
-		else if ((strchr(str, '$')))
-		{
-			while(str[b])
-			{
-				if(str[b] == '$')
-				{
-					b++;
-					returned_str = handle_dollar_sign(str + b, data, &b);
-					if(returned_str)
-						final_str = ft_strjoin(final_str, returned_str);
-				}
-				else
-				{
-					tmp[0] = str[b];
-					tmp[1] = '\0';
-					final_str = ft_strjoin(final_str, tmp);
-					b++;
-				}	
-			}
-			argv[i] = final_str;
-			(*token)->arg = final_str;
-			final_str = NULL;
-			returned_str = NULL;
-			*token = (*token)->next;
-			i++;	
-		}	
-	}
-	*token = hold;
-	return(argv);
-}
-// void lexer(char *command, t_data *data)
-// {
-// 	int i;
-	
-// 	i = 0;
-// 	while(command[i])
-// 	{
-// 		data->lexer.dollar += (command[i] == '$');
-// 		data->lexer.redirect_output += (command[i] == '>');
-// 		data->lexer.redirect_input += (command[i] == '<');
-// 		data->lexer.pipe += (command[i] == '|');
-// 		data->lexer.single_quote += (command[i] == '\'');
-// 		data->lexer.double_quote += (command[i] == '\"');
-// 		i++;
-// 	}
-// }
+//USER
+//USER
+
+
+
 void ft_syntax_error(t_data *data)
 {
 	write(2, "syntax Error\n", 14);
 	data->exit_status = 2;
 }
-char * handle_pipe(char *command, t_data *data)
+char *handle_pipe(char *command, t_data *data)
 {
 	int i = 0;
 	int b = 0;

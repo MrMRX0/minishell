@@ -5,14 +5,12 @@
 NAME = minishell
 
 CC = cc
-CFLAGS =  -g 
+CFLAGS =  -Wall -Wextra -g 
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 SRCS =  pipe.c \
-		execution.c \
-		minishell.c \
 		bultins/buil_tools.c \
 		bultins/export_helper.c \
 		bultins/ft_export.c \
@@ -21,8 +19,10 @@ SRCS =  pipe.c \
 		bultins/ft_unset.c \
 		bultins/ft_pwd.c \
 		bultins/ft_echo.c \
+		bultins/bultins.c \
+		execution.c \
+		minishell.c \
 		parsing.c \
-		bultins.c \
 		env/env.c	\
 		env/env_tools.c \
 		bultins/ft_cd.c \
@@ -30,6 +30,12 @@ SRCS =  pipe.c \
 		bultins/ft_exit.c \
 		free/free.c \
 		signals/signals.c \
+		utils.c \
+		token.c \
+		redirections.c \
+		path.c \
+		heredoc.c \
+		expand.c
 
 OBJS = $(SRCS:.c=.o)
 

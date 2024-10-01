@@ -1,2 +1,29 @@
-ls>""
-<<a|<<b
+ls > o1 > o2 > o3 > /dev/stdout
+(should dup in each file)
+
+➜touch o2
+➜chmod -w o2
+➜minishell ls > o1 > o2 > o3
+(should print an error and only create o1)
+
+chmod -x 
+
+cd
+(should take you $HOME)
+
+➜export PATH=:$PATH
+➜cp /bin/ls ./myls
+➜myls
+(should work)
+
+
+➜export PATH=$PATH:
+➜cp /bin/ls ./myls
+➜myls
+(should work)
+
+export PATH=
+➜export PATH=$PATH:
+➜cp /bin/ls ./myls
+➜myls
+(should work)
