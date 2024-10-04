@@ -6,11 +6,11 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:22:59 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/03 11:17:44 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../incld/minishell.h"
 
 void	bultins_runner(char **av, t_data *data)
 {

@@ -1,58 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/24 11:27:13 by nait-bou          #+#    #+#             */
+/*   Created: 2024/10/04 18:35:08 by ibougajd          #+#    #+#             */
 /*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incld/minishell.h"
 
-int	ft_strncmp_echo(char *str)
+void	close_fds(int n, int *fd)
 {
 	int	i;
 
 	i = 0;
-	if (str[i] == '-')
+	while (i < 2 * n)
 	{
+		close(fd[i]);
 		i++;
-		if (str[i] == '\0')
-			return (1);
-		while (str[i] == 'n')
-			i++;
-		if (str[i] == '\0')
-			return (0);
 	}
-	return (1);
 }
 
-t_bool	ft_echo(char **av)
+char	**get_command(t_data *data, int *std_in, int *std_out)
 {
-	int	i;
-	int	option;
+	t_token	*pipe_token;
+	char	**command;
 
-	i = 1;
-	option = 0;
-	if (nb_args(av) > 1)
-	{
-		while (av[i] && ft_strncmp_echo(av[i]) == 0)
-		{
-			option = 1;
-			i++;
-		}
-		while (av[i])
-		{
-			ft_putstr_fd(av[i], 1);
-			if (av[i + 1] && av[i][0] != '\0')
-				write(1, " ", 1);
-			i++;
-		}
-	}
-	if (option == 0)
-		write(1, "\n", 1);
-	return (true);
+	command = NULL;
+	pipe_token = extract_token(&data->token);
+	command = get_copy_of_token_v1(command, &pipe_token);
+	expand(command, data, &pipe_token);
+	join_nodes(&pipe_token);
+	*std_out = redirections(&pipe_token, data);
+	*std_in = redirect_input(&pipe_token, data);
+	if (*std_in == -1 || *std_out == -1)
+		return (NULL);
+	free_double_char(command);
+	command = get_copy_of_token_v2(command, &pipe_token);
+	free_linked_list(&pipe_token);
+	return (command);
 }

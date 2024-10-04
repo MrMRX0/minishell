@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 21:21:58 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/03 18:30:54 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/04 20:13:10 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (!s2)
 		return (NULL);
 	if (!s1)
-	{
-		i = 0;
-		total_len = ft_strlen(s2);
-		all_str = (char *)malloc(total_len * sizeof(char) + 1);	
-		while (s2[i])
-		{
-			all_str[i] = s2[i];
-			i++;
-		}
-		all_str[i] = '\0';
-		return (all_str);
-	}
+		return (all_str = ft_strdup(s2), all_str);
 	total_len = ft_strlen(s1) + ft_strlen(s2);
 	i = -1;
 	all_str = (char *)malloc(total_len * sizeof(char) + 1);

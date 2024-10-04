@@ -6,11 +6,11 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/03 11:27:33 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../incld/minishell.h"
 
 void	normal_execution(t_data *data)
 {
@@ -46,7 +46,7 @@ void	execution(t_data *data)
 	if (!i)
 		normal_execution(data);
 	else
-		pipe_pipe(i, data);
+		pipex(data, i);
 }
 
 void	child_process(char **args, t_data *data, char *path)
@@ -99,8 +99,7 @@ void	execute(char **args, t_data *data)
 	signal(SIGINT, exec_handler);
 	signal(SIGQUIT, SIG_IGN);
 	if (bultins(args, data))
-		;
-	return ;
+		return ;
 	path = check_path(args[0], data);
 	pid = fork();
 	if (pid == 0)

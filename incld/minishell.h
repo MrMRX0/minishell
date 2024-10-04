@@ -6,14 +6,15 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/03 14:49:13 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:23:41 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft/libft.h"
+# include "collors.h"
+# include "../libft/libft.h"
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -26,47 +27,18 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-// Regular Colors
-# define COLOR_BLACK "\033[0;30m"
-# define COLOR_RED "\033[0;31m"
-# define COLOR_GREEN "\033[0;32m"
-# define COLOR_YELLOW "\033[0;33m"
-# define COLOR_BLUE "\033[0;34m"
-# define COLOR_MAGENTA "\033[0;35m"
-# define COLOR_CYAN "\033[0;36m"
-# define COLOR_WHITE "\033[0;37m"
-
-// Bold Colors
-# define COLOR_BOLD_BLACK "\033[1;30m"
-# define COLOR_BOLD_RED "\033[1;31m"
-# define COLOR_BOLD_GREEN "\033[1;32m"
-# define COLOR_BOLD_YELLOW "\033[1;33m"
-# define COLOR_BOLD_BLUE "\033[1;34m"
-# define COLOR_BOLD_MAGENTA "\033[1;35m"
-# define COLOR_BOLD_CYAN "\033[1;36m"
-# define COLOR_BOLD_WHITE "\033[1;37m"
-
-// Background Colors
-# define COLOR_BG_BLACK "\033[0;40m"
-# define COLOR_BG_RED "\033[0;41m"
-# define COLOR_BG_GREEN "\033[0;42m"
-# define COLOR_BG_YELLOW "\033[0;43m"
-# define COLOR_BG_BLUE "\033[0;44m"
-# define COLOR_BG_MAGENTA "\033[0;45m"
-# define COLOR_BG_CYAN "\033[0;46m"
-# define COLOR_BG_WHITE "\033[0;47m"
-
-// Reset Color
-# define COLOR_RESET "\033[0m"
-
 # define S_QUOTE 1
 # define D_QUOTE 2
-# define APPEND_REDIRECTION 3
-# define SINGLE_REDIRECTION 4
+# define A_R 3
+# define S_R 4
 # define PIPE 5
-# define INPUT_REDIRECTION 6
+# define I_R 6
 # define HERDOK 7
 # define HERDOK_INPUT 8
+
+# define P_D ": Permission denied\n"
+# define HEREDOC_ERROR "minishell: warning: \
+	here-document at line %d delimited by end-of-file (wanted `%s')\n"
 
 /*env*/
 //--------------------env--------------------
@@ -93,17 +65,26 @@ typedef struct t_lst_0
 	char			*input;
 	t_token			*token;
 	char			**args;
-	char			**env;      // myne free
-	t_env			*env_list; // myne free
+	char			**env;
+	t_env			*env_list;
 	int				type;
 	int				std_in;
 	int				std_out;
-	int				exit_status; // myne
+	int				exit_status;
 	int				flag;
 	int				syntax_error;
 	int				prompt_call_times;
 	int				shild_signal;
 }					t_data;
+
+typedef struct t_lst_5
+{
+	int				cmd_idx;
+	int				std_out;
+	int				std_in;
+	char			**command;
+	int				*fd;
+}					t_pipex;
 
 /*boul*/
 //--------------------boul--------------------
@@ -223,10 +204,9 @@ int					ft_buitin_check(char **av);
 int					bultins(char **args, t_data *data);
 //---------------------------bultins------------------------------
 
-
-//------------------------------------------------------------------------------------------------------------
-//############################################################################################################
-//------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//#############################################################################
+//-----------------------------------------------------------------------------
 
 /*minishell*/
 //--------------------minishell--------------------
@@ -237,49 +217,67 @@ int					minishell(t_data *data, char **env);
 
 /*token*/
 //--------------------token--------------------
-char 				**get_copy_of_token_v1(char **argv, t_token **lst);
-char 				**get_copy_of_token_v2(char **argv, t_token **lst);
+char				**get_copy_of_token_v1(char **argv, t_token **lst);
+char				**get_copy_of_token_v2(char **argv, t_token **lst);
 void				ft_lst_add(t_token **lst);
-t_token 			*extract_token(t_token **token);
-void 				join_nodes(t_token **token);
-char 				*add_command_to_node(char *command, int i, t_data *data);
+t_token				*extract_token(t_token **token);
+void				join_nodes(t_token **token);
+char				*add_command_to_node(char *command, int i, t_data *data);
 //--------------------token--------------------
 
 /*redirections*/
 //--------------------redirections--------------------
 int					redirect_input(t_token **token, t_data *data);
 int					redirections(t_token **token, t_data *data);
-char 				*handle_redirections(char *command, t_data *data, char c);
+char				*handle_redirections(char *command, t_data *data, char c);
 //--------------------redirections--------------------
 
 /*expand*/
 //--------------------expand--------------------
-char 				**expand(char** argv, t_data *data, t_token **token);
-char 				*handle_dollar_sign(char *str, t_data *data, int *b);
+char				**expand(char **argv, t_data *data, t_token **token);
 char				*expander(char *str, t_data *data);
 //--------------------expand--------------------
 
-/*pipe*/
-//--------------------pipe--------------------
-void				pipe_pipe(int n, t_data *data);
-//--------------------pipe--------------------
+/*expand_utils*/
+//--------------------expand_utils--------------------
+int					find_dollar_sign(char *str, t_token *tmp);
+char				*get_value(char **env, char *str, int i);
+char				*handle_dollar_sign(char *str, t_data *data, int *b);
+char				*get_last_res(char *str, t_data *data, int *b,
+						char *final_str);
+//--------------------expand_utils--------------------
+
+/*pipex*/
+//--------------------pipex--------------------
+void				ft_fork(t_pipex *pipe, t_data *data, int n);
+void				pipex_child(t_pipex *pipe, t_data *data, int n);
+void				pipex(t_data *data, int n);
+int					*create_pipes(int n);
+//--------------------pipex--------------------
+
+/*pipex_utils*/
+//--------------------pipex_utils--------------------
+void				close_fds(int n, int *fd);
+char				**get_command(t_data *data, int *std_in, int *std_out);
+//--------------------pipex_utils--------------------
 
 /*utils*/
 //--------------------utils--------------------
-char 				*extraxt_arg(char *arg);
+char				*extraxt_arg(char *arg);
 int					get_size_of_tree(t_token **token);
-void 				ft_error(t_data *data, char *arg, char *error ,int exit_status);
+void				ft_error(t_data *data, char *arg, char *error,
+						int exit_status);
 int					get_len(t_token *lst);
-char 				*get_copy(t_token *lst);
+char				*get_copy(t_token *lst);
 void				get_copy_v3(char *s1, t_token *lst);
-char 				*remove_white_spaces(char *str);
+char				*remove_white_spaces(char *str);
 int					str_cmp_n(char *str1, char *str2, int n);
 //--------------------utils--------------------
 
 /*path*/
 //--------------------path--------------------
-char					*check_splited_path(char **splited_path, char *command);
-char					*check_path(char *command, t_data *data);
+char				*check_splited_path(char **splited_path, char *command);
+char				*check_path(char *command, t_data *data);
 //--------------------path--------------------
 
 /*execution*/
@@ -291,19 +289,31 @@ void				execute(char **args, t_data *data);
 
 /*parsing*/
 //--------------------parsing--------------------
-char 				*handle_quote(char *command , t_data *data, char c);
-void				ft_syntax_error(t_data *data);
-char				*handle_pipe(char *command, t_data *data);
 int					parser(t_data *data);
 int					parsing(char *command, t_data *data);
+char				*split_the_command(char *command, int i, t_data *data);
 //--------------------parsing--------------------
+
+/*parsing_utils*/
+//--------------------parsing_utils--------------------
+char				*func2(t_data *data, char *command, char c);
+char				*func3(t_data *data, char *command, char c, int i);
+char				*func1(t_data *data, char *command, char c);
+//--------------------parsing_utils--------------------
+
+/*parsing_utils_2*/
+//--------------------parsing_utils_2--------------------
+char				*handle_quote(char *command, t_data *data, char c);
+void				ft_syntax_error(t_data *data);
+char				*handle_pipe(char *command, t_data *data);
+//--------------------parsing_utils_2--------------------
 
 /*heredoc*/
 //--------------------heredoc--------------------
 int					heredoc(t_token **node, t_data *data);
 char				*herdok_expand(char *str, t_data *data);
-void 				set_heredoc_input_value(t_token **token);
+void				set_heredoc_input_value(t_token **token);
 //--------------------heredoc--------------------
 
-char *readline_dyali();
+char				*readline_dyali(void);
 #endif
