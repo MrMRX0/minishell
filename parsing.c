@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 14:48:47 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/09/26 16:02:15 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/02 02:14:39 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,10 @@ int parsing(char *command, t_data *data)
 	
 	i = 0;
 	if(*command == '\n')
+	{
+		data->exit_status = 0;
 		return(1);
+	}
 	data->syntax_error = 0;
 	while(command[i] != '\0')
 	{

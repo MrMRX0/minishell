@@ -14,32 +14,21 @@ void set_heredoc_input_value(t_token **token)
 		tmp = tmp->next;
 	}
 }
-
-int	heredoc(t_token **node, t_data *data)
+char *get_file_name()
 {
 	static int	i;
 	char		s2[2];
-	char		*filepath;
-	int			fd;
-	char		*input;
-	char		*arg;
+	char		*file_path;
 
-	if (!(*node)->next)
-		return (-1);
 	s2[0] = (i + 48);
 	s2[1] = '\0';
-	filepath = "/tmp/heardok";
-	filepath = ft_strjoin(filepath, s2);
+	file_path = "/tmp/heardok";
+	file_path = ft_strjoin(file_path, s2);
 	i++;
-	fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-	{
-		write(2, "Failed to open file\n", 20); // Write to stderr if open fails
-		return (-1);
-	}
-	free(filepath);
-	input = NULL;
-	arg = extraxt_arg((*node)->next->arg);
+	return(file_path);
+}
+void open_heredoc(t_data *data, t_token **node, int fd, char *input)
+{
 	while (1)
 	{
 		input = readline(">");
@@ -49,7 +38,7 @@ int	heredoc(t_token **node, t_data *data)
 				data->prompt_call_times, (*node)->next->arg);
 			break ;
 		}
-		if (ft_strcmp(input, arg) == 0)
+		if (ft_strcmp(input, (*node)->next->arg) == 0)
 			break ;
 		if ((ft_strchr(input, '$')) && (ft_strchr((*node)->next->arg,
 					'\'') == 0) && (ft_strchr((*node)->next->arg, '\"') == 0))
@@ -59,15 +48,33 @@ int	heredoc(t_token **node, t_data *data)
 		write(fd, "\n", 1);
 		free(input);
 	}
-	close(fd);
 	free(input);
-	free(arg);
+}
+int	heredoc(t_token **node, t_data *data)
+{
+	char		*filepath;
+	int			fd;
+	char		*input;
+
+	if (!(*node)->next)
+		return (-1);
+	input = NULL;
+	filepath = get_file_name();
+	fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (access(filepath, R_OK) == -1)
+	{
+		ft_error(data, filepath, ": Permission denied\n", 1);
+		return -1;
+	}
+	open_heredoc(data, node, fd, input);
+	close(fd);
 	fd = open(filepath, O_RDONLY);
 	if (fd == -1)
 	{
 		write(2, "Failed to reopen file\n", 22);
 		return (-1);
 	}
+	free(filepath);
 	return (fd);
 }
 

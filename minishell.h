@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/01 04:37:05 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/03 14:49:13 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ typedef struct t_lst_1
 
 typedef struct t_lst_0
 {
+	char			*input;
 	t_token			*token;
 	char			**args;
 	char			**env;      // myne free
@@ -204,6 +205,7 @@ void				free_av(char **av);
 void				ft_free(t_data *data);
 void				free_n_lst(t_token **lst, int len);
 void				free_linked_list(t_token **lst);
+void				free_double_char(char **str);
 //--------------------free--------------------
 
 /*signals*/
@@ -218,6 +220,7 @@ void				exec_handler(int signum);
 //---------------------------bultins------------------------------
 void				bultins_runner(char **av, t_data *data);
 int					ft_buitin_check(char **av);
+int					bultins(char **args, t_data *data);
 //---------------------------bultins------------------------------
 
 
@@ -234,9 +237,8 @@ int					minishell(t_data *data, char **env);
 
 /*token*/
 //--------------------token--------------------
-char 				**get_copy_of_token_version_tow(char **argv, t_token **lst);
-char 				**get_copy_of_token_v3(char **argv, t_token **lst);
-char 				**get_copy_of_token(char **argv, t_token **lst);
+char 				**get_copy_of_token_v1(char **argv, t_token **lst);
+char 				**get_copy_of_token_v2(char **argv, t_token **lst);
 void				ft_lst_add(t_token **lst);
 t_token 			*extract_token(t_token **token);
 void 				join_nodes(t_token **token);
@@ -246,7 +248,7 @@ char 				*add_command_to_node(char *command, int i, t_data *data);
 /*redirections*/
 //--------------------redirections--------------------
 int					redirect_input(t_token **token, t_data *data);
-int					redirections(t_token **token);
+int					redirections(t_token **token, t_data *data);
 char 				*handle_redirections(char *command, t_data *data, char c);
 //--------------------redirections--------------------
 
@@ -254,6 +256,7 @@ char 				*handle_redirections(char *command, t_data *data, char c);
 //--------------------expand--------------------
 char 				**expand(char** argv, t_data *data, t_token **token);
 char 				*handle_dollar_sign(char *str, t_data *data, int *b);
+char				*expander(char *str, t_data *data);
 //--------------------expand--------------------
 
 /*pipe*/
@@ -265,9 +268,9 @@ void				pipe_pipe(int n, t_data *data);
 //--------------------utils--------------------
 char 				*extraxt_arg(char *arg);
 int					get_size_of_tree(t_token **token);
-void				ft_error(char **cmd, t_data *data);
+void 				ft_error(t_data *data, char *arg, char *error ,int exit_status);
 int					get_len(t_token *lst);
-void				get_copy(char *s1, t_token *lst);
+char 				*get_copy(t_token *lst);
 void				get_copy_v3(char *s1, t_token *lst);
 char 				*remove_white_spaces(char *str);
 int					str_cmp_n(char *str1, char *str2, int n);
@@ -275,8 +278,8 @@ int					str_cmp_n(char *str1, char *str2, int n);
 
 /*path*/
 //--------------------path--------------------
-int					check_splited_path(char **splited_path, char *command);
-int					check_path(char *command, t_data *data);
+char					*check_splited_path(char **splited_path, char *command);
+char					*check_path(char *command, t_data *data);
 //--------------------path--------------------
 
 /*execution*/
@@ -301,4 +304,6 @@ int					heredoc(t_token **node, t_data *data);
 char				*herdok_expand(char *str, t_data *data);
 void 				set_heredoc_input_value(t_token **token);
 //--------------------heredoc--------------------
+
+char *readline_dyali();
 #endif

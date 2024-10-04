@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:43:47 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/10/01 05:04:49 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/03 11:31:03 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,17 @@ void free_linked_list(t_token **lst)
         free(tmp->arg);
 		free(tmp);
 	}
+}
+
+void free_double_char(char **str)
+{
+    int i;
+
+    i = 0;
+    while(str[i])
+    {
+        free(str[i]);
+        i++;
+    }
+    free(str);
 }

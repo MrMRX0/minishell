@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:31 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/01 04:21:33 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/02 05:52:33 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,18 @@ int  redirect_input(t_token **token, t_data *data)
 		if (tmp->type == HERDOK)
 		{
 			fd = heredoc(&tmp, data);
+			dup2(fd,STDIN_FILENO);
 			tmp = tmp->next->next;
 		}
 		else if(tmp->type == INPUT_REDIRECTION)
 		{
 			fd = open(tmp->next->arg, O_RDONLY);
+			if (access(tmp->next->arg, R_OK) == -1)
+			{
+				ft_error(data, tmp->next->arg, ": Permission denied\n", 1);
+				return -1;
+			}
+			dup2(fd,STDIN_FILENO);
 			tmp = tmp->next->next;
 		}
 		else if(tmp)
@@ -35,7 +42,7 @@ int  redirect_input(t_token **token, t_data *data)
 	return fd;
 }
 
-int redirections(t_token **token)
+int redirections(t_token **token, t_data *data)
 {
 	int i = 0;
 	t_token *tmp = *token;
@@ -47,14 +54,28 @@ int redirections(t_token **token)
 		if ((tmp->next) && (tmp->type == SINGLE_REDIRECTION || tmp->type == APPEND_REDIRECTION))
 		{
 			if (tmp->type == APPEND_REDIRECTION)
+			{
 				fd  = open(tmp->next->arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				if (access(tmp->next->arg, W_OK) == -1)
+				{
+					ft_error(data, tmp->next->arg, ": Permission denied\n", 1);
+					return -1;
+				}
+				dup2(fd,STDOUT_FILENO);
+			}
 			else
+			{
 				fd  = open(tmp->next->arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (access(tmp->next->arg, W_OK) == -1)
+				{
+					ft_error(data, tmp->next->arg, ": Permission denied\n", 1);
+					return -1;
+				}
+				dup2(fd,STDOUT_FILENO);
+			}
 		}
 		tmp = tmp->next;
 	}
-	// dup2(fd , STDOUT_FILENO);
-	// close(fd);
 	return(fd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/03 11:33:04 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/03 11:27:33 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ void	execute(char **args, t_data *data)
 	signal(SIGINT, exec_handler);
 	signal(SIGQUIT, SIG_IGN);
 	if (bultins(args, data))
-		return ;
+		;
+	return ;
 	path = check_path(args[0], data);
 	pid = fork();
 	if (pid == 0)

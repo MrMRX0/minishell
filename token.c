@@ -6,40 +6,13 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:10 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/01 06:39:47 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/03 09:40:22 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **get_copy_of_token_version_tow(char **argv, t_token **lst)
-{
-	int len = 0;
-	t_token *tmp = *lst;
-	while(tmp && tmp->type != PIPE)
-	{
-		tmp = tmp->next;
-		len++;
-	}
-	tmp= *lst;
-	argv = malloc(len * sizeof(char *) + 1);
-	int i = 0;
-	while(i < len)
-	{
-		// printf("len of arg[%d] is %d\n",i,get_len(tmp->arg));
-		argv[i] = malloc(get_len(tmp) + 1);
-		get_copy(argv[i], tmp);
-		// printf("%s\n",argv[i]);
-		tmp = tmp->next;
-		i++;
-		
-	}
-	argv[i] = NULL;
-	free_n_lst(lst, len);
-	return(argv);
-}
-
-char **get_copy_of_token_v3(char **argv, t_token **lst)
+char **get_copy_of_token_v2(char **argv, t_token **lst)
 {
 	int len = 0;
 	if (!*lst)
@@ -74,8 +47,7 @@ char **get_copy_of_token_v3(char **argv, t_token **lst)
 			}
 			else
 			{
-				argv[i] = malloc(ft_strlen(tmp->arg) + 1);
-				get_copy_v3(argv[i], tmp);
+				argv[i] = ft_strdup(tmp->arg);
 				tmp = tmp->next;
 				i++;
 			}
@@ -87,9 +59,8 @@ char **get_copy_of_token_v3(char **argv, t_token **lst)
 
 }
 
-char **get_copy_of_token(char **argv, t_token **lst)
+char **get_copy_of_token_v1(char **argv, t_token **lst)
 {
-	(void)argv;
 	int len = 0;
 	if (!*lst)
 		return(NULL);
@@ -104,10 +75,7 @@ char **get_copy_of_token(char **argv, t_token **lst)
 	int i = 0;
 	while(i < len)
 	{
-		// printf("len of arg[%d] is %d\n",i,get_len(tmp->arg));
-		argv[i] = malloc(get_len(tmp) + 1);
-		get_copy(argv[i], tmp);
-		// printf("%s\n",argv[i]);
+		argv[i] = get_copy(tmp);
 		tmp = tmp->next;
 		i++;
 		
@@ -120,7 +88,7 @@ char **get_copy_of_token(char **argv, t_token **lst)
 void ft_lst_add(t_token **lst) 
 {
 	if (!*lst) {
-		*lst = malloc(sizeof(t_token));
+		*lst = malloc(1 * sizeof(t_token));
 		if (!*lst) {
 			perror("malloc failed");
 			exit(EXIT_FAILURE);
@@ -161,7 +129,7 @@ t_token *extract_token(t_token **token)
 		tmp = new;	
 		while(tmp->next)
 			tmp = tmp->next;
-		tmp->arg = (*token)->arg;
+		tmp->arg = ft_strdup((*token)->arg);
 		tmp->next_command = (*token)->next_command;
 		tmp->type = (*token)->type;
 		*token = (*token)->next;
@@ -209,7 +177,7 @@ char *add_command_to_node(char *command, int i, t_data *data)
 	t_token *tmp = data->token;
 	while(tmp->next)
 		tmp = tmp->next;
-	tmp->arg = malloc(i * sizeof(char) + 1);
+	tmp->arg = malloc((i + 1) * sizeof(char));
 	tmp->type = data->type;
 	while(j < i)
 	{

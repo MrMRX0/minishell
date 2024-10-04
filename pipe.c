@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:45 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/01 04:21:47 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/03 10:09:24 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,30 @@ void pipe_pipe(int n, t_data *data)
 		}
 		i++;
 	}
+	t_token *tmp = data->token; // store token pointer to free it later
 	// Fork and execute commands
 	while(cmd_idx <= n)
 	{
 		pipe_token  = extract_token(&data->token);
-		command = get_copy_of_token(command, &pipe_token);
+		command = get_copy_of_token_v1(command, &pipe_token);
 		expand(command,data, &pipe_token);
 		join_nodes(&pipe_token);
-		std_out = redirections(&pipe_token);
+		std_out = redirections(&pipe_token, data);
 		std_in = redirect_input(&pipe_token, data);
-		if(std_in)
-			dup2(std_in, STDIN_FILENO);
-		if (std_out)
-			dup2(std_out, STDOUT_FILENO);
-		command = get_copy_of_token_v3(command, &pipe_token);
+		if(std_out == -1 || std_in == -1)
+		{
+			cmd_idx++;
+			continue;
+		}
+		i = 0;
+		while(command[i])
+		{
+			free(command[i]);
+			i++;
+		}
+		free(command);
+		command = get_copy_of_token_v2(command, &pipe_token);
+		free_linked_list(&pipe_token);
 		pid = fork();
 		if (pid == 0)
 		{
@@ -81,6 +91,13 @@ void pipe_pipe(int n, t_data *data)
 		}
 		else
 		{
+			i = 0;
+			while(command[i])
+			{
+				free(command[i]);
+				i++;
+			}
+			free(command);
 			restore_stdin_stdout(data->std_in, data->std_out);
 			save_stdin_stdout(&data->std_in, &data->std_out);
 			usleep(1000);
@@ -94,6 +111,7 @@ void pipe_pipe(int n, t_data *data)
 		close(fd[i]);
 		i++;
 	}
+	free(fd);
 	// Wait for all child processes to finish
 	i = 0;
 	while(i <= n)
@@ -101,6 +119,7 @@ void pipe_pipe(int n, t_data *data)
 		wait(NULL);
 		i++;
 	}
+	data->token = tmp; // restore pointer
 	// printf("number of executions is %d\n", cmd_idx);
 }
 
