@@ -13,27 +13,28 @@
 #include "../incld/minishell.h"
 
 
-void free_env(t_env **env)
-{
-    t_env *tmp;
-    t_env *tmp2;
 
-    tmp = *env;
-    while (tmp)
-    {
-        tmp2 = tmp->next;
-        free(tmp->key);
-        free(tmp->value);
-        tmp = tmp2;
-    }
-    *env = NULL;
+
+void free_env(t_env *head)
+{
+    t_env *temp;
+
+	while (head != NULL)
+	{
+		temp = head;
+		head = head->next;
+		free(temp->key);    // Free the key string
+		free(temp->value);  // Free the value string
+		free(temp);         // Free the node itself
+	}
+    // free();
 }
 
 void    free_close_all(t_data *data, char **av)
 {
     free_double_char(av);
     free_double_char(data->env);
-    free_env(&(data)->env_list);
+    free_env(data->env_list);
 }
 void	ft_free(t_data *data)
 {

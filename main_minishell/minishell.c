@@ -37,7 +37,7 @@ void	prompt(t_data *data)
 	{
 		printf("exit_main\n");
 		ft_free(data);
-		free_env(&(data)->env_list);
+		free_env((data)->env_list);
 		exit(0);
 	}
 	data->prompt_call_times++;

@@ -186,7 +186,7 @@ int					nb_count(char **av);
 /*free*/
 //--------------------free--------------------
 void				free_close_all(t_data *data, char **av);
-void				free_env(t_env **env);
+void				free_env(t_env *env);
 void				free_av(char **av);
 void				ft_free(t_data *data);
 void				free_n_lst(t_token **lst, int len);
