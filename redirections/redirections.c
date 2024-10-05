@@ -19,9 +19,9 @@ int	redirect_input(t_token **token, t_data *data)
 
 	tmp = *token;
 	fd = 0;
-	while (tmp)
+	while (tmp) // << l << d flag = 1
 	{
-		if (tmp->type == HERDOK)
+		if (tmp->type == HERDOK && global_data->sig_flag != 1)
 		{
 			fd = heredoc(&tmp, data);
 			tmp = tmp->next->next;
@@ -37,6 +37,7 @@ int	redirect_input(t_token **token, t_data *data)
 			tmp = tmp->next;
 	}
 	dup2(fd, STDIN_FILENO);
+
 	return (fd);
 }
 

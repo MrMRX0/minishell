@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:18:42 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/21 23:44:34 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ t_env	*create_env_node(const char *env_var)
 
 	new_node = (t_env *)malloc(sizeof(t_env));
 	delimiter = ft_strchr(env_var, '=');
+	if(delimiter != NULL)
+		new_node->q = 1;
+	else
+		new_node->q = 0;
 	new_node->key = ft_strndup(env_var, delimiter - env_var);
 	new_node->value = ft_strdup(delimiter + 1);
 	new_node->next = NULL;

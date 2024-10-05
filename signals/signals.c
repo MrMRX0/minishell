@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 10:55:16 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/30 12:43:56 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,34 +20,41 @@ void    main_signal_handler(void)
 
 void    handler(int signum)
 {
-    if (signum == SIGINT)
-    {
-        write(1, "\n", 1);
-        rl_on_new_line();
-        rl_replace_line("", 0);
-        rl_redisplay();
-    }
+	(void)signum;
+	global_data->exit_status = 130;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
-// void   middle_exec_signal(t_data *data)
-// {
-//     struct sigaction sa;
-//     sa.sa_flags = SA_SIGINFO;
-//     sa.sa_sigaction = exec_handler;
-//     sigaction(SIGINT, &sa, (void *)data);
-//     sigaction(SIGQUIT, &sa, (void *)data);
-// }
 
-void    exec_handler(int signum)
+
+void	handler_2(int signum)
 {
-    if (signum == SIGINT)
-    {
-        write(1, "\n", 1);
+	(void)signum;
+	global_data->exit_status = 130;
+	write(1, "\n", 1);
+}
 
-    }
-    else if (signum == SIGQUIT)
-    {
-        write(1, "\n", 1);
+void	handler_3(int signum)
+{
+	(void)signum;
+	global_data->exit_status = 131;
+	write(1, "\n", 1);
+}
 
-    }
+void	signal_handler_heredoc(void)
+{
+	signal(SIGINT, handler_heredoc);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	handler_heredoc(int signum)
+{
+	write(1, "\n", 1);
+	global_data->sig_flag = 1;
+	global_data->exit_status = 130;
+	close(0);
+	(void)signum;
 }

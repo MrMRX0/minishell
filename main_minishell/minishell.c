@@ -12,6 +12,8 @@
 
 #include "../incld/minishell.h"
 
+t_data *global_data;
+
 void	save_stdin_stdout(int *std_in, int *std_out)
 {
 	*std_in = dup(0);
@@ -28,7 +30,9 @@ void	restore_stdin_stdout(int std_in, int std_out)
 
 void	prompt(t_data *data)
 {
+	main_signal_handler();
 	data->input = readline(COLOR_BOLD_RED "➜  minishell " COLOR_RESET);
+	global_data->sig_flag = 0;
 	if (!data->input)
 	{
 		printf("exit_main\n");
@@ -45,7 +49,6 @@ int	minishell(t_data *data, char **env)
 	while (1)
 	{
 		free_linked_list(&data->token);
-		main_signal_handler();
 		prompt(data);
 		add_history(data->input);
 		data->flag = 0;
@@ -53,7 +56,7 @@ int	minishell(t_data *data, char **env)
 		if (parsing(data->input, data) == 0)
 		{
 			if (parser(data) == 1)
-				return (free(data->input), 0);
+				continue;
 			save_stdin_stdout(&data->std_in, &data->std_out);
 			execution(data);
 			restore_stdin_stdout(data->std_in, data->std_out);
@@ -63,6 +66,8 @@ int	minishell(t_data *data, char **env)
 	return (0);
 }
 
+
+
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
@@ -71,6 +76,7 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (1);
 	ft_memset(&data, 0, sizeof(t_data));
+	global_data = &data;
 	minishell(&data, env);
 	return (0);
 }

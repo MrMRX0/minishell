@@ -41,13 +41,19 @@ char	*get_file_name(void)
 	return (file_path);
 }
 
-void	open_heredoc(t_data *data, t_token **node, int fd, char *input)
+t_bool	open_heredoc(t_data *data, t_token **node, int fd, char *input)
 {
 	while (1)
 	{
+		signal_handler_heredoc();
 		input = readline(">");
 		if (!input)
 		{
+			if (global_data->sig_flag == 1)
+			{
+				write(1, "\n", 1);
+				return false;
+			}
 			restore_stdin_stdout(data->std_in, data->std_in);
 			save_stdin_stdout(&data->std_in, &data->std_in);
 			printf(HEREDOC_ERROR, data->prompt_call_times, (*node)->next->arg);
@@ -64,6 +70,7 @@ void	open_heredoc(t_data *data, t_token **node, int fd, char *input)
 		free(input);
 	}
 	free(input);
+	return true;
 }
 
 int	heredoc(t_token **node, t_data *data)
@@ -79,7 +86,8 @@ int	heredoc(t_token **node, t_data *data)
 	fd = open(filepath, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (access(filepath, R_OK) == -1)
 		return (ft_error(data, filepath, P_D, 1), -1);
-	open_heredoc(data, node, fd, input);
+	if (open_heredoc(data, node, fd, input) == false)
+		return -1;
 	close(fd);
 	fd = open(filepath, O_RDONLY);
 	if (fd == -1)

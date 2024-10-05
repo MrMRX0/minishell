@@ -46,6 +46,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
+	int				q;
 	struct s_env	*next;
 }					t_env;
 //--------------------env--------------------
@@ -75,6 +76,7 @@ typedef struct t_lst_0
 	int				syntax_error;
 	int				prompt_call_times;
 	int				shild_signal;
+	int 			sig_flag;
 }					t_data;
 
 typedef struct t_lst_5
@@ -85,6 +87,8 @@ typedef struct t_lst_5
 	char			**command;
 	int				*fd;
 }					t_pipex;
+
+extern t_data *global_data;
 
 /*boul*/
 //--------------------boul--------------------
@@ -194,12 +198,15 @@ void				free_double_char(char **str);
 void				main_signal_handler(void);
 void				handler(int signum);
 void				middle_exec_signal(t_data *data);
-void				exec_handler(int signum);
+void	handler_3(int signum);
+void	handler_2(int signum);
+void	signal_handler_heredoc(void);
+void	handler_heredoc(int signum);
 //--------------------signals--------------------
 
 /*bultins*/
 //---------------------------bultins------------------------------
-void				bultins_runner(char **av, t_data *data);
+t_bool				bultins_runner(char **av, t_data *data);
 int					ft_buitin_check(char **av);
 int					bultins(char **args, t_data *data);
 //---------------------------bultins------------------------------

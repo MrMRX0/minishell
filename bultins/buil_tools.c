@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   buil_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 18:06:27 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/09/26 10:23:50 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,10 @@ t_env	*init_new_variable(char *variable, char *key)
 	if (!new)
 		return (NULL);
 	new->key = ft_strdup(key);
+	if (ft_strchr(variable, '=') != NULL)
+		new->q = 1;
+	else
+		new->q = 0;
 	if (ft_strstr(variable, "+=") == NULL)
 	{
 		if (ft_strchr(variable, '=') == NULL)

@@ -66,13 +66,13 @@ t_bool	ft_exit(char **av, t_data *data)
 	if (nb_count(av) == 1 && data->flag == 1)
 	{
 		data->exit_status = 0;
-		// free_close_all(data, av);
+		free_close_all(data, av);
 		exit(data->exit_status);
 	}
 	if (nb_count(av) == 1)
 	{
 		write(2, "exit\n", 5);
-		// free_close_all(data, av);
+		free_close_all(data, av);
 		exit(data->exit_status);
 	}
 	if (nb_count(av) > 2)
