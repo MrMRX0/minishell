@@ -96,8 +96,12 @@ void	execute(char **args, t_data *data)
 
 	path = NULL;
 	i = 0;
+	global_data->sig_flag2 = 0;
+	if(ft_strcmp(args[0], "cat") == 0)
+		global_data->sig_flag3 = 1;
 	signal(SIGINT, handler_2);
 	signal(SIGQUIT, handler_3);
+	// global_data->sig_flag3 = 0;
 	if (bultins(args, data))
 		return ;
 	path = check_path(args[0], data);

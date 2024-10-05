@@ -77,6 +77,8 @@ typedef struct t_lst_0
 	int				prompt_call_times;
 	int				shild_signal;
 	int 			sig_flag;
+	int				sig_flag2;
+	int				sig_flag3;
 }					t_data;
 
 typedef struct t_lst_5

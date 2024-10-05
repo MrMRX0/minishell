@@ -12,20 +12,6 @@
 
 #include "../incld/minishell.h"
 
-void   free_av(char **av)
-{
-    int i;
-
-    i = 0;
-    if(!av)
-        return ;
-    while (av[i])
-    {
-        free(av[i]);
-        i++;
-    }
-    free(av);
-}
 
 void free_env(t_env **env)
 {
@@ -45,8 +31,8 @@ void free_env(t_env **env)
 
 void    free_close_all(t_data *data, char **av)
 {
-    free_av(av);
-    free_av(data->env);
+    free_double_char(av);
+    free_double_char(data->env);
     free_env(&(data)->env_list);
 }
 void	ft_free(t_data *data)

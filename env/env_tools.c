@@ -80,9 +80,16 @@ char	**transform_env(t_env *env)
 
 void	join_key_value(char *str, char **envp, int i, t_env *tmp)
 {
+	char *to_free;
+
+	to_free = NULL;
 	if (str != NULL)
 		free(str);
 	str = ft_strdup(tmp->key);
+	to_free = str;
 	envp[i] = ft_strjoin(str, "=");
+	free(to_free);
+	to_free = envp[i];
 	envp[i] = ft_strjoin(envp[i], tmp->value);
+	free(to_free);
 }
