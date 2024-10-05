@@ -154,15 +154,14 @@ int					ft_strncmp_echo(char *str);
 
 /*ft_cd*/
 //--------------------ft_cd--------------------
-t_bool				ft_cd(char **av, t_data *data);
+t_bool				ft_cd(char **av);
 t_bool				check_cd(char **av, char *old_pwd);
 t_bool				check_directory(char *dir);
-void				set_env(t_env *env, const char *key, const char *value,
-						t_data *data);
+void				set_env(t_env *env, const char *key, const char *value);
 char				*get_env_value(t_env *env, const char *key);
 void				error(const char *cmd, const char *msg);
 void				change_pwd(t_env *envs, const char *old_pwd,
-						const char *pwd, t_data *data);
+						const char *pwd);
 //--------------------ft_cd--------------------
 
 /*sub_lib*/

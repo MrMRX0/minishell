@@ -23,7 +23,7 @@ char	*get_env_value(t_env *env, const char *key)
 	return (NULL);
 }
 
-void	set_env(t_env *env, const char *key, const char *value, t_data *data)
+void	set_env(t_env *env, const char *key, const char *value)
 {
 	t_env	*new_env;
 
@@ -40,18 +40,18 @@ void	set_env(t_env *env, const char *key, const char *value, t_data *data)
 	new_env = (t_env *)malloc(sizeof(t_env));
 	new_env->key = ft_strdup(key);
 	new_env->value = ft_strdup(value);
-	new_env->next = data->env_list;
-	data->env_list = new_env;
+	new_env->next = global_data->env_list;
+	global_data->env_list = new_env;
 }
 
 t_bool	check_directory(char *dir)
 {
-	struct stat	info; 
+	struct stat	info;
 
 	if (access(dir, F_OK) == -1)
 		return (error("cd", "No such file or directory"), false);
 	if (stat(dir, &info) == -1)
-		return (error("cd", "Error!"), false);
+		return (error("cd", NULL), false);
 	if (!S_ISDIR(info.st_mode))
 		return (error("cd", "Not a directory"), false);
 	if (access(dir, R_OK | X_OK) == -1)
@@ -71,7 +71,7 @@ t_bool	check_cd(char **av, char *old_pwd)
 	return (true);
 }
 
-t_bool	ft_cd(char **av, t_data *data)
+t_bool	ft_cd(char **av)
 {
 	char	old_pwd[PATH_MAX];
 	char	new_pwd[PATH_MAX];
@@ -81,10 +81,11 @@ t_bool	ft_cd(char **av, t_data *data)
 		return (false);
 	if (!av[1])
 	{
-		home = get_env_value(data->env_list, "HOME");
+		home = get_env_value(global_data->env_list, "HOME");
 		if (!home)
 			return (error("cd", "HOME not set"), false);
 		ft_strcpy(new_pwd, home);
+
 	}
 	else
 	{
@@ -96,6 +97,5 @@ t_bool	ft_cd(char **av, t_data *data)
 		return (error("cd", new_pwd), false);
 	if (!getcwd(new_pwd, PATH_MAX))
 		return (error("cd", "getcwd failed"), false);
-	return (change_pwd(data->env_list, old_pwd, new_pwd, data), 1);
+	return (change_pwd(global_data->env_list, old_pwd, new_pwd), 1);
 }
- 

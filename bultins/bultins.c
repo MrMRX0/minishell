@@ -25,7 +25,7 @@ t_bool	bultins_runner(char **av, t_data *data)
 	else if (ft_strcmp(av[0], "echo") == 0)
 		return (ft_echo(av));
 	else if (ft_strcmp(av[0], "cd") == 0)
-		return (ft_cd(av, data));
+		return (ft_cd(av));
 	else if (ft_strcmp(av[0], "exit") == 0)
 		return (ft_exit(av, data));
 	return (false);
