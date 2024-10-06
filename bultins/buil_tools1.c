@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../incld/minishell.h"
 
-void	change_pwd(t_env *envs, const char *old_pwd, const char *pwd, t_data *data)
+void	change_pwd(t_env *envs, const char *old_pwd, const char *pwd)
 {
-	set_env(envs, "OLDPWD", old_pwd, data);
-	set_env(envs, "PWD", pwd, data);
+	set_env(envs, "OLDPWD", old_pwd);
+	set_env(envs, "PWD", pwd);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../incld/minishell.h"
 
 void	free_global_tmp(t_env *tmp)
 {

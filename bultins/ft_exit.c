@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../incld/minishell.h"
 
 int	nb_count(char **av)
 {
@@ -40,9 +40,9 @@ void	ft_exit_helper(char **av, t_data *data)
 {
 	write(2, "exit\n", 5);
 	write(2, "exit: numeric argument required\n", 33);
-	data->status = 2;
-	free_close_all(data, av);
-	exit(data->status);
+	data->exit_status = 2;
+	ft_free_heap();
+	exit(data->exit_status);
 }
 
 void	ft_exit_helper2(t_data *data, char **av)
@@ -56,7 +56,7 @@ void	ft_exit_helper2(t_data *data, char **av)
 		ft_putstr_fd("exit numeric argument required", 2);
 		i = 2;
 	}
-	free_close_all(data, av);
+	ft_free_heap();;
 	exit((unsigned char)i);
 }
 
@@ -65,21 +65,21 @@ t_bool	ft_exit(char **av, t_data *data)
 
 	if (nb_count(av) == 1 && data->flag == 1)
 	{
-		data->status = 0;
-		free_close_all(data, av);
-		exit(data->status);
+		data->exit_status = 0;
+		ft_free_heap();
+		exit(data->exit_status);
 	}
 	if (nb_count(av) == 1)
 	{
 		write(2, "exit\n", 5);
-		free_close_all(data, av);
-		exit(data->status);
+		ft_free_heap();
+		exit(data->exit_status);
 	}
 	if (nb_count(av) > 2)
 	{
 		write(2, "exit\n", 5);
 		write(2, "exit: too many arguments\n", 25);
-		data->status = 1;
+		data->exit_status = 1;
 		return (false);
 	}
 	else if (ft_isnumber(av[1]) == false)

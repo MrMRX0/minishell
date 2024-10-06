@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../incld/minishell.h"
 
 t_bool	ft_env(char **av, t_data *data)
 {
@@ -24,10 +24,13 @@ t_bool	ft_env(char **av, t_data *data)
 	}
 	while (tmp)
 	{
-		ft_putstr_fd(tmp->key, 1);
-		write(1, "=", 1);
-		ft_putstr_fd(tmp->value, 1);
-		write(1, "\n", 1);
+		if(tmp->q == 1)
+		{
+			ft_putstr_fd(tmp->key, 1);
+			write(1, "=", 1);
+			ft_putstr_fd(tmp->value, 1);
+			write(1, "\n", 1);
+		}
 		tmp = tmp->next;
 	}
 	return (true);

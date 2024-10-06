@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../incld/minishell.h"
 
 void	remove_variable(char *key, t_data *data)
 {

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env_tools.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:20:45 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/24 09:37:18 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/06 02:53:35 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../incld/minishell.h"
 
 
 
@@ -64,7 +64,7 @@ char	**transform_env(t_env *env)
 		i++;
 		tmp = tmp->next;
 	}
-	envp = (char **)malloc(sizeof(char *) * (i + 1));
+	envp = (char **)ft_malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	tmp = env;
 	str = NULL;
@@ -80,9 +80,24 @@ char	**transform_env(t_env *env)
 
 void	join_key_value(char *str, char **envp, int i, t_env *tmp)
 {
+	char *temp;  // Temporary variable to hold intermediate allocations
+
 	if (str != NULL)
 		free(str);
+
+	// Duplicate the key
 	str = ft_strdup(tmp->key);
+
+	// First join: str + "="
 	envp[i] = ft_strjoin(str, "=");
+
+	// Free 'str' after joining
+
+
+	// Second join: envp[i] + value
+	temp = envp[i];  // Store previous envp[i] to free it
 	envp[i] = ft_strjoin(envp[i], tmp->value);
+
+	// Free the previous allocation stored in temp
+
 }
