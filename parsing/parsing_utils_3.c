@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 09:07:37 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*get_copy(t_token *lst)
 
 	i = 0;
 	b = 0;
-	copy = malloc((get_len(lst) + 1) * sizeof(char));
+	copy = ft_malloc((get_len(lst) + 1) * sizeof(char));
 	while (lst->arg[i])
 	{
 		if (lst->arg[i] == '\"' && lst->type == D_QUOTE)
@@ -85,7 +85,6 @@ char	*get_copy(t_token *lst)
 		}
 	}
 	copy[b] = '\0';
-	free(lst->arg);
 	lst->arg = ft_strdup(copy);
 	return (copy);
 }

@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:04:57 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:11:43 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,10 @@ int	find_dollar_sign(char *str, t_token *tmp)
 char	*get_last_res(char *str, t_data *data, int *b, char *final_str)
 {
 	char	*returned_str;
-	char	*tmp_free;
 
 	returned_str = NULL;
-	tmp_free = NULL;
 	returned_str = handle_dollar_sign(str + *b, data, b);
 	if (returned_str)
-	{
-		tmp_free = final_str;
 		final_str = ft_strjoin(final_str, returned_str);
-		if (tmp_free)
-			free(tmp_free);
-		free(returned_str);
-	}
 	return (final_str);
 }

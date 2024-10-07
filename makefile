@@ -36,11 +36,14 @@ SRCS =  main_minishell/minishell.c \
 		env/env.c	\
 		env/env_tools.c \
 		free/free.c \
+		free/gar_co.c \
+		free/utils.c \
 		signals/signals.c \
 		redirections/redirections.c \
 		redirections/heredoc.c \
 		expand/expand.c \
-		expand/expand_utils.c
+		expand/expand_utils.c \
+		main_minishell/ft_readline.c \
 
 OBJS = $(SRCS:.c=.o)
 

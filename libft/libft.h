@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 22:13:26 by alamaoui          #+#    #+#             */
-/*   Updated: 2023/12/02 13:41:09 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/06 02:46:26 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include "../incld/minishell.h"
 
 typedef struct s_list
 {

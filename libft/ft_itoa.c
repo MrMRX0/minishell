@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 09:56:38 by ibougajd          #+#    #+#             */
-/*   Updated: 2023/12/02 16:50:22 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 09:11:30 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*ft_itoa(int n)
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
 	len = len_nbr(n);
-	string = malloc((len + 1) * sizeof(char));
+	string = ft_malloc((len + 1) * sizeof(char));
 	if (!string)
 		return (NULL);
 	string[len] = '\0';

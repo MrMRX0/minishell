@@ -6,15 +6,15 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 21:23:41 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 15:09:43 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "collors.h"
 # include "../libft/libft.h"
+# include "collors.h"
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/history.h>
@@ -37,8 +37,16 @@
 # define HERDOK_INPUT 8
 
 # define P_D ": Permission denied\n"
-# define HEREDOC_ERROR "minishell: warning: \
+# define HEREDOC_ERROR \
+	"minishell: warning: \
 	here-document at line %d delimited by end-of-file (wanted `%s')\n"
+
+typedef struct s_cool
+{
+	void			*content;
+	struct s_cool	*next;
+	struct s_cool	*prev;
+}					t_cool;
 
 /*env*/
 //--------------------env--------------------
@@ -76,9 +84,12 @@ typedef struct t_lst_0
 	int				syntax_error;
 	int				prompt_call_times;
 	int				shild_signal;
-	int 			sig_flag;
+	int				sig_flag;
 	int				sig_flag2;
 	int				sig_flag3;
+	int				tmp_heredoc_flag;
+	t_cool			*garn;
+
 }					t_data;
 
 typedef struct t_lst_5
@@ -90,7 +101,7 @@ typedef struct t_lst_5
 	int				*fd;
 }					t_pipex;
 
-extern t_data *global_data;
+extern t_data		*g_global_data;
 
 /*boul*/
 //--------------------boul--------------------
@@ -177,8 +188,8 @@ int					ft_strcmp(const char *s1, const char *s2);
 /*ft_exit*/
 //--------------------ft_exit--------------------
 t_bool				ft_exit(char **av, t_data *data);
-void				ft_exit_helper2(t_data *data, char **av);
-void				ft_exit_helper(char **av, t_data *data);
+void				ft_exit_helper2(char **av);
+void				ft_exit_helper(t_data *data);
 int					ft_isnumber(char *str);
 int					nb_count(char **av);
 //--------------------ft_exit--------------------
@@ -199,10 +210,10 @@ void				free_double_char(char **str);
 void				main_signal_handler(void);
 void				handler(int signum);
 void				middle_exec_signal(t_data *data);
-void	handler_3(int signum);
-void	handler_2(int signum);
-void	signal_handler_heredoc(void);
-void	handler_heredoc(int signum);
+void				handler_3(int signum);
+void				handler_2(int signum);
+void				signal_handler_heredoc(void);
+void				handler_heredoc(int signum);
 //--------------------signals--------------------
 
 /*bultins*/
@@ -324,4 +335,14 @@ void				set_heredoc_input_value(t_token **token);
 //--------------------heredoc--------------------
 
 char				*readline_dyali(void);
+
+void				*ft_malloc(size_t size);
+void				ft_free_all(void);
+t_cool				**get_heap(void);
+void				fft_lstdel_node(t_cool **lst, void (*del)(void *),
+						t_cool *node);
+t_cool				*fft_lstnew(void *content);
+t_bool				fft_lstadd_back(t_cool **lst, t_cool *new);
+t_cool				*fft_lstlast(t_cool *lst);
+t_bool				fft_lstclear(t_cool **lst, void (*del)(void *));
 #endif

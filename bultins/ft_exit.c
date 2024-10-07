@@ -36,16 +36,16 @@ int	ft_isnumber(char *str)
 	return (true);
 }
 
-void	ft_exit_helper(char **av, t_data *data)
+void	ft_exit_helper(t_data *data)
 {
 	write(2, "exit\n", 5);
 	write(2, "exit: numeric argument required\n", 33);
 	data->exit_status = 2;
-	free_close_all(data, av);
+	ft_free_all();
 	exit(data->exit_status);
 }
 
-void	ft_exit_helper2(t_data *data, char **av)
+void	ft_exit_helper2(char **av)
 {
 	int	i;
 
@@ -56,23 +56,22 @@ void	ft_exit_helper2(t_data *data, char **av)
 		ft_putstr_fd("exit numeric argument required", 2);
 		i = 2;
 	}
-	free_close_all(data, av);
+	ft_free_all();;
 	exit((unsigned char)i);
 }
 
 t_bool	ft_exit(char **av, t_data *data)
 {
-
 	if (nb_count(av) == 1 && data->flag == 1)
 	{
 		data->exit_status = 0;
-		free_close_all(data, av);
+		ft_free_all();
 		exit(data->exit_status);
 	}
 	if (nb_count(av) == 1)
 	{
 		write(2, "exit\n", 5);
-		free_close_all(data, av);
+		ft_free_all();
 		exit(data->exit_status);
 	}
 	if (nb_count(av) > 2)
@@ -83,8 +82,8 @@ t_bool	ft_exit(char **av, t_data *data)
 		return (false);
 	}
 	else if (ft_isnumber(av[1]) == false)
-		ft_exit_helper(av, data);
+		ft_exit_helper(data);
 	else
-		ft_exit_helper2(data, av);
+		ft_exit_helper2(av);
 	return (true);
 }

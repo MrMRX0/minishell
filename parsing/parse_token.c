@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:10 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 20:59:10 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/06 01:50:30 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	**get_copy_of_token_v2_handler(t_token **tmp, char **argv, int len)
 	int	i;
 
 	i = 0;
-	argv = malloc((len + 1) * sizeof(char *));
+	argv = ft_malloc((len + 1) * sizeof(char *));
 	while ((*tmp))
 	{
 		if ((*tmp)->type == HERDOK || (*tmp)->type == S_R || (*tmp)->type == A_R
@@ -88,7 +88,7 @@ char	**get_copy_of_token_v1(char **argv, t_token **lst)
 		len++;
 	}
 	tmp = *lst;
-	argv = malloc((len + 1) * sizeof(char *));
+	argv = ft_malloc((len + 1) * sizeof(char *));
 	i = 0;
 	while (i < len)
 	{

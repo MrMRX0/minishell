@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_helper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 16:36:15 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/23 11:26:12 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/06 01:50:30 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_env	*ft_copy_env(t_env *env)
 	{
 		if (ft_strcmp(tmp->key, "_") != 0)
 		{
-			new = (t_env *)malloc(sizeof(t_env));
+			new = (t_env *)ft_malloc(sizeof(t_env));
 			new->key = ft_strdup(tmp->key);
 			new->value = ft_strdup(tmp->value);
 			new->q = tmp->q;

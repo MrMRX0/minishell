@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   buil_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 18:06:27 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/26 10:23:50 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/07 08:52:14 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_key(char *variable)
 	while (variable[i] && variable[i] != '=' && !(variable[i] == '+'
 			&& variable[i + 1] == '='))
 		i++;
-	key = (char *)malloc(sizeof(char) * (i + 1));
+	key = (char *)ft_malloc(sizeof(char) * (i + 1));
 	i = 0;
 	while (variable[i] && variable[i] != '=' && !(variable[i] == '+'
 			&& variable[i + 1] == '='))
@@ -41,18 +41,16 @@ void	update_value(t_env *tmp, char *variable)
 		return ;
 	if (ft_strstr(variable, "+=") == NULL)
 	{
-		free(tmp->value);
 		tmp->value = ft_strdup(ft_strchr(variable, '=') + 1);
 	}
 	else
 	{
-		new_value = malloc(ft_strlen(tmp->value) + ft_strlen(
+		new_value = ft_malloc(ft_strlen(tmp->value) + ft_strlen(
 					ft_strchr(variable, '=') + 1) + 1);
 		if (!new_value)
 			return ;
 		ft_strcpy(new_value, tmp->value);
 		ft_strcat(new_value, ft_strchr(variable, '=') + 1);
-		free(tmp->value);
 		tmp->value = new_value;
 	}
 }
@@ -61,7 +59,7 @@ t_env	*init_new_variable(char *variable, char *key)
 {
 	t_env	*new;
 
-	new = (t_env *)malloc(sizeof(t_env));
+	new = (t_env *)ft_malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
 	new->key = ft_strdup(key);

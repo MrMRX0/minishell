@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:44:35 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/26 10:24:40 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:26:02 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,16 @@ void	set_env(t_env *env, const char *key, const char *value)
 	{
 		if (ft_strcmp(env->key, key) == 0)
 		{
-			free(env->value);
 			env->value = ft_strdup(value);
 			return ;
 		}
 		env = env->next;
 	}
-	new_env = (t_env *)malloc(sizeof(t_env));
+	new_env = (t_env *)ft_malloc(sizeof(t_env));
 	new_env->key = ft_strdup(key);
 	new_env->value = ft_strdup(value);
-	new_env->next = global_data->env_list;
-	global_data->env_list = new_env;
+	new_env->next = g_global_data->env_list;
+	g_global_data->env_list = new_env;
 }
 
 t_bool	check_directory(char *dir)
@@ -81,7 +80,7 @@ t_bool	ft_cd(char **av)
 		return (false);
 	if (!av[1])
 	{
-		home = get_env_value(global_data->env_list, "HOME");
+		home = get_env_value(g_global_data->env_list, "HOME");
 		if (!home)
 			return (error("cd", "HOME not set"), false);
 		ft_strcpy(new_pwd, home);
@@ -97,5 +96,5 @@ t_bool	ft_cd(char **av)
 		return (error("cd", new_pwd), false);
 	if (!getcwd(new_pwd, PATH_MAX))
 		return (error("cd", "getcwd failed"), false);
-	return (change_pwd(global_data->env_list, old_pwd, new_pwd), 1);
+	return (change_pwd(g_global_data->env_list, old_pwd, new_pwd), 1);
 }

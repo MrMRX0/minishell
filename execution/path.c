@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:54 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:04:57 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,14 @@ char	*check_splited_path(char **splited_path, char *command)
 {
 	int		i;
 	char	*path;
-	char	*to_free;
 
 	i = 0;
-	to_free = NULL;
 	while (splited_path[i])
 	{
 		path = ft_strjoin(splited_path[i], "/");
-		to_free = path;
 		path = ft_strjoin(path, command);
-		free(to_free);
 		if ((access(path, X_OK) == 0))
 			return (path);
-		free(path);
 		i++;
 	}
 	return (NULL);

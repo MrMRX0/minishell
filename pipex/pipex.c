@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:45 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 15:09:43 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	*create_pipes(int n)
 	int	*fd;
 
 	i = 0;
-	fd = malloc(((2 * n) * sizeof(int)));
+	fd = ft_malloc(((2 * n) * sizeof(int)));
 	while (i < n)
 	{
 		if (pipe(fd + i * 2) == -1)
@@ -54,7 +54,6 @@ void	pipex(t_data *data, int n)
 		wait(NULL);
 		i++;
 	}
-	free(pipe.fd);
 	data->token = tmp;
 }
 
@@ -77,6 +76,7 @@ void	pipex_child(t_pipex *pipe, t_data *data, int n)
 		ft_exit(pipe->command, data);
 	}
 	execute(pipe->command, data);
+	ft_free_all();
 	exit(0);
 }
 
@@ -94,7 +94,6 @@ void	ft_fork(t_pipex *pipe, t_data *data, int n)
 	}
 	else
 	{
-		free_double_char(pipe->command);
 		restore_stdin_stdout(data->std_in, data->std_out);
 		save_stdin_stdout(&data->std_in, &data->std_out);
 		usleep(1000);

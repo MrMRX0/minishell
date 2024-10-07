@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:31 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 21:38:01 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:29:08 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ int	redirect_input(t_token **token, t_data *data)
 
 	tmp = *token;
 	fd = 0;
-	while (tmp) // << l << d flag = 1
+	while (tmp)
 	{
-		if (tmp->type == HERDOK && global_data->sig_flag != 1)
+		if (tmp->type == HERDOK && g_global_data->sig_flag != 1)
 		{
 			fd = heredoc(&tmp, data);
 			tmp = tmp->next->next;
@@ -37,7 +37,6 @@ int	redirect_input(t_token **token, t_data *data)
 			tmp = tmp->next;
 	}
 	dup2(fd, STDIN_FILENO);
-
 	return (fd);
 }
 

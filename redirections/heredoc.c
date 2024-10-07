@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:25:23 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 21:48:41 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 15:06:58 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,12 @@ t_bool	open_heredoc(t_data *data, t_token **node, int fd, char *input)
 	while (1)
 	{
 		signal_handler_heredoc();
+		g_global_data->tmp_heredoc_flag = 1;
 		input = readline(">");
 		if (!input)
 		{
-			if (global_data->sig_flag == 1)
-			{
-				write(1, "\n", 1);
-				return false;
-			}
+			if (g_global_data->sig_flag == 1)
+				return (write(1, "\n", 1), false);
 			restore_stdin_stdout(data->std_in, data->std_in);
 			save_stdin_stdout(&data->std_in, &data->std_in);
 			printf(HEREDOC_ERROR, data->prompt_call_times, (*node)->next->arg);
@@ -67,10 +65,8 @@ t_bool	open_heredoc(t_data *data, t_token **node, int fd, char *input)
 		if (input)
 			write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
-		free(input);
 	}
-	free(input);
-	return true;
+	return (true);
 }
 
 int	heredoc(t_token **node, t_data *data)
@@ -87,7 +83,7 @@ int	heredoc(t_token **node, t_data *data)
 	if (access(filepath, R_OK) == -1)
 		return (ft_error(data, filepath, P_D, 1), -1);
 	if (open_heredoc(data, node, fd, input) == false)
-		return -1;
+		return (-1);
 	close(fd);
 	fd = open(filepath, O_RDONLY);
 	if (fd == -1)
@@ -95,6 +91,5 @@ int	heredoc(t_token **node, t_data *data)
 		write(2, "Failed to reopen file\n", 22);
 		return (-1);
 	}
-	free(filepath);
 	return (fd);
 }

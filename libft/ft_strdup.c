@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 18:42:14 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/02 06:30:56 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/06 02:43:28 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strdup(const char *s)
 
 	len = ft_strlen(s);
 	i = 0;
-	new_s = (char *)malloc((len + 1) * sizeof(char));
+	new_s = (char *)ft_malloc((len + 1) * sizeof(char));
 	if (!new_s)
 		return (NULL);
 	while (s[i])

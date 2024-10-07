@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_tools.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:20:45 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/24 09:37:18 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:10:46 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,12 @@ void	shlvl_init(t_data *data)
 		{
 			if (ft_strcmp(tmp->value, "999") == 0)
 			{
-				free(tmp->value);
 				printf("warning: shell level (999) too high, resetting to 1\n");
 				tmp->value = ft_strdup("1");
 				return ;
 			}
 			shlvl = ft_itoa(ft_atoi(tmp->value) + 1);
-			free(tmp->value);
 			tmp->value = ft_strdup(shlvl);
-			free(shlvl);
 			return ;
 		}
 		tmp = tmp->next;
@@ -64,7 +61,7 @@ char	**transform_env(t_env *env)
 		i++;
 		tmp = tmp->next;
 	}
-	envp = (char **)malloc(sizeof(char *) * (i + 1));
+	envp = (char **)ft_malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	tmp = env;
 	str = NULL;
@@ -80,24 +77,9 @@ char	**transform_env(t_env *env)
 
 void	join_key_value(char *str, char **envp, int i, t_env *tmp)
 {
-	char *temp;  // Temporary variable to hold intermediate allocations
-
-	if (str != NULL)
-		free(str);
-
-	// Duplicate the key
+	char *temp;
 	str = ft_strdup(tmp->key);
-
-	// First join: str + "="
 	envp[i] = ft_strjoin(str, "=");
-
-	// Free 'str' after joining
-	free(str);
-
-	// Second join: envp[i] + value
-	temp = envp[i];  // Store previous envp[i] to free it
+	temp = envp[i];
 	envp[i] = ft_strjoin(envp[i], tmp->value);
-
-	// Free the previous allocation stored in temp
-	free(temp);
 }

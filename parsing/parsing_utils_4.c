@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 20:46:42 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 20:56:21 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:03:41 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_lst_add(t_token **lst)
 
 	if (!*lst)
 	{
-		*lst = malloc(1 * sizeof(t_token));
+		*lst = ft_malloc(1 * sizeof(t_token));
 		(*lst)->arg = NULL;
 		(*lst)->next = NULL;
 		(*lst)->previous = NULL;
@@ -29,7 +29,7 @@ void	ft_lst_add(t_token **lst)
 	current = *lst;
 	while (current->next)
 		current = current->next;
-	new_node = malloc(sizeof(t_token));
+	new_node = ft_malloc(sizeof(t_token));
 	new_node->arg = NULL;
 	new_node->next = NULL;
 	new_node->next_command = 0;
@@ -69,7 +69,6 @@ void	join_and_free(t_token **tmp)
 	to_free = NULL;
 	to_free_2 = (*tmp)->arg;
 	(*tmp)->arg = ft_strjoin((*tmp)->arg, (*tmp)->next->arg);
-	free(to_free_2);
 	to_free = (*tmp)->next;
 	if (to_free->next)
 		(*tmp)->next = to_free->next;
@@ -78,8 +77,6 @@ void	join_and_free(t_token **tmp)
 	(*tmp)->type = 0;
 	if (to_free->next_command == 0)
 		(*tmp)->next_command = 0;
-	free(to_free->arg);
-	free(to_free);
 }
 
 void	join_nodes(t_token **token)
@@ -108,7 +105,7 @@ char	*add_command_to_node(char *command, int i, t_data *data)
 	tmp = data->token;
 	while (tmp->next)
 		tmp = tmp->next;
-	tmp->arg = malloc((i + 1) * sizeof(char));
+	tmp->arg = ft_malloc((i + 1) * sizeof(char));
 	tmp->type = data->type;
 	while (j < i)
 	{

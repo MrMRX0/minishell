@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:18:42 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/21 23:44:34 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:14:38 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*ft_strndup(const char *s1, size_t n)
 	char	*copy;
 	size_t	i;
 
-	copy = (char *)malloc((n + 1) * sizeof(char));
+	copy = (char *)ft_malloc((n + 1) * sizeof(char));
 	i = 0;
 	while (i < n && s1[i])
 	{
@@ -33,7 +33,7 @@ t_env	*create_env_node(const char *env_var)
 	t_env	*new_node;
 	char	*delimiter;
 
-	new_node = (t_env *)malloc(sizeof(t_env));
+	new_node = (t_env *)ft_malloc(sizeof(t_env));
 	delimiter = ft_strchr(env_var, '=');
 	if(delimiter != NULL)
 		new_node->q = 1;
@@ -45,14 +45,6 @@ t_env	*create_env_node(const char *env_var)
 	return (new_node);
 }
 
-void	ft_null_helper(char **default_env)
-{
-	free(default_env[0]);
-	free(default_env[1]);
-	free(default_env[2]);
-	free(default_env);
-}
-
 char	**ft_null_env(void)
 {
 	char	**default_env;
@@ -61,15 +53,12 @@ char	**ft_null_env(void)
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		return (NULL);
-	default_env = (char **)malloc(sizeof(char *) * 4);
+	default_env = (char **)ft_malloc(sizeof(char *) * 4);
 	if (!default_env)
 		return (NULL);
-	pwd = (char *)malloc(ft_strlen("PWD=") + ft_strlen(cwd) + 1);
+	pwd = (char *)ft_malloc(ft_strlen("PWD=") + ft_strlen(cwd) + 1);
 	if (!pwd)
-	{
-		free(default_env);
 		return (NULL);
-	}
 	ft_strcpy(pwd, "PWD=");
 	ft_strcat(pwd, cwd);
 	default_env[0] = pwd;
@@ -77,7 +66,7 @@ char	**ft_null_env(void)
 	default_env[2] = ft_strdup("_=/usr/bin/env");
 	default_env[3] = NULL;
 	if (!default_env[1] || !default_env[2])
-		return (ft_null_helper(default_env), NULL);
+		return (NULL);
 	return (default_env);
 }
 

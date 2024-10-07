@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 09:53:10 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/24 10:24:10 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:06:42 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,6 @@ void	remove_variable(char *key, t_data *data)
 				prev->next = tmp->next;
 			else
 				data->env_list = tmp->next;
-			free(tmp->key);
-			free(tmp->value);
-			free(tmp);
 			return ;
 		}
 		prev = tmp;

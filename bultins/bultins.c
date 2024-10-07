@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:22:59 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/03 11:17:44 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/07 11:26:02 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,9 @@ int bultins(char **args, t_data *data)
 	if (ft_buitin_check(args) == 0)
 	{
 		if (bultins_runner(args,data) == true)
-			global_data->exit_status = 0;
+			g_global_data->exit_status = 0;
 		else
-			global_data->exit_status = 1;
-		while(args[i])
-		{
-			free(args[i]);
-			i++;
-		}
-		free(args);
+			g_global_data->exit_status = 1;
 		return 1;
 	}
 	return(0);
