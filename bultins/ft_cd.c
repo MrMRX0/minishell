@@ -84,7 +84,6 @@ t_bool	ft_cd(char **av)
 		if (!home)
 			return (error("cd", "HOME not set"), false);
 		ft_strcpy(new_pwd, home);
-
 	}
 	else
 	{

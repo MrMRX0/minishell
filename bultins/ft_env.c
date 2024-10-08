@@ -24,7 +24,7 @@ t_bool	ft_env(char **av, t_data *data)
 	}
 	while (tmp)
 	{
-		if(tmp->q == 1)
+		if (tmp->q == 1)
 		{
 			ft_putstr_fd(tmp->key, 1);
 			write(1, "=", 1);

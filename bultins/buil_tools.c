@@ -55,31 +55,28 @@ void	update_value(t_env *tmp, char *variable)
 	}
 }
 
-t_env	*init_new_variable(char *variable, char *key)
+t_env	*init_new_variable(char *var, char *key)
 {
 	t_env	*new;
+	char	*equal;
 
 	new = (t_env *)ft_malloc(sizeof(t_env));
-	if (!new)
-		return (NULL);
 	new->key = ft_strdup(key);
-	if (ft_strchr(variable, '=') != NULL)
-		new->q = 1;
-	else
-		new->q = 0;
-	if (ft_strstr(variable, "+=") == NULL)
+	equal = ft_strchr(var, '=');
+	new->q = (equal != NULL);
+	if (ft_strstr(var, "+=") == NULL)
 	{
-		if (ft_strchr(variable, '=') == NULL)
+		if (equal == NULL)
 			new->value = ft_strdup("");
 		else
-			new->value = ft_strdup(ft_strchr(variable, '=') + 1);
+			new->value = ft_strdup(equal + 1);
 	}
 	else
 	{
-		if (ft_strchr(variable, '=') == NULL)
+		if (equal == NULL)
 			new->value = ft_strdup("");
 		else
-			new->value = ft_strdup(ft_strchr(variable, '=') + 1);
+			new->value = ft_strdup(equal + 1);
 	}
 	new->next = NULL;
 	return (new);
@@ -99,5 +96,4 @@ void	error(const char *cmd, const char *msg)
 {
 	if (msg && cmd)
 		printf("%s: %s\n", cmd, msg);
-
 }

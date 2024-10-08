@@ -52,7 +52,7 @@ void	child_process(char **args, t_data *data, char *path)
 {
 	if (strchr(args[0], '/'))
 	{
-		if(!args[1])
+		if (!args[1])
 		{
 			ft_error(data, args[0], ": Is a directory\n", 126);
 			exit(data->exit_status);

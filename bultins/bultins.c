@@ -31,7 +31,7 @@ t_bool	bultins_runner(char **av, t_data *data)
 	return (false);
 }
 
-int 	ft_buitin_check(char **av)
+int	ft_buitin_check(char **av)
 {
 	if (ft_strcmp(av[0], "echo") == 0)
 		return (0);
@@ -49,18 +49,19 @@ int 	ft_buitin_check(char **av)
 		return (0);
 	return (1);
 }
-int bultins(char **args, t_data *data)
+
+int	bultins(char **args, t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (ft_buitin_check(args) == 0)
 	{
-		if (bultins_runner(args,data) == true)
+		if (bultins_runner(args, data) == true)
 			g_global_data->exit_status = 0;
 		else
 			g_global_data->exit_status = 1;
-		return 1;
+		return (1);
 	}
-	return(0);
+	return (0);
 }

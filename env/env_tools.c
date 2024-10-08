@@ -12,15 +12,11 @@
 
 #include "../incld/minishell.h"
 
-
-
-void billed_env_list(char **env, t_data *data)
+void	billed_env_list(char **env, t_data *data)
 {
-
 	data->env_list = init_env(env);
 	shlvl_init(data);
 }
-
 
 void	shlvl_init(t_data *data)
 {
@@ -77,7 +73,8 @@ char	**transform_env(t_env *env)
 
 void	join_key_value(char *str, char **envp, int i, t_env *tmp)
 {
-	char *temp;
+	char	*temp;
+
 	str = ft_strdup(tmp->key);
 	envp[i] = ft_strjoin(str, "=");
 	temp = envp[i];

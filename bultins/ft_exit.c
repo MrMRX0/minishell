@@ -56,7 +56,7 @@ void	ft_exit_helper2(char **av)
 		ft_putstr_fd("exit numeric argument required", 2);
 		i = 2;
 	}
-	ft_free_all();;
+	ft_free_all();
 	exit((unsigned char)i);
 }
 

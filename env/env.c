@@ -35,7 +35,7 @@ t_env	*create_env_node(const char *env_var)
 
 	new_node = (t_env *)ft_malloc(sizeof(t_env));
 	delimiter = ft_strchr(env_var, '=');
-	if(delimiter != NULL)
+	if (ft_strchr(env_var, '=') != NULL)
 		new_node->q = 1;
 	else
 		new_node->q = 0;
