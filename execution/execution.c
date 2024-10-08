@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 20:50:52 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 23:01:12 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	execution(t_data *data)
 		pipex(data, i);
 }
 
-void	child_process(char **args, t_data *data, char *path)
+int	child_process(char **args, t_data *data, char *path)
 {
 	struct stat	statbuf;
 
@@ -56,24 +56,22 @@ void	child_process(char **args, t_data *data, char *path)
 	if (ft_strchr(args[0], '/'))
 	{
 		if (S_ISDIR(statbuf.st_mode))
-		{
-			ft_error(data, args[0], ": Is a directory\n", 126);
-			exit(data->exit_status);
-		}
+			return (ft_error(data, args[0], ": Is a directory\n", 126),
+				exit(data->exit_status), 1);
+		if (access(args[0], F_OK) == -1)
+			return (ft_error(data, args[0], ": No such file or directory\n",
+					127), exit(data->exit_status), 0);
 		if (access(args[0], X_OK) == -1)
-		{
-			ft_error(data, args[0], ": No such file or directory\n", 127);
-			exit(data->exit_status);
-		}
+			return (ft_error(data, args[0], P_D, 126), exit(data->exit_status),
+				0);
 		execve(args[0], args, data->env);
 	}
 	if (path)
 		execve(path, args, data->env);
 	else
-	{
-		ft_error(data, args[0], ": command not found\n", 127);
-		exit(data->exit_status);
-	}
+		return (ft_error(data, args[0], ": command not found\n", 127),
+			exit(data->exit_status), 0);
+	return (0);
 }
 
 void	parent_process(t_data *data, int pid)
