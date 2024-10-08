@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 02:18:37 by soutchak          #+#    #+#             */
-/*   Updated: 2024/10/06 02:31:45 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 10:10:39 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_bool	fft_lstclear(t_cool **lst, void (*del)(void *))
 	return (true);
 }
 
- t_cool	*fft_lstlast(t_cool *lst)
+t_cool	*fft_lstlast(t_cool *lst)
 {
 	if (lst == NULL)
 		return (NULL);

@@ -12,14 +12,12 @@
 
 #include "../incld/minishell.h"
 
-
-
 void	ft_free_all(void)
 {
 	t_cool	**head;
 
 	head = &g_global_data->garn;
-	if(g_global_data->input)
+	if (g_global_data->input)
 		free(g_global_data->input);
 	fft_lstclear(head, free);
 }
