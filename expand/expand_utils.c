@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:04:57 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/07 11:11:43 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 14:21:33 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ char	*handle_dollar_sign(char *str, t_data *data, int *b)
 
 int	find_dollar_sign(char *str, t_token *tmp)
 {
-	if (((strchr(str, '$')) && ((tmp)->type == S_QUOTE
-				|| (tmp)->type == HERDOK_INPUT)) || (strchr(str, '$') == 0))
+	if (((ft_strchr(str, '$')) && ((tmp)->type == S_QUOTE
+				|| (tmp)->type == HERDOK_INPUT)) || (ft_strchr(str, '$') == 0))
 		return (0);
-	else if ((strchr(str, '$')))
+	else if ((ft_strchr(str, '$')))
 		return (1);
 	return (0);
 }

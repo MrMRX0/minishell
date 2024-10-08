@@ -1,0 +1,23 @@
+➜  minishell ./makefile/test
+minishell: ./makefile/test: No such file or directory
+
+should return is not directory
+
+➜  minishell cat < makaynch
+minishell: makaynch: Permission denied => no such file or directory
+
+exit sdfsdfsd sdfsdf => khask tktb numeric arg requ w tkhrj
+checki first arg wach numeric 3ad too many args
+
+➜  minishell env | grep saad
+➜  minishell export saad
+➜  minishell env | grep saad
+➜  minishell export | grep saad
+declare -x saad
+➜  minishell echo "cat lol.c | cat > lol.c"^C
+➜  minishell export saad=simo
+➜  minishell env | grep saad
+➜  minishell export | grep saad
+declare -x saad="simo"
+➜  minishell env | grep saad
+

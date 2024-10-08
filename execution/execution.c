@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 10:30:16 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:39:56 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,12 @@ void	execution(t_data *data)
 
 void	child_process(char **args, t_data *data, char *path)
 {
-	if (strchr(args[0], '/'))
+	struct stat	statbuf;
+
+	stat(args[0], &statbuf);
+	if (ft_strchr(args[0], '/'))
 	{
-		if (!args[1])
+		if (S_ISDIR(statbuf.st_mode))
 		{
 			ft_error(data, args[0], ": Is a directory\n", 126);
 			exit(data->exit_status);
@@ -68,7 +71,7 @@ void	child_process(char **args, t_data *data, char *path)
 		execve(path, args, data->env);
 	else
 	{
-		ft_error(data, args[0], ": No such file or directory\n", 127);
+		ft_error(data, args[0], ": command not found\n", 127);
 		exit(data->exit_status);
 	}
 }
@@ -83,6 +86,8 @@ void	parent_process(t_data *data, int pid)
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		data->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		data->exit_status = WTERMSIG(status) + 128;
 }
 
 void	execute(char **args, t_data *data)
@@ -96,7 +101,7 @@ void	execute(char **args, t_data *data)
 	g_global_data->sig_flag2 = 0;
 	if (!args[0])
 		return ;
-	if (ft_strcmp(args[0], "cat") == 0)
+	if (ft_strcmp(args[0], "cat") == 0 || ft_strcmp(args[0], "/bin/cat") == 0)
 		g_global_data->sig_flag3 = 1;
 	signal(SIGINT, handler_2);
 	signal(SIGQUIT, handler_3);

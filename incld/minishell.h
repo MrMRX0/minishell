@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/07 15:09:43 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:31:51 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct t_lst_0
 {
 	char			*input;
 	t_token			*token;
+	t_token			*copy;
 	char			**args;
 	char			**env;
 	t_env			*env_list;
@@ -88,6 +89,8 @@ typedef struct t_lst_0
 	int				sig_flag2;
 	int				sig_flag3;
 	int				tmp_heredoc_flag;
+	int				expand_flag;
+	int				last_child_exit_s;
 	t_cool			*garn;
 
 }					t_data;
@@ -244,6 +247,7 @@ void				ft_lst_add(t_token **lst);
 t_token				*extract_token(t_token **token);
 void				join_nodes(t_token **token);
 char				*add_command_to_node(char *command, int i, t_data *data);
+t_token				*copy_token_list(t_token *head);
 //--------------------token--------------------
 
 /*redirections*/

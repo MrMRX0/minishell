@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:56:16 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 21:08:24 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 17:36:41 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ char	*func3(t_data *data, char *command, char c, int i)
 	t_token	*tmp;
 
 	letter = command[i];
-	if (i == 2)
-		return (command + 2);
 	data->type = S_QUOTE;
 	if (c == '\"')
 		data->type = D_QUOTE;

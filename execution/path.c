@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:54 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/07 11:04:57 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 14:22:31 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*check_path(char *command, t_data *data)
 	while (data->env[i])
 	{
 		splited_path = ft_split(data->env[i], '=');
-		if (strcmp(splited_path[0], "PATH") == 0)
+		if (ft_strcmp(splited_path[0], "PATH") == 0)
 		{
 			free_double_char(splited_path);
 			break ;
