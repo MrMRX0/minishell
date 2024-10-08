@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:45 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 20:28:11 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 21:13:31 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,23 +77,27 @@ void	pipex_child(t_pipex *pipe, t_data *data, int n)
 	}
 	execute(pipe->command, data);
 	ft_free_all();
-	exit(0);
+	exit(data->exit_status);
 }
 
 void	ft_fork(t_pipex *pipe, t_data *data, int n)
 {
 	pid_t	pid;
+	int		status;
 
 	pid = fork();
 	if (pid == 0)
 		pipex_child(pipe, data, n);
-	else if (pid < 0)
-	{
-		perror("fork failed");
-		exit(EXIT_FAILURE);
-	}
 	else
 	{
+		if (pipe->cmd_idx == n)
+		{
+			waitpid(pid, &status, 0);
+			if (WIFEXITED(status))
+				data->exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->exit_status = WTERMSIG(status) + 128;
+		}
 		restore_stdin_stdout(data->std_in, data->std_out);
 		save_stdin_stdout(&data->std_in, &data->std_out);
 		usleep(1000);

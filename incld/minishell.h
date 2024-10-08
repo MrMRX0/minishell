@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 19:31:51 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 21:21:01 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define HERDOK_INPUT 8
 
 # define P_D ": Permission denied\n"
+# define NO_F_D ": No such file or directory\n"
 # define HEREDOC_ERROR \
 	"minishell: warning: \
 	here-document at line %d delimited by end-of-file (wanted `%s')\n"
@@ -90,7 +91,6 @@ typedef struct t_lst_0
 	int				sig_flag3;
 	int				tmp_heredoc_flag;
 	int				expand_flag;
-	int				last_child_exit_s;
 	t_cool			*garn;
 
 }					t_data;

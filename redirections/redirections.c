@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:31 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/07 11:29:08 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 21:22:51 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	redirect_input(t_token **token, t_data *data)
 		else if (tmp->type == I_R)
 		{
 			fd = open(tmp->next->arg, O_RDONLY);
+			if (access(tmp->next->arg, F_OK) == -1)
+				return (ft_error(data, tmp->next->arg, NO_F_D, 1), -1);
 			if (access(tmp->next->arg, R_OK) == -1)
 				return (ft_error(data, tmp->next->arg, P_D, 1), -1);
 			tmp = tmp->next->next;
@@ -36,8 +38,7 @@ int	redirect_input(t_token **token, t_data *data)
 		else if (tmp)
 			tmp = tmp->next;
 	}
-	dup2(fd, STDIN_FILENO);
-	return (fd);
+	return (dup2(fd, STDIN_FILENO), fd);
 }
 
 int	open_file(char *file_name, t_data *data, int mode)
