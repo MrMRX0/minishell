@@ -42,6 +42,7 @@ void	update_value(t_env *tmp, char *variable)
 	if (ft_strstr(variable, "+=") == NULL)
 	{
 		tmp->value = ft_strdup(ft_strchr(variable, '=') + 1);
+		tmp->q = 1;
 	}
 	else
 	{
@@ -52,6 +53,7 @@ void	update_value(t_env *tmp, char *variable)
 		ft_strcpy(new_value, tmp->value);
 		ft_strcat(new_value, ft_strchr(variable, '=') + 1);
 		tmp->value = new_value;
+		tmp->q = 1;
 	}
 }
 

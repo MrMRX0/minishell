@@ -36,54 +36,59 @@ int	ft_isnumber(char *str)
 	return (true);
 }
 
-void	ft_exit_helper(t_data *data)
+void	exit_case_2(char **av, t_data *data)
 {
-	write(2, "exit\n", 5);
-	write(2, "exit: numeric argument required\n", 33);
-	data->exit_status = 2;
-	ft_free_all();
-	exit(data->exit_status);
-}
-
-void	ft_exit_helper2(char **av)
-{
-	int	i;
-
-	write(2, "exit\n", 5);
-	i = ft_atoi(av[1]);
-	if (ft_strlen(av[1]) > 19)
+	if (nb_count(av) == 2 && !ft_isnumber(av[1]))
 	{
-		ft_putstr_fd("exit numeric argument required", 2);
-		i = 2;
+		data->exit_status = 2;
+		ft_error(data, av[0], ": numeric argument required\n",
+			data->exit_status);
+		ft_free_all();
+		exit(data->exit_status);
 	}
-	ft_free_all();
-	exit((unsigned char)i);
+	else if (nb_count(av) > 2)
+	{
+		if (ft_isnumber(av[1]))
+		{
+			data->exit_status = 2;
+			ft_error(data, av[0], ": too many arguments\n", data->exit_status);
+		}
+		else
+		{
+			data->exit_status = 2;
+			ft_error(data, av[0], ": numeric argument required\n",
+				data->exit_status);
+			ft_free_all();
+			exit(data->exit_status);
+		}
+	}
 }
 
 t_bool	ft_exit(char **av, t_data *data)
 {
-	if (nb_count(av) == 1 && data->flag == 1)
+	int	i;
+
+	i = 0;
+	if (nb_count(av) == 1)
 	{
+		if (data->flag != 1)
+			write(2, "exit\n", 5);
 		data->exit_status = 0;
 		ft_free_all();
 		exit(data->exit_status);
 	}
-	if (nb_count(av) == 1)
+	if (nb_count(av) == 2 && ft_isnumber(av[1]))
 	{
-		write(2, "exit\n", 5);
+		i = ft_atoi(av[1]);
+		if (ft_strlen(av[1]) > 19)
+		{
+			ft_putstr_fd("exit numeric argument required\n", 2);
+			i = 2;
+		}
+		else
+			ft_putstr_fd("exit\n", 2);
 		ft_free_all();
-		exit(data->exit_status);
+		exit((unsigned char)i);
 	}
-	if (nb_count(av) > 2)
-	{
-		write(2, "exit\n", 5);
-		write(2, "exit: too many arguments\n", 25);
-		data->exit_status = 1;
-		return (false);
-	}
-	else if (ft_isnumber(av[1]) == false)
-		ft_exit_helper(data);
-	else
-		ft_exit_helper2(av);
-	return (true);
+	return (exit_case_2(av, data), true);
 }
