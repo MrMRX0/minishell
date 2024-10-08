@@ -18,14 +18,13 @@ void	add_exported_variable(char *variable, t_data *data)
 	t_env	*new;
 	char	*key;
 
-
 	key = ft_key(variable);
 	tmp = data->env_list;
 	new = init_new_variable(variable, key);
 	if (!new)
 		return ;
 	if (!tmp)
-        data->env_list = new;
+		data->env_list = new;
 	else
 	{
 		while (tmp->next)
@@ -74,7 +73,7 @@ t_bool	ft_export(char **av, t_data *data)
 {
 	int		i;
 	t_env	*tmp;
-    t_env    *tmp2;
+	t_env	*tmp2;
 
 	tmp2 = data->env_list;
 	tmp = ft_copy_env(tmp2);
@@ -97,5 +96,3 @@ t_bool	ft_export(char **av, t_data *data)
 	}
 	return (true);
 }
-
-

@@ -22,15 +22,12 @@ t_env	*ft_copy_env(t_env *env)
 	tmp = env;
 	head = NULL;
 	prev = NULL;
+	new = NULL;
 	while (tmp)
 	{
 		if (ft_strcmp(tmp->key, "_") != 0)
 		{
-			new = (t_env *)ft_malloc(sizeof(t_env));
-			new->key = ft_strdup(tmp->key);
-			new->value = ft_strdup(tmp->value);
-			new->q = tmp->q;
-			new->next = NULL;
+			set_node(new, tmp);
 			if (prev)
 				prev->next = new;
 			else
@@ -79,7 +76,7 @@ void	print_env(t_env *env)
 	{
 		if (ft_strlen(tmp->value) == 0)
 		{
-			if(tmp->q == 1)
+			if (tmp->q == 1)
 				printf("declare -x %s=\"\"\n", tmp->key);
 			else
 				printf("declare -x %s\n", tmp->key);

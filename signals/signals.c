@@ -36,6 +36,8 @@ void	handler_3(int signum)
 {
 	(void)signum;
 	g_global_data->exit_status = 131;
+	if (g_global_data->sig_flag3 == 1)
+		write(1, "\n", 1);
 }
 
 void	signal_handler_heredoc(void)

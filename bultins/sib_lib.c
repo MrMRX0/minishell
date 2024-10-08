@@ -74,22 +74,20 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-
-
-char *ft_strncpy(char *dest, const char *src, size_t n) 
+char	*ft_strncpy(char *dest, const char *src, size_t n)
 {
-    size_t i;
+	size_t	i;
 
-    for (i = 0; i < n && src[i] != '\0'; i++) {
-        dest[i] = src[i];
-    }
-
-    for (; i < n; i++) {
-        dest[i] = '\0';
-    }
-
-    return dest;
+	i = 0;
+	while (i < n && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < n)
+	{
+		dest[i] = '\0';
+		i++;
+	}
+	return (dest);
 }
-
-
-
