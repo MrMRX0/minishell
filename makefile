@@ -39,6 +39,7 @@ SRCS =  main_minishell/minishell.c \
 		free/gar_co.c \
 		free/utils.c \
 		signals/signals.c \
+		signals/signals_utils.c \
 		redirections/redirections.c \
 		redirections/heredoc.c \
 		expand/expand.c \

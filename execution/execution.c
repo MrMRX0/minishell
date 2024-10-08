@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 10:06:29 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 10:30:16 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,14 @@ void	child_process(char **args, t_data *data, char *path)
 {
 	if (strchr(args[0], '/'))
 	{
+		if(!args[1])
+		{
+			ft_error(data, args[0], ": Is a directory\n", 126);
+			exit(data->exit_status);
+		}
 		if (access(args[0], X_OK) == -1)
 		{
-			ft_error(data, args[0], ": Permission denied\n", 126);
+			ft_error(data, args[0], ": No such file or directory\n", 127);
 			exit(data->exit_status);
 		}
 		execve(args[0], args, data->env);

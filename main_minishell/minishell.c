@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:20:44 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/07 15:15:20 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 10:21:36 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	prompt(t_data *data)
 		exit(0);
 	}
 	data->prompt_call_times++;
-	// add_history(data->input);
+	add_history(data->input);
 }
 
 int	minishell(t_data *data, char **env)
