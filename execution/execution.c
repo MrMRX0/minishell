@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 10:01:54 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 10:06:29 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	execute(char **args, t_data *data)
 	path = NULL;
 	i = 0;
 	g_global_data->sig_flag2 = 0;
-	if(!args[0])
+	if (!args[0])
 		return ;
 	if (ft_strcmp(args[0], "cat") == 0)
 		g_global_data->sig_flag3 = 1;

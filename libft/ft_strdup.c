@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 18:42:14 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 09:53:09 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/08 10:05:59 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_strdup(const char *s)
 	int		i;
 	char	*new_s;
 
-	if(!s)
+	if (!s)
 		return (NULL);
 	len = ft_strlen(s);
 	i = 0;
