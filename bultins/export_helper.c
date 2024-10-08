@@ -27,7 +27,7 @@ t_env	*ft_copy_env(t_env *env)
 	{
 		if (ft_strcmp(tmp->key, "_") != 0)
 		{
-			set_node(new, tmp);
+			new = set_node(tmp);
 			if (prev)
 				prev->next = new;
 			else
@@ -43,8 +43,6 @@ void	ft_sort_env(t_env *env)
 {
 	t_env	*tmp;
 	t_env	*tmp2;
-	char	*key;
-	char	*value;
 
 	tmp = env;
 	while (tmp)
@@ -54,12 +52,7 @@ void	ft_sort_env(t_env *env)
 		{
 			if (ft_strcmp(tmp->key, tmp2->key) > 0)
 			{
-				key = tmp->key;
-				value = tmp->value;
-				tmp->key = tmp2->key;
-				tmp->value = tmp2->value;
-				tmp2->key = key;
-				tmp2->value = value;
+				swap_env(tmp, tmp2);
 			}
 			tmp2 = tmp2->next;
 		}
@@ -76,7 +69,7 @@ void	print_env(t_env *env)
 	{
 		if (ft_strlen(tmp->value) == 0)
 		{
-			if (tmp->q == 1)
+			if (tmp->q)
 				printf("declare -x %s=\"\"\n", tmp->key);
 			else
 				printf("declare -x %s\n", tmp->key);

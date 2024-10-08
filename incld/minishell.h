@@ -140,7 +140,8 @@ void				update_value(t_env *tmp, char *variable);
 void				add_exported_variable(char *variable, t_data *data);
 t_env				*init_new_variable(char *variable, char *key);
 void				free_global_tmp(t_env *tmp);
-void				set_node(t_env *new, t_env *tmp);
+t_env				*set_node(t_env *tmp);
+void				swap_env(t_env *tmp, t_env *tmp2);
 //--------------------export--------------------
 
 /*ft_env*/

@@ -18,11 +18,31 @@ void	change_pwd(t_env *envs, const char *old_pwd, const char *pwd)
 	set_env(envs, "PWD", pwd);
 }
 
-void	set_node(t_env *new, t_env *tmp)
+t_env	*set_node(t_env *tmp)
 {
+	t_env	*new;
+
 	new = (t_env *)ft_malloc(sizeof(t_env));
 	new->key = ft_strdup(tmp->key);
 	new->value = ft_strdup(tmp->value);
 	new->q = tmp->q;
 	new->next = NULL;
+	return (new);
+}
+
+void	swap_env(t_env *tmp, t_env *tmp2)
+{
+	char	*key;
+	char	*value;
+	int		q;
+
+	key = tmp->key;
+	value = tmp->value;
+	q = tmp->q;
+	tmp->key = tmp2->key;
+	tmp->value = tmp2->value;
+	tmp->q = tmp2->q;
+	tmp2->key = key;
+	tmp2->value = value;
+	tmp2->q = q;
 }
