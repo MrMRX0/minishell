@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:10 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/06 01:50:30 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:59:56 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ char	**get_copy_of_token_v1(char **argv, t_token **lst)
 	t_token	*tmp;
 	int		i;
 
-	len = 0;
 	if (!*lst)
 		return (NULL);
+	len = 0;
 	tmp = *lst;
 	while (tmp)
 	{
@@ -92,12 +92,11 @@ char	**get_copy_of_token_v1(char **argv, t_token **lst)
 	i = 0;
 	while (i < len)
 	{
-		argv[i] = get_copy(tmp);
+		argv[i] = get_copy(tmp, i);
 		tmp = tmp->next;
 		i++;
 	}
-	argv[i] = NULL;
-	return (argv);
+	return (argv[i] = NULL, argv);
 }
 
 int	str_cmp_n(char *str1, char *str2, int n)

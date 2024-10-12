@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/07 09:07:37 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/12 02:05:00 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	get_len(t_token *lst)
 	return (b);
 }
 
-char	*get_copy(t_token *lst)
+char	*get_copy(t_token *lst, int flag)
 {
 	int		i;
 	int		b;
@@ -70,6 +70,8 @@ char	*get_copy(t_token *lst)
 
 	i = 0;
 	b = 0;
+	if(get_len(lst) == 0 && flag == 0)
+		return(g_global_data->tmp_error_flag = 1, lst->arg = ft_strdup("\'\'"));
 	copy = ft_malloc((get_len(lst) + 1) * sizeof(char));
 	while (lst->arg[i])
 	{

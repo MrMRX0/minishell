@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 21:21:01 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/12 03:38:26 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct t_lst_1
 	int				type;
 	struct t_lst_1	*next;
 	struct t_lst_1	*previous;
+	int				is_splited;
 }					t_token;
 
 typedef struct t_lst_0
@@ -91,6 +92,7 @@ typedef struct t_lst_0
 	int				sig_flag3;
 	int				tmp_heredoc_flag;
 	int				expand_flag;
+	int				tmp_error_flag;
 	t_cool			*garn;
 
 }					t_data;
@@ -293,7 +295,7 @@ int					get_size_of_tree(t_token **token);
 void				ft_error(t_data *data, char *arg, char *error,
 						int exit_status);
 int					get_len(t_token *lst);
-char				*get_copy(t_token *lst);
+char				*get_copy(t_token *lst, int flag);
 void				get_copy_v3(char *s1, t_token *lst);
 char				*remove_white_spaces(char *str);
 int					str_cmp_n(char *str1, char *str2, int n);

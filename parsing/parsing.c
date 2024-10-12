@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 14:48:47 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/04 21:17:52 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:56:48 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	parser(t_data *data)
 	tmp = data->token;
 	if (!tmp)
 		return (0);
+	if (tmp->type == PIPE)
+		return (ft_syntax_error(data), 1);
 	while (tmp)
 	{
 		if (tmp->type == S_R || tmp->type == A_R || tmp->type == HERDOK

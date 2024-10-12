@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 20:46:42 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/07 11:03:41 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/12 02:02:13 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,35 @@ void	join_and_free(t_token **tmp)
 	if (to_free->next_command == 0)
 		(*tmp)->next_command = 0;
 }
+char *ft_remove_char(char *str, char c)
+{
+	int i;
+	int b;
+	char *new;
 
+	i = 0;
+	b = 0;
+	new = NULL;
+	while(str[i])
+	{
+		if(str[i] != c)
+			b++;
+		i++;
+	}
+	if(!b)
+		return (str);
+	new = ft_malloc((b + 1) * sizeof(char));
+	i = 0;
+	b = 0;
+	while(str[i])
+	{
+		if(str[i] == c)
+			i++;
+		else
+			new[b++] = str[i++];
+	}
+	return (new[b] = '\0', new);
+}
 void	join_nodes(t_token **token)
 {
 	t_token	*tmp;
@@ -92,6 +120,12 @@ void	join_nodes(t_token **token)
 			join_and_free(&tmp);
 		if (tmp->next_command == 0)
 			tmp = tmp->next;
+	}
+	tmp = *token;
+	if (g_global_data->tmp_error_flag)
+	{
+		tmp->arg = ft_remove_char(tmp->arg, '\'');
+		tmp->arg = ft_remove_char(tmp->arg, '\"');
 	}
 }
 
