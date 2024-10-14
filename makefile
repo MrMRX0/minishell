@@ -32,7 +32,6 @@ SRCS =  main_minishell/minishell.c \
 		parsing/parsing_utils_2.c \
 		parsing/parsing_utils_3.c \
 		parsing/parsing_utils_4.c \
-		parsing/parsing_utils_5.c \
 		parsing/parse_token.c \
 		env/env.c	\
 		env/env_tools.c \
