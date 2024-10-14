@@ -43,7 +43,9 @@ SRCS =  main_minishell/minishell.c \
 		redirections/redirections.c \
 		redirections/heredoc.c \
 		expand/expand.c \
-		expand/expand_utils.c 
+		expand/expand_utils.c \
+		expand/expand_utils1.c \
+		expand/expand_utils2.c \
 
 OBJS = $(SRCS:.c=.o)
 

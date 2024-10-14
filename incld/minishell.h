@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/12 03:38:26 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/14 01:55:13 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,13 @@ char				*handle_redirections(char *command, t_data *data, char c);
 //--------------------expand--------------------
 char				**expand(char **argv, t_data *data, t_token **token);
 char				*expander(char *str, t_data *data);
+char				*get_value(char **env, char *str, int i);
+char				*handle_dollar_sign(char *str, t_data *data, int *b);
+int					find_dollar_sign(char *str, t_token *tmp);
+char				*get_last_res(char *str, t_data *data, int *b,
+						char *final_str);
+int					ccount_words(const char *s, char c);
+char				*gget_next_word(const char **s, char c);
 //--------------------expand--------------------
 
 /*expand_utils*/
@@ -272,6 +279,14 @@ char				*get_value(char **env, char *str, int i);
 char				*handle_dollar_sign(char *str, t_data *data, int *b);
 char				*get_last_res(char *str, t_data *data, int *b,
 						char *final_str);
+char				**ft_split_with_tabs(char const *s, char c);
+char				*expander(char *str, t_data *data);
+int					get_size_of_double_array(char **arr);
+void				get_the_size_of_splited_arr(t_token *tmp, char *final_str);
+int					count_dollars(char **argv, t_token *token);
+int					get_total_len(t_token *token);
+void				not_z(t_token *tmp, t_token **new, char *str);
+void				avec_z(t_token **new, char *str);
 //--------------------expand_utils--------------------
 
 /*pipex*/

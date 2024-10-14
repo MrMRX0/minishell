@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 23:01:12 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/14 00:36:14 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,8 @@ int	child_process(char **args, t_data *data, char *path)
 
 void	parent_process(t_data *data, int pid)
 {
-	int	i;
 	int	status;
 
-	i = 0;
 	restore_stdin_stdout(data->std_in, data->std_out);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))

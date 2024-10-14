@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/12 02:05:00 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/14 02:02:01 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ char	*get_copy(t_token *lst, int flag)
 
 	i = 0;
 	b = 0;
-	if(get_len(lst) == 0 && flag == 0)
-		return(g_global_data->tmp_error_flag = 1, lst->arg = ft_strdup("\'\'"));
+	if (get_len(lst) == 0 && flag == 0)
+		return (g_global_data->tmp_error_flag = 1,
+			lst->arg = ft_strdup("\'\'"));
 	copy = ft_malloc((get_len(lst) + 1) * sizeof(char));
 	while (lst->arg[i])
 	{
@@ -87,8 +88,7 @@ char	*get_copy(t_token *lst, int flag)
 		}
 	}
 	copy[b] = '\0';
-	lst->arg = ft_strdup(copy);
-	return (copy);
+	return (lst->arg = ft_strdup(copy), copy);
 }
 
 char	*remove_white_spaces(char *str)

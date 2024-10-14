@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:15:08 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 17:45:58 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/14 02:00:33 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,29 @@ char	*handle_pipe(char *command, t_data *data)
 	data->type = PIPE;
 	command = add_command_to_node(command, 1, data);
 	return (command);
+}
+
+void	ft_lst_add(t_token **lst)
+{
+	t_token	*current;
+	t_token	*new_node;
+
+	if (!*lst)
+	{
+		*lst = ft_malloc(1 * sizeof(t_token));
+		(*lst)->arg = NULL;
+		(*lst)->next = NULL;
+		(*lst)->previous = NULL;
+		(*lst)->next_command = 0;
+		return ;
+	}
+	current = *lst;
+	while (current->next)
+		current = current->next;
+	new_node = ft_malloc(sizeof(t_token));
+	new_node->arg = NULL;
+	new_node->next = NULL;
+	new_node->next_command = 0;
+	current->next = new_node;
+	new_node->previous = current;
 }
