@@ -55,10 +55,8 @@ int	open_file(char *file_name, t_data *data, int mode)
 int	redirections(t_token **token, t_data *data)
 {
 	t_token	*tmp;
-	int		i;
 	int		fd;
 
-	i = 0;
 	tmp = *token;
 	fd = 0;
 	while (tmp)

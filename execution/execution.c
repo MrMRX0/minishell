@@ -76,10 +76,8 @@ int	child_process(char **args, t_data *data, char *path)
 
 void	parent_process(t_data *data, int pid)
 {
-	int	i;
 	int	status;
 
-	i = 0;
 	restore_stdin_stdout(data->std_in, data->std_out);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
@@ -90,12 +88,10 @@ void	parent_process(t_data *data, int pid)
 
 void	execute(char **args, t_data *data)
 {
-	int		i;
 	char	*path;
 	pid_t	pid;
 
 	path = NULL;
-	i = 0;
 	g_global_data->sig_flag2 = 0;
 	if (!args[0])
 		return ;
