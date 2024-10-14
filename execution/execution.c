@@ -88,12 +88,10 @@ void	parent_process(t_data *data, int pid)
 
 void	execute(char **args, t_data *data)
 {
-	int		i;
 	char	*path;
 	pid_t	pid;
 
 	path = NULL;
-	i = 0;
 	g_global_data->sig_flag2 = 0;
 	if (!args[0])
 		return ;

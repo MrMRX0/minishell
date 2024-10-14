@@ -21,7 +21,11 @@ t_bool	ft_pwd(char **av)
 		ft_putstr_fd("pwd: too many arguments\n", 2);
 		return (false);
 	}
-	getcwd(pwd, PATH_MAX);
+	if (!getcwd(pwd, PATH_MAX))
+	{
+		ft_putstr_fd("could not get current working directory\n", 2);
+		return (false);
+	}
 	ft_putstr_fd(pwd, 1);
 	write(1, "\n", 1);
 	return (true);

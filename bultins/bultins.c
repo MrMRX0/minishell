@@ -52,9 +52,6 @@ int	ft_buitin_check(char **av)
 
 int	bultins(char **args, t_data *data)
 {
-	int	i;
-
-	i = 0;
 	if (ft_buitin_check(args) == 0)
 	{
 		if (bultins_runner(args, data) == true)

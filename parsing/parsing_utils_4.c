@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 20:46:42 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/14 02:01:17 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/14 02:06:46 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,8 @@ t_token	*extract_token(t_token **token)
 void	join_and_free(t_token **tmp)
 {
 	t_token	*to_free;
-	char	*to_free_2;
 
-	to_free_2 = NULL;
 	to_free = NULL;
-	to_free_2 = (*tmp)->arg;
 	(*tmp)->arg = ft_strjoin((*tmp)->arg, (*tmp)->next->arg);
 	to_free = (*tmp)->next;
 	if (to_free->next)
