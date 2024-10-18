@@ -31,11 +31,33 @@ int	*create_pipes(int n)
 	return (fd);
 }
 
+void	wait_for_child_processes(int n, t_data *data, pid_t last_pid)
+{
+	int		i;
+	int		status;
+	pid_t	waited_pid;
+
+	i = 0;
+	while (i <= n)
+	{
+		waited_pid = waitpid(-1, &status, 0);
+		if (waited_pid == last_pid)
+		{
+			if (WIFEXITED(status))
+				data->exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->exit_status = 128 + WTERMSIG(status);
+		}
+		i++;
+	}
+}
+
 void	pipex(t_data *data, int n)
 {
 	t_pipex	pipe;
 	int		i;
 	t_token	*tmp;
+	pid_t	last_pid;
 
 	i = 0;
 	tmp = data->token;
@@ -46,14 +68,10 @@ void	pipex(t_data *data, int n)
 		pipe.command = get_command(data, &pipe.std_in, &pipe.std_out);
 		if ((pipe.std_out == -1 || pipe.std_in == -1) && (++pipe.cmd_idx))
 			continue ;
-		ft_fork(&pipe, data, n);
+		last_pid = ft_fork(&pipe, data, n);
 	}
 	close_fds(n, pipe.fd);
-	while (i <= n)
-	{
-		wait(NULL);
-		i++;
-	}
+	wait_for_child_processes(n, data, last_pid);
 	data->token = tmp;
 }
 
@@ -80,27 +98,19 @@ void	pipex_child(t_pipex *pipe, t_data *data, int n)
 	exit(data->exit_status);
 }
 
-void	ft_fork(t_pipex *pipe, t_data *data, int n)
+pid_t	ft_fork(t_pipex *pipe, t_data *data, int n)
 {
 	pid_t	pid;
-	int		status;
 
 	pid = fork();
 	if (pid == 0)
 		pipex_child(pipe, data, n);
 	else
 	{
-		if (pipe->cmd_idx == n)
-		{
-			waitpid(pid, &status, 0);
-			if (WIFEXITED(status))
-				data->exit_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				data->exit_status = WTERMSIG(status) + 128;
-		}
 		restore_stdin_stdout(data->std_in, data->std_out);
 		save_stdin_stdout(&data->std_in, &data->std_out);
 		usleep(1000);
 		pipe->cmd_idx++;
 	}
+	return (pid);
 }

@@ -291,7 +291,7 @@ void				avec_z(t_token **new, char *str);
 
 /*pipex*/
 //--------------------pipex--------------------
-void				ft_fork(t_pipex *pipe, t_data *data, int n);
+pid_t				ft_fork(t_pipex *pipe, t_data *data, int n);
 void				pipex_child(t_pipex *pipe, t_data *data, int n);
 void				pipex(t_data *data, int n);
 int					*create_pipes(int n);

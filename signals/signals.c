@@ -18,7 +18,7 @@ void	handler(int signum)
 	g_global_data->exit_status = 130;
 	if (g_global_data->sig_flag2 != 22)
 		write(1, "\n", 1);
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -52,7 +52,7 @@ void	handler_heredoc(int signum)
 	g_global_data->exit_status = 130;
 	close(0);
 	(void)signum;
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 	g_global_data->sig_flag2 = 22;

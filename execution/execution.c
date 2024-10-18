@@ -27,8 +27,8 @@ void	normal_execution(t_data *data)
 		return ;
 	expand(command, data, &data->token);
 	join_nodes(&data->token);
-	red_fd = redirections(&data->token, data);
 	red_in = redirect_input(&data->token, data);
+	red_fd = redirections(&data->token, data);
 	if (red_fd == -1 || red_in == -1)
 		return ;
 	command = get_copy_of_token_v2(command, &(data->token));
@@ -95,6 +95,11 @@ void	execute(char **args, t_data *data)
 	g_global_data->sig_flag2 = 0;
 	if (!args[0])
 		return ;
+	if (ft_strcmp(args[0], "..") == 0 || ft_strcmp(args[0], ".") == 0)
+	{
+		ft_error(data, args[0], ": command not found\n", 127);
+		return ;
+	}
 	if (ft_strcmp(args[0], "cat") == 0 || ft_strcmp(args[0], "/bin/cat") == 0)
 		g_global_data->sig_flag3 = 1;
 	signal(SIGINT, handler_2);

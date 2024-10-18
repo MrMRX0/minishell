@@ -60,7 +60,7 @@ char	*ft_remove_char(char *str, char c)
 	i = 0;
 	b = 0;
 	new = NULL;
-	while (str[i++])
+	while (str[++i])
 	{
 		if (str[i] != c)
 			b++;
