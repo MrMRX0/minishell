@@ -5,7 +5,8 @@
 NAME = minishell
 
 CC = cc
-CFLAGS =  -Wall -Wextra -Werror -g 
+CFLAGS = -Wall -Wextra -Werror -g -I$(HOME)/readline/include
+LDFLAGS = -L$(HOME)/readline/lib -lreadline
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
@@ -60,7 +61,7 @@ $(LIBFT):
 	@make -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) $(LDFLAGS)
 
 # Rule to create object files from .c files
 %.o: %.c
