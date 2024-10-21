@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 20:46:42 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/14 02:07:50 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:17:18 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ char	*ft_remove_char(char *str, char c)
 	i = 0;
 	b = 0;
 	new = NULL;
-	while (str[++i])
+	while (str[i])
 	{
 		if (str[i] != c)
 			b++;
+		i++;
 	}
 	if (!b)
 		return (str);

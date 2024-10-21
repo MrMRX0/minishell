@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:03:33 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/14 01:49:38 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/21 20:51:38 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	add_to_node(t_token **new, t_token *tmp)
 
 char	**fill_new_array(t_token **token)
 {
-	int		len;
+	int		len ;
 	t_token	*tmp;
 	t_token	*new;
 	char	**new_arr;
@@ -100,6 +100,8 @@ char	**expand(char **argv, t_data *data, t_token **token)
 				tmp->is_splited = 1;
 			(tmp)->arg = ft_strdup(final_str);
 		}
+		else
+			tmp->is_splited = 1;
 		tmp = (tmp)->next;
 		i++;
 	}

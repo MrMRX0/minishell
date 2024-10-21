@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:45 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 21:13:31 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/21 21:15:28 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,15 @@ void	pipex(t_data *data, int n)
 	pid_t	last_pid;
 
 	i = 0;
+	ft_memset(&last_pid, 0, sizeof(pid_t));
 	tmp = data->token;
 	ft_memset(&pipe, 0, sizeof(t_pipex));
 	pipe.fd = create_pipes(n);
 	while (pipe.cmd_idx <= n)
 	{
 		pipe.command = get_command(data, &pipe.std_in, &pipe.std_out);
+		if(!pipe.command && (++pipe.cmd_idx))
+			continue ;
 		if ((pipe.std_out == -1 || pipe.std_in == -1) && (++pipe.cmd_idx))
 			continue ;
 		last_pid = ft_fork(&pipe, data, n);

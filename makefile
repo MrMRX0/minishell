@@ -46,7 +46,7 @@ SRCS =  main_minishell/minishell.c \
 		expand/expand.c \
 		expand/expand_utils.c \
 		expand/expand_utils1.c \
-		expand/expand_utils2.c \
+		expand/expand_utils2.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -82,3 +82,5 @@ re: fclean all
 # **************************************************************************** #
 
 .PHONY: all clean fclean re
+
+.SECONDARY:

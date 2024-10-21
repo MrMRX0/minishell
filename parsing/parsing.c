@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 14:48:47 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/14 01:23:35 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/21 20:06:12 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	parsing(char *command, t_data *data)
 			return (0);
 		while (command[i] != '\"' && command[i] != ' ' && command[i] != '\0'
 			&& command[i] != '\'' && command[i] != '>' && command[i] != '|'
-			&& command[i] != '<')
+			&& command[i] != '<' && command[i] != '	')
 			i++;
 		command = split_the_command(command, i, data);
 		if (data->syntax_error)

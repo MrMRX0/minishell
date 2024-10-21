@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/14 00:36:14 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/21 21:32:52 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	normal_execution(t_data *data)
 	command = get_copy_of_token_v1(command, &(data->token));
 	if (!command)
 		return ;
-	expand(command, data, &data->token);
+	if(expand(command, data, &data->token) == NULL)
+		return ;
 	join_nodes(&data->token);
 	red_in = redirect_input(&data->token, data);
 	red_fd = redirections(&data->token, data);
@@ -50,7 +51,7 @@ void	execution(t_data *data)
 
 int	child_process(char **args, t_data *data, char *path)
 {
-	struct stat	statbuf;
+	struct stat statbuf = {0};
 
 	stat(args[0], &statbuf);
 	if (ft_strchr(args[0], '/'))

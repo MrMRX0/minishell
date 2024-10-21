@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:15:08 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/14 02:00:33 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/21 20:13:01 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*handle_pipe(char *command, t_data *data)
 	i = 1;
 	while (command[i] != '|' && command[i] != '\0')
 	{
-		if (command[i] == ' ')
+		if (command[i] == ' ' || command[i] == '	')
 			i++;
 		else if (++b)
 			i++;

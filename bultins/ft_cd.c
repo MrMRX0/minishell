@@ -6,7 +6,7 @@
 /*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:44:35 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/10/07 11:26:02 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/21 21:42:45 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	set_env(t_env *env, const char *key, const char *value)
 {
 	t_env	*new_env;
 
+	new_env = NULL;
 	while (env)
 	{
 		if (ft_strcmp(env->key, key) == 0)
@@ -76,6 +77,8 @@ t_bool	ft_cd(char **av)
 	char	new_pwd[PATH_MAX];
 	char	*home;
 
+	ft_memset(old_pwd, 0, sizeof(old_pwd));
+	ft_memset(new_pwd, 0, sizeof(new_pwd));
 	if (check_cd(av, old_pwd) == false)
 		return (false);
 	if (!av[1])
