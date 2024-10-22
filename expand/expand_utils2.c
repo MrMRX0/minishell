@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 01:49:45 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/14 01:57:16 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:34:54 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	get_the_size_of_splited_arr(t_token *tmp, char *final_str)
 	splited_arr = ft_split_with_tabs(final_str, ' ');
 	if (splited_arr)
 		tmp->is_splited = get_size_of_double_array(splited_arr);
+	free_double_char(splited_arr);
 }
 
 int	count_dollars(char **argv, t_token *token)

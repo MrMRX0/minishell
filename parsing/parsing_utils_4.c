@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_4.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 20:46:42 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/21 13:17:18 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:03:47 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,8 @@ char	*ft_remove_char(char *str, char c)
 	if (!b)
 		return (str);
 	new = ft_malloc((b + 1) * sizeof(char));
-	i = 0;
-	b = 0;
-	while (str[i])
-	{
-		if (str[i] == c)
-			i++;
-		else
-			new[b++] = str[i++];
-	}
-	return (new[b] = '\0', new);
+	new = ft_remove_char_norm(new, str, c);
+	return (new);
 }
 
 void	join_nodes(t_token **token)

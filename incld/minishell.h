@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/14 01:55:13 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:46:47 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ t_bool				check_directory(char *dir);
 void				set_env(t_env *env, const char *key, const char *value);
 char				*get_env_value(t_env *env, const char *key);
 void				error(const char *cmd, const char *msg);
+void				ft_cd_norm(char *old_pwd, char *new_pwd);
 void				change_pwd(t_env *envs, const char *old_pwd,
 						const char *pwd);
 //--------------------ft_cd--------------------
@@ -334,6 +335,7 @@ void				execute(char **args, t_data *data);
 int					parser(t_data *data);
 int					parsing(char *command, t_data *data);
 char				*split_the_command(char *command, int i, t_data *data);
+char				*ft_remove_char_norm(char *new, char *str, char c);
 //--------------------parsing--------------------
 
 /*parsing_utils*/

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 19:03:33 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/21 20:51:38 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:41:23 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	fill_sub_array(t_token *tmp, char **new_arr, t_token **new, int *j)
 			z++;
 			(*j)++;
 		}
+		free_double_char(splited_arr);
 	}
 }
 
@@ -79,15 +80,13 @@ char	**fill_new_array(t_token **token)
 
 char	**expand(char **argv, t_data *data, t_token **token)
 {
-	t_token	*tmp;
-	char	*final_str;
-	int		i;
+	t_token			*tmp;
+	char			*final_str;
+	static int		i;
 
 	tmp = *token;
 	if (!count_dollars(argv, tmp))
 		return (argv);
-	final_str = NULL;
-	i = 0;
 	while (argv[i] && tmp)
 	{
 		if (find_dollar_sign(argv[i], tmp))
@@ -105,5 +104,5 @@ char	**expand(char **argv, t_data *data, t_token **token)
 		tmp = (tmp)->next;
 		i++;
 	}
-	return (fill_new_array(token));
+	return (i = 0, fill_new_array(token));
 }

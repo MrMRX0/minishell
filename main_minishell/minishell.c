@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:20:44 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/21 21:06:58 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:48:42 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	prompt(t_data *data)
 {
 	main_signal_handler();
 	data->input = readline(COLOR_BOLD_RED "➜  minishell " COLOR_RESET);
-	// data->input = readline_dyali();
 	g_global_data->sig_flag = 0;
 	if (!data->input)
 	{

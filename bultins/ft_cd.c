@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:44:35 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/10/21 21:42:45 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:47:53 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,7 @@ t_bool	ft_cd(char **av)
 	char	new_pwd[PATH_MAX];
 	char	*home;
 
-	ft_memset(old_pwd, 0, sizeof(old_pwd));
-	ft_memset(new_pwd, 0, sizeof(new_pwd));
+	ft_cd_norm(old_pwd, new_pwd);
 	if (check_cd(av, old_pwd) == false)
 		return (false);
 	if (!av[1])

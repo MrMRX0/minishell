@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:54:28 by nait-bou          #+#    #+#             */
-/*   Updated: 2024/09/25 11:55:29 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:45:34 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,10 @@ void	swap_env(t_env *tmp, t_env *tmp2)
 	tmp2->key = key;
 	tmp2->value = value;
 	tmp2->q = q;
+}
+
+void	ft_cd_norm(char *old_pwd, char *new_pwd)
+{
+	ft_memset(old_pwd, 0, sizeof(old_pwd));
+	ft_memset(new_pwd, 0, sizeof(new_pwd));
 }

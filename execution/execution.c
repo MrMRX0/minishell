@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 13:49:01 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/21 21:32:52 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:17:49 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	normal_execution(t_data *data)
 	command = get_copy_of_token_v1(command, &(data->token));
 	if (!command)
 		return ;
-	if(expand(command, data, &data->token) == NULL)
+	if (expand(command, data, &data->token) == NULL)
 		return ;
 	join_nodes(&data->token);
 	red_in = redirect_input(&data->token, data);
@@ -51,8 +51,9 @@ void	execution(t_data *data)
 
 int	child_process(char **args, t_data *data, char *path)
 {
-	struct stat statbuf = {0};
+	struct stat	statbuf;
 
+	ft_memset(&statbuf, 0, sizeof(statbuf));
 	stat(args[0], &statbuf);
 	if (ft_strchr(args[0], '/'))
 	{

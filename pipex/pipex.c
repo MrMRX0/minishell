@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 04:21:45 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/21 21:15:28 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/22 11:54:13 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	pipex(t_data *data, int n)
 	while (pipe.cmd_idx <= n)
 	{
 		pipe.command = get_command(data, &pipe.std_in, &pipe.std_out);
-		if(!pipe.command && (++pipe.cmd_idx))
+		if (!pipe.command && (++pipe.cmd_idx))
 			continue ;
 		if ((pipe.std_out == -1 || pipe.std_in == -1) && (++pipe.cmd_idx))
 			continue ;

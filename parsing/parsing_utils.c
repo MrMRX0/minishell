@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibougajd <ibougajd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:56:16 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/08 17:36:41 by ibougajd         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:08:35 by nait-bou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,22 @@ char	*func1(t_data *data, char *command, char c)
 	}
 	data->syntax_error = 1;
 	return (NULL);
+}
+
+char	*ft_remove_char_norm(char *new, char *str, char c)
+{
+	int	i;
+	int	b;
+
+	i = 0;
+	b = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			i++;
+		else
+			new[b++] = str[i++];
+	}
+	new[b] = '\0';
+	return (new);
 }
