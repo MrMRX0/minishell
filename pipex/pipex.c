@@ -52,7 +52,7 @@ void	wait_for_child_processes(int n, t_data *data, pid_t last_pid)
 	}
 }
 
-void	pipex(t_data *data, int n)
+void	*pipex(t_data *data, int n)
 {
 	t_pipex	pipe;
 	int		i;
@@ -68,14 +68,17 @@ void	pipex(t_data *data, int n)
 	{
 		pipe.command = get_command(data, &pipe.std_in, &pipe.std_out);
 		if (!pipe.command && (++pipe.cmd_idx))
+		{
+			restore_stdin_stdout(data->std_in, data->std_out);
+			save_stdin_stdout(&data->std_in, &data->std_out);
 			continue ;
+		}
 		if ((pipe.std_out == -1 || pipe.std_in == -1) && (++pipe.cmd_idx))
 			continue ;
 		last_pid = ft_fork(&pipe, data, n);
 	}
-	close_fds(n, pipe.fd);
-	wait_for_child_processes(n, data, last_pid);
-	data->token = tmp;
+	return (close_fds(n, pipe.fd),
+		wait_for_child_processes(n, data, last_pid), data->token = tmp);
 }
 
 void	pipex_child(t_pipex *pipe, t_data *data, int n)

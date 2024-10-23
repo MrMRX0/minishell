@@ -81,6 +81,7 @@ void	parent_process(t_data *data, int pid)
 	int	status;
 
 	restore_stdin_stdout(data->std_in, data->std_out);
+	save_stdin_stdout(&data->std_in, &data->std_out);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		data->exit_status = WEXITSTATUS(status);

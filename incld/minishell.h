@@ -6,7 +6,7 @@
 /*   By: nait-bou <nait-bou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 06:33:05 by ibougajd          #+#    #+#             */
-/*   Updated: 2024/10/22 12:46:47 by nait-bou         ###   ########.fr       */
+/*   Updated: 2024/10/23 18:33:16 by ibougajd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,7 @@ void				avec_z(t_token **new, char *str);
 //--------------------pipex--------------------
 pid_t				ft_fork(t_pipex *pipe, t_data *data, int n);
 void				pipex_child(t_pipex *pipe, t_data *data, int n);
-void				pipex(t_data *data, int n);
+void				*pipex(t_data *data, int n);
 int					*create_pipes(int n);
 //--------------------pipex--------------------
 
